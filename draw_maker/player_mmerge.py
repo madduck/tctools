@@ -3,14 +3,10 @@
 # Mail-merges the text in the argument with data from the draw maker.
 #
 # Usage:
-#   ./player_mmerge.py draw_maker.ods "Hello {First name} {Squash Code}"
+#   ./player_mmerge.py draw_maker.ods "Hello {first name} {squash code}"
 #
-# The available field names are exactly the columns names in the
-# Men's/Women's Draws tabs in the draw_maker.ods file.
-#
-# It would be nice if this tool could somehow include a filter to select e.g.
-# only the players matching a certain pattern, such as "on the waiting list"
-# or "from this club" or "this region".
+# Please see the output of `./player_mmerge.py --help` for information on
+# available filters.
 #
 # Copyright © 2021 martin f. krafft <tctools@pobox.madduck.net>
 # Released under the MIT Licence
