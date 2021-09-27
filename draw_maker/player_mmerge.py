@@ -64,10 +64,12 @@ else:
 if args.all:
     sheet_name = '{gender}'
     row_offset = 2
+    skip_cols = ['male', 'female', 'r', 'w', 'source']
 
 else:
     sheet_name = "{gender}'s Draws"
     row_offset = 8
+    skip_cols = ['men', 'women']
 
 workbook = pyexcel.load_book(args.draw_maker[0])
 sheets = []
@@ -82,7 +84,14 @@ if args.gender != 'm':
 colnames = sheets[0][0].row_at(row_offset-1)
 cols = {}
 for i, n in enumerate(colnames):
-    cols[str(n).lower()] = i
+    try:
+        n = n.lower()
+    except AttributeError:
+        # skip over integer columns
+        continue
+    if n in skip_cols:
+        continue
+    cols[n] = i
 
 if args.points:
     p = args.points.split('-')
@@ -98,7 +107,7 @@ for draws, gender in sheets:
         row = draws.row_at(player)
         if not row[0]: continue
 
-        data = {'Gender': gender}
+        data = {'gender': gender}
         for k,i in cols.items():
             data[k] = row[i]
             # It might would be good to turn week day names into actual dates,
