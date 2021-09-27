@@ -33,14 +33,18 @@ indata.add_argument('--file', '-f', metavar='TEMPLATE', default=None,
         type=str, nargs=1, help='Template file to use for the merge')
 indata.add_argument('text', metavar='TEMPLATE_TEXT', type=str,
         nargs='*', default='', help='Template text to use for merge')
+
 filterg = parser.add_argument_group(title='Filters')
 filterg.add_argument('--waitlist', '-w', action="store_true",
         dest='waitlist', help='Limit to players on waitlist (see also --all)')
-filterg.add_argument('--code', '-c', type=str, metavar='CODE',
-        dest='code', help='Limit to players whose codes start with CODE')
 filterg.add_argument('--gender', '-g', type=str, metavar='GENDER',
         choices=['m','f'], dest='gender', default=None,
         help='Limit to players of the specified gender')
+filterg.add_argument('--code', '-c', type=str, metavar='CODE',
+        dest='code', help='Limit to players whose codes start with CODE')
+filterg.add_argument('--points', '-p', type=str, metavar='FROM-TO',
+        default=None,
+        help='Limit to players within points range')
 filterg.add_argument('--invert', '-i', action="store_true",
         dest='invert', default=False,
         help='Invert the filter criteria')
@@ -80,6 +84,14 @@ cols = {}
 for i, n in enumerate(colnames):
     cols[str(n).lower()] = i
 
+if args.points:
+    p = args.points.split('-')
+    points_min = int(p[0])
+    points_max = int(p[1]) if len(p) > 1 else points_min
+
+else:
+    points_min, points_max = 0, 9999
+
 for draws, gender in sheets:
     count = draws.number_of_rows()
     for player in range(row_offset, count):
@@ -105,6 +117,9 @@ for draws, gender in sheets:
             continue
 
         elif args.code and data['squash code'].startswith(args.code) == args.invert:
+            continue
+
+        elif (data['points'] >= points_min and data['points'] <= points_max) == args.invert:
             continue
 
         try:
