@@ -18,17 +18,55 @@
 
 import sys
 import pyexcel
+import argparse
 
-workbook = pyexcel.load_book(sys.argv[1])
-men = workbook.sheet_by_name("Men's Draws")
-wmn = workbook.sheet_by_name("Women's Draws")
+parser = argparse.ArgumentParser(description='Mail merge draw data')
+inputg = parser.add_argument_group(title='Input')
+inputg.add_argument('draw_maker', metavar='SPREADSHEET', type=str,
+        nargs=1, help='Draws spreadsheet to read')
+indata = inputg.add_mutually_exclusive_group(required=True)
+indata.add_argument('--file', '-f', metavar='TEMPLATE', default=None,
+        type=str, nargs=1, help='Template file to use for the merge')
+indata.add_argument('text', metavar='TEMPLATE_TEXT', type=str,
+        nargs='*', default='', help='Template text to use for merge')
+filterg = parser.add_argument_group(title='Filters')
+filterg.add_argument('--waitlist', '-w', action="store_true",
+        dest='waitlist', help='Limit to players in draws AND on the waitlist')
+filterg.add_argument('--code', '-c', type=str, metavar='CODE',
+        dest='code', help='Limit to players whose codes start with CODE')
+filterg.add_argument('--gender', '-g', type=str, metavar='GENDER',
+        choices=['m','f'], dest='gender', default=None,
+        help='Limit to players of the specified gender')
+filterg.add_argument('--invert', '-i', action="store_true",
+        dest='invert', default=False,
+        help='Invert the filter criteria')
 
-colnames = men.row_at(7)
+args = parser.parse_args()
+
+if args.file:
+    try:
+        with open(args.file[0], "r") as f:
+            template = f.read().strip()
+    except FileNotFoundError as e:
+        print(f'{e.strerror}: {e.filename}', file=sys.stderr)
+        sys.exit(1)
+else:
+    template = " ".join(args.text)
+
+workbook = pyexcel.load_book(args.draw_maker[0])
+
+sheets = []
+if args.gender != 'f':
+    sheets.append((workbook.sheet_by_name("Men's Draws"), 'm'))
+if args.gender != 'm':
+    sheets.append((workbook.sheet_by_name("Women's Draws"), 'f'))
+
+colnames = sheets[0][0].row_at(7)
 cols = {}
 for i, n in enumerate(colnames):
-    cols[n] = i
+    cols[str(n).lower()] = i
 
-for draws, gender in ((men,'m'), (wmn,'f')):
+for draws, gender in sheets:
     count = draws.number_of_rows()
     for player in range(8, count):
         row = draws.row_at(player)
@@ -49,14 +87,20 @@ for draws, gender in ((men,'m'), (wmn,'f')):
             #elif data[k] == 'Sat':
             #    data[k] = 'Sat 2 Oct in the morning'
 
-        print(" ".join(sys.argv[2:]).format(**data))
+        if args.waitlist and data['wl'] == args.invert:
+            continue
 
-        # If you need to filter, for now modify like so:
-        #
-        # if data['WL']:
-        #     print(" ".join(sys.argv[2:]).format(**data))
-        #
-        # or
-        #
-        # if data['Squash Code'].startswith('WNTH'):
-        #    print(" ".join(sys.argv[2:]).format(**data))
+        elif args.code and data['squash code'].startswith(args.code) == args.invert:
+            continue
+
+        try:
+            print(template.format(**data))
+        except KeyError as e:
+            arg = e.args[0].lower()
+            if arg in data:
+                print(f"Field {e} should be all lower-case: {arg}",
+                        file=sys.stderr)
+            else:
+                print(f"Field {e} is not one of {', '.join(data.keys())}",
+                        file=sys.stderr)
+            sys.exit(0)
