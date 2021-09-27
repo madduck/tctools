@@ -95,7 +95,8 @@ if args.points:
     points_max = int(p[1]) if len(p) > 1 else points_min
 
 else:
-    points_min, points_max = 0, 9999
+    points_min = 0
+    points_max = -1
 
 for draws, gender in sheets:
     count = draws.number_of_rows()
@@ -118,14 +119,24 @@ for draws, gender in sheets:
             #elif data[k] == 'Sat':
             #    data[k] = 'Sat 2 Oct in the morning'
 
-        if args.waitlist and data['wl'] == args.invert:
-            continue
-
-        elif args.code and data['squash code'].startswith(args.code) == args.invert:
-            continue
-
-        elif (data['points'] >= points_min and data['points'] <= points_max) == args.invert:
-            continue
+        if not args.invert:
+            if args.waitlist and not data['wl']:
+                continue
+            elif args.code and not data['squash code'].startswith(args.code):
+                continue
+            elif args.points and \
+                    (data['points'] < points_min or
+                     data['points'] > points_max):
+                continue
+        else:
+            if args.waitlist and data['wl']:
+                continue
+            elif args.code and data['squash code'].startswith(args.code):
+                continue
+            elif args.points and \
+                    (data['points'] >= points_min and
+                     data['points'] <= points_max):
+                continue
 
         try:
             print(template.format(**data))
