@@ -21,9 +21,13 @@ import pyexcel
 import argparse
 
 parser = argparse.ArgumentParser(description='Mail merge draw data')
+
 inputg = parser.add_argument_group(title='Input')
 inputg.add_argument('draw_maker', metavar='SPREADSHEET', type=str,
         nargs=1, help='Draws spreadsheet to read')
+inputg.add_argument('--all', '-a', action="store_true",
+        help="Read all players, not just those in draws")
+
 indata = inputg.add_mutually_exclusive_group(required=True)
 indata.add_argument('--file', '-f', metavar='TEMPLATE', default=None,
         type=str, nargs=1, help='Template file to use for the merge')
@@ -31,7 +35,7 @@ indata.add_argument('text', metavar='TEMPLATE_TEXT', type=str,
         nargs='*', default='', help='Template text to use for merge')
 filterg = parser.add_argument_group(title='Filters')
 filterg.add_argument('--waitlist', '-w', action="store_true",
-        dest='waitlist', help='Limit to players in draws AND on the waitlist')
+        dest='waitlist', help='Limit to players on waitlist (see also --all)')
 filterg.add_argument('--code', '-c', type=str, metavar='CODE',
         dest='code', help='Limit to players whose codes start with CODE')
 filterg.add_argument('--gender', '-g', type=str, metavar='GENDER',
@@ -53,22 +57,32 @@ if args.file:
 else:
     template = " ".join(args.text)
 
+if args.all:
+    sheet_name = '{gender}'
+    row_offset = 2
+
+else:
+    sheet_name = "{gender}'s Draws"
+    row_offset = 8
+
 workbook = pyexcel.load_book(args.draw_maker[0])
-
 sheets = []
-if args.gender != 'f':
-    sheets.append((workbook.sheet_by_name("Men's Draws"), 'm'))
-if args.gender != 'm':
-    sheets.append((workbook.sheet_by_name("Women's Draws"), 'f'))
 
-colnames = sheets[0][0].row_at(7)
+if args.gender != 'f':
+    wb = workbook.sheet_by_name(sheet_name.format(gender='Men'))
+    sheets.append((wb, 'm'))
+if args.gender != 'm':
+    wb = workbook.sheet_by_name(sheet_name.format(gender='Women'))
+    sheets.append((wb, 'f'))
+
+colnames = sheets[0][0].row_at(row_offset-1)
 cols = {}
 for i, n in enumerate(colnames):
     cols[str(n).lower()] = i
 
 for draws, gender in sheets:
     count = draws.number_of_rows()
-    for player in range(8, count):
+    for player in range(row_offset, count):
         row = draws.row_at(player)
         if not row[0]: continue
 
