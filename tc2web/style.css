@@ -1,0 +1,74 @@
+body {
+  font-family: Lato, Arial, Helvetica, sans-serif
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #5cc133;
+}
+
+table {
+  border: 1px #aaa solid;
+  border-collapse: collapse;
+}
+
+thead td {
+  font-weight: bold;
+}
+
+tr.even {
+  background: #f6f6f6;
+}
+
+td.on {
+  background: #5cc133;
+  color: #fff;
+  font-weight: bold;
+}
+
+td.next {
+  background: #ffff00;
+}
+
+td.winner {
+  font-weight: bold;
+}
+
+td.winner::before {
+  content: "🏆 ";
+}
+
+td {
+  border: 1px #ddd solid;
+  padding: 0.5em;
+}
+
+td.unknown {
+  color: #999;
+}
+
+p.warning {
+  background: #f00;
+  color: #fff;
+  font-weight: bold;
+  padding: 1em;
+}
+
+a {
+  text-decoration: none;
+}
+
+a[href] {
+  color: #5cc133;
+}
+
+div.footer {
+  color: #aaa;
+}
+
+div.footer a {
+  color: #999;
+}
+
+:target {
+  background-color: #fc0 !important;
+}

@@ -1,0 +1,73 @@
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ tournament_name }} Draws Overview</title>
+  <link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body>
+
+<h1>{{ tournament_name }} Draws Overview</h1>
+
+{% for code, name, colour, games in draws -%}
+
+<a name="{{code}}"/>
+<h2>{{ name }}</h2>
+
+<p>
+Jump to: <a href="schedule.html#now">Schedule</a> |
+{% for draw in draws -%}
+{% if draw[0] == code -%}
+{{code}}
+{% else -%}
+<a href="#{{draw[0]}}">{{draw[0]}}</a>
+{% endif -%}
+{% endfor -%}
+</p>
+
+<p>
+Last updated: {{timestamp}}
+</p>
+
+<table>
+<thead>
+<tr>
+<td style="background:#{{colour}}">&nbsp;</td>
+<td>Day</td>
+<td style="text-align:right">Time</td>
+<td>Code</td>
+<td>Player 1</td>
+<td>Player 2</td>
+<td>Status</td>
+<td>Comment/Result</td>
+</tr>
+</thead>
+<tbody>
+{% for game in games -%}
+  <tr class="{{ loop.cycle('odd', 'even') }}" id="{{game.code}}">
+    <td style="background:#{{colour}}">&nbsp;</td>
+    <td>{{ game.day }}</td>
+    <td style="text-align:right">
+      <a href="schedule.html#{{game.code}}">{{game.time.strftime('%H:%M')}}</a>
+    </td>
+    <td><a name="{{ game.code}}">{{ game.code }}</a></td>
+    <td class="{{ game.p1classes|join(' ') }}">{{ game.p1 }}</td>
+    <td class="{{ game.p2classes|join(' ') }}">{{ game.p2 }}</td>
+    <td class="{{ game.statusclasses|join(' ') }}">{{ game.status }}</td>
+    <td>{{ game.comment }}</td>
+  </tr>
+{% endfor -%}
+</tbody>
+</table>
+
+<div class="footer">
+<p>
+Made with <a
+href="https://github.com/madduck/tctools/tree/main/tc2web">tc2web</a>.
+Copyright &copy; 2021 by <a href="mailto:tctools@pobox.madduck.net">martin f.
+krafft</a>
+</p>
+</div>
+
+{% endfor -%}
+
+</body>
