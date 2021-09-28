@@ -28,8 +28,8 @@ except ImportError:
 parser = argparse.ArgumentParser(description='Mail merge draw data')
 
 inputg = parser.add_argument_group(title='Input')
-inputg.add_argument('draw_maker', metavar='SPREADSHEET', type=str,
-        nargs=1, help='Draws spreadsheet to read')
+inputg.add_argument('spreadsheet', metavar='SPREADSHEET', type=str,
+        nargs=1, help='Spreadsheet to read (either TC export or Draw Maker)')
 inputg.add_argument('--all', '-a', action="store_true",
         help="Read all players, not just those in draws")
 
@@ -71,25 +71,45 @@ if args.file or args.template:
 elif not args.template:
     template = " ".join(args.text)
 
-if args.all:
-    sheet_name = '{gender}'
-    row_offset = 2
-    skip_cols = ['male', 'female', 'r', 'w', 'source']
-
-else:
-    sheet_name = "{gender}'s Draws"
-    row_offset = 8
-    skip_cols = ['men', 'women']
-
-workbook = pyexcel.load_book(args.draw_maker[0])
+workbook = pyexcel.load_book(args.spreadsheet[0])
 sheets = []
 
-if args.gender != 'f':
-    wb = workbook.sheet_by_name(sheet_name.format(gender='Men'))
-    sheets.append((wb, 'm'))
-if args.gender != 'm':
-    wb = workbook.sheet_by_name(sheet_name.format(gender='Women'))
-    sheets.append((wb, 'f'))
+if 'Players' in workbook.sheet_names():
+
+    wb = workbook.sheet_by_name('Tournament')
+    tournament_name = wb.row_at(0)[1]
+
+    wb = workbook.sheet_by_name('Players')
+    sheets.append((wb, None))
+
+    row_offset = 1
+    skip_cols = []
+
+elif 'Restrictions' in workbook.sheet_names():
+    if args.all:
+        sheet_name = '{gender}'
+        row_offset = 2
+        skip_cols = ['male', 'female', 'r', 'w', 'source']
+
+    else:
+        sheet_name = "{gender}'s Draws"
+        row_offset = 8
+        skip_cols = ['men', 'women']
+
+    wb = workbook.sheet_by_name('Info')
+    tournament_name = wb.row_at(3)[2]
+
+    if args.gender != 'f':
+        wb = workbook.sheet_by_name(sheet_name.format(gender='Men'))
+        sheets.append((wb, 'm'))
+    if args.gender != 'm':
+        wb = workbook.sheet_by_name(sheet_name.format(gender='Women'))
+        sheets.append((wb, 'f'))
+
+else:
+    print("This seems to be neither a TC export nor Draw Maker spreadsheet: {args.spreadsheet[0]}", file=sys.stderr)
+    sys.exit(0)
+
 
 colnames = sheets[0][0].row_at(row_offset-1)
 cols = {}
@@ -113,13 +133,13 @@ else:
     points_max = -1
 
 resultset = []
-for draws, gender in sheets:
-    count = draws.number_of_rows()
+for players, gender in sheets:
+    count = players.number_of_rows()
     for player in range(row_offset, count):
-        row = draws.row_at(player)
+        row = players.row_at(player)
         if not row[0]: continue
 
-        data = {'gender': gender}
+        data = {'tournament' : tournament_name}
         for k,i in cols.items():
             data[k] = row[i]
             # It might would be good to turn week day names into actual dates,
@@ -134,8 +154,15 @@ for draws, gender in sheets:
             #elif data[k] == 'Sat':
             #    data[k] = 'Sat 2 Oct in the morning'
 
+        if gender:
+            data['gender'] = gender
+        else:
+            data['gender'] = data['gender'].lower()
+            if args.gender and (args.gender == data['gender']) == args.invert:
+                continue
+
         if not args.invert:
-            if args.waitlist and not data['wl']:
+            if args.waitlist and not data.get('wl'):
                 continue
             elif args.code and not data['squash code'].startswith(args.code):
                 continue
@@ -144,7 +171,7 @@ for draws, gender in sheets:
                      data['points'] > points_max):
                 continue
         else:
-            if args.waitlist and data['wl']:
+            if args.waitlist and data.get('wl'):
                 continue
             elif args.code and data['squash code'].startswith(args.code):
                 continue
@@ -172,14 +199,13 @@ if not args.template:
         sys.exit(1)
 
 else:
-    wb = workbook.sheet_by_name('Info')
-    tournament_name = wb.row_at(3)[2]
-
     env = jinja2.Environment(
         loader=jinja2.FileSystemLoader(os.getcwd()),
-        autoescape=jinja2.select_autoescape(['j2']))
+        autoescape=jinja2.select_autoescape(['j2'])
+    )
     template = env.from_string(template)
     timestamp = datetime.datetime.now(tz=pytz.timezone('Pacific/Auckland')).strftime('%F % T %Z')
     print(template.render(tournament_name=tournament_name,
                           timestamp=timestamp,
-                          dataset=resultset))
+                          dataset=resultset)
+    )
