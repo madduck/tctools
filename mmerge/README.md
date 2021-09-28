@@ -22,6 +22,8 @@ as [TournamentControl](https://tournamentcontrol.dtkapiti.co.nz/) exports.
 
 Note that to use a TC exported spreadsheet, it needs to be fixed by loading and saving it with LibreOffce, since PyExcel cannot read the ancient format TC writes. There is a script [fix-tc-export.sh](https://github.com/madduck/tctools/blob/main/fix-tc-export.sh) that does this.
 
+Have a look at how I [send bulk SMS](https://github.com/madduck/tctools/blob/main/mmerge/README.SMS.md), which is an essential ability for running successful tournaments.
+
 ## Licence
 
 You are free to use this under the terms of the [MIT
