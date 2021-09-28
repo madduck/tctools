@@ -3,6 +3,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
+  margin-top: 7em;
   color: #5cc133;
 }
 
@@ -70,6 +71,10 @@ div.footer a {
 }
 
 tr:target {
-  background-color: #fc0 !important;
+  background-color: #5cc133 !important;
   scroll-margin-top: 15em;
+}
+
+tr:target a {
+  color: #fff;
 }

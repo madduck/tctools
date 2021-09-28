@@ -9,8 +9,7 @@
 <h1>{{ tournament_name }} Games Schedule</h1>
 
 {% if played_games -%}
-<a name="played"/>
-<h2>{{ tournament_name}} — Played games</h2>
+<h2><a name="played">{{ tournament_name}} — Played games</a></h2>
 
 <p>
 {% if pending_games -%}
@@ -58,9 +57,8 @@ Last updated: {{timestamp}}
 </table>
 {% endif -%}
 
-<a name="now"/>
 {% if pending_games -%}
-<h2>{{ tournament_name }} — Scheduled games</h2>
+<h2><a name="now">{{ tournament_name }} — Scheduled games</a></h2>
 
 <a href="display.html">
   <img src="display.png" width="90" height="45"/>
@@ -128,8 +126,7 @@ krafft</a>
 
 {% for code, name, colour, games in draws -%}
 
-<a name="{{code}}"/>
-<h2>{{tournament_name}} — {{ name }}</h2>
+<h2><a name="{{code}}">{{tournament_name}} — {{ name }}</a></h2>
 
 <p>
 Jump to: <a href="#now">Schedule</a> |
