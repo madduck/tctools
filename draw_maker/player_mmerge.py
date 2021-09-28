@@ -13,8 +13,17 @@
 #
 
 import sys
+import os
 import pyexcel
 import argparse
+import datetime
+import pytz
+
+try:
+    import jinja2
+    HAVE_JINJA2=True
+except ImportError:
+    HAVE_JINJA2=False
 
 parser = argparse.ArgumentParser(description='Mail merge draw data')
 
@@ -25,10 +34,13 @@ inputg.add_argument('--all', '-a', action="store_true",
         help="Read all players, not just those in draws")
 
 indata = inputg.add_mutually_exclusive_group(required=True)
-indata.add_argument('--file', '-f', metavar='TEMPLATE', default=None,
-        type=str, nargs=1, help='Template file to use for the merge')
 indata.add_argument('text', metavar='TEMPLATE_TEXT', type=str,
         nargs='*', default='', help='Template text to use for merge')
+indata.add_argument('--file', '-f', metavar='FILE', default=None,
+        type=str, nargs=1, help='File to read template text from')
+if HAVE_JINJA2:
+    indata.add_argument('--template', '-t', metavar='TEMPLATE', default=None,
+            type=str, nargs=1, help='Jinja2 template to be used for the merge')
 
 filterg = parser.add_argument_group(title='Filters')
 filterg.add_argument('--waitlist', '-w', action="store_true",
@@ -45,16 +57,18 @@ filterg.add_argument('--invert', '-i', action="store_true",
         dest='invert', default=False,
         help='Invert the filter criteria')
 
-args = parser.parse_args()
+args = parser.parse_args(namespace=argparse.Namespace(template=None))
 
-if args.file:
+if args.file or args.template:
+    f = args.file or args.template
     try:
-        with open(args.file[0], "r") as f:
-            template = f.read().strip()
+        with open(f[0], "r") as inp:
+            template = inp.read().strip()
     except FileNotFoundError as e:
         print(f'{e.strerror}: {e.filename}', file=sys.stderr)
         sys.exit(1)
-else:
+
+elif not args.template:
     template = " ".join(args.text)
 
 if args.all:
@@ -98,6 +112,7 @@ else:
     points_min = 0
     points_max = -1
 
+resultset = []
 for draws, gender in sheets:
     count = draws.number_of_rows()
     for player in range(row_offset, count):
@@ -138,14 +153,33 @@ for draws, gender in sheets:
                      data['points'] <= points_max):
                 continue
 
-        try:
-            print(template.format(**data))
-        except KeyError as e:
-            arg = e.args[0].lower()
-            if arg in data:
-                print(f"Field {e} should be all lower-case: {arg}",
-                        file=sys.stderr)
-            else:
-                print(f"Field {e} is not one of {', '.join(data.keys())}",
-                        file=sys.stderr)
-            sys.exit(0)
+        resultset.append(data)
+
+
+
+if not args.template:
+    try:
+        print('\n'.join(template.format(**d) for d in resultset))
+
+    except KeyError as e:
+        arg = e.args[0].lower()
+        if arg in data:
+            print(f"Field {e} should be all lower-case: {arg}",
+                    file=sys.stderr)
+        else:
+            print(f"Field {e} is not one of {', '.join(data.keys())}",
+                    file=sys.stderr)
+        sys.exit(1)
+
+else:
+    wb = workbook.sheet_by_name('Info')
+    tournament_name = wb.row_at(3)[2]
+
+    env = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(os.getcwd()),
+        autoescape=jinja2.select_autoescape(['j2']))
+    template = env.from_string(template)
+    timestamp = datetime.datetime.now(tz=pytz.timezone('Pacific/Auckland')).strftime('%F % T %Z')
+    print(template.render(tournament_name=tournament_name,
+                          timestamp=timestamp,
+                          dataset=resultset))
