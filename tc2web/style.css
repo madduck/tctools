@@ -71,10 +71,6 @@ div.footer a {
 }
 
 tr:target {
-  background-color: #5cc133 !important;
+  background-color: #f0ffaa !important;
   scroll-margin-top: 15em;
-}
-
-tr:target a {
-  color: #fff;
 }
