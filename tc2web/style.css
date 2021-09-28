@@ -71,4 +71,5 @@ div.footer a {
 
 :target {
   background-color: #fc0 !important;
+  scroll-margin-top: 15em;
 }
