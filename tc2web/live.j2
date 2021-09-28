@@ -1,8 +1,9 @@
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=0.75">
   <title>{{ tournament_name }} Live Info</title>
   <link rel="stylesheet" href="style.css" type="text/css">
+  <meta http-equiv="refresh" content="60" />
 </head>
 <body>
 
@@ -11,15 +12,14 @@
 {% if played_games -%}
 <h2><a name="played">{{ tournament_name}} — Played games</a></h2>
 
-<p>
+<div class="nav">
 {% if pending_games -%}
-Jump to: <a href="#now">Now</a> |
+<a href="#now">Now</a>
 {% endif -%}
-By draw:
 {% for draw in drawdata -%}
 <a href="#{{draw[0]}}">{{draw[0]}}</a>
 {% endfor -%}
-</p>
+</div>
 
 <p>
 Last updated: {{timestamp}}
@@ -60,20 +60,20 @@ Last updated: {{timestamp}}
 {% if pending_games -%}
 <h2><a name="now">{{ tournament_name }} — Scheduled games</a></h2>
 
-<a href="display.html">
-  <img src="display.png" width="90" height="45"/>
-</a>
+<div class="display">
+  <a href="display.html">
+    <img src="display.png" width="90" height="45"/>
+  </a>
+</div>
 
-<p>
+<div class="nav">
 {% if played_games -%}
-Jump to:
-<a href="#played">Played</a> |
+<a href="#played">Played</a>
 {% endif -%}
-By draw:
 {% for draw in draws -%}
 <a href="#{{draw[0]}}">{{draw[0]}}</a>
 {% endfor -%}
-</p>
+</div>
 
 <p>
 Last updated: {{timestamp}}
@@ -126,18 +126,19 @@ krafft</a>
 
 {% for code, name, colour, games in draws -%}
 
-<h2><a name="{{code}}">{{tournament_name}} — {{ name }}</a></h2>
+<h2><a name="{{code}}"></a><span class="tname">{{tournament_name}}</span>
+{{ name }}</h2>
 
-<p>
-Jump to: <a href="#now">Schedule</a> |
+<div class="nav">
+<a href="#now">Schedule</a>
 {% for draw in drawdata -%}
 {% if draw[0] == code -%}
-{{code}}
+<a class="current">{{code}}</a>
 {% else -%}
 <a href="#{{draw[0]}}">{{draw[0]}}</a>
 {% endif -%}
 {% endfor -%}
-</p>
+</div>
 
 <p>
 Last updated: {{timestamp}}

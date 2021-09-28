@@ -2,9 +2,19 @@ body {
   font-family: Lato, Arial, Helvetica, sans-serif
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2 {
   margin-top: 7em;
   color: #5cc133;
+}
+
+h2 .tname {
+  font-size: smaller;
+  white-space: pre;
+  color: #000;
+}
+
+h2 .tname::after {
+  content: "\A";
 }
 
 table {
@@ -73,4 +83,20 @@ div.footer a {
 tr:target {
   background-color: #f0ffaa !important;
   scroll-margin-top: 15em;
+}
+
+.nav a {
+  padding: 0.2em;
+  background-color: #5cc133;
+  color: #fff;
+}
+
+.nav a.current {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #5cc133;
+}
+
+.display {
+  margin-bottom: 1em;
 }
