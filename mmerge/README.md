@@ -1,4 +1,4 @@
-# TC mail-merge script
+# TC "mail"-merge script
 
 This is a [Python](https://python.org) script that makes
 use of [PyExcel](http://www.pyexcel.org/) to give access to the data in the [DrawMaker](https://github.com/madduck/tctools/tree/main/draw_maker), as well
