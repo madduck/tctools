@@ -20,8 +20,6 @@ import re
 import jinja2
 import pytz
 
-WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-
 def time_parser(timestr):
     """Convert silly 12h time to 24h time"""
     ampm = timestr[-2:]
@@ -66,6 +64,9 @@ class Draw:
 drawrows = workbook.sheet_by_name('Draws')
 draws = [Draw(drawrows.row_values(rowx)) for rowx in range(1, drawrows.nrows)]
 draws.sort()
+
+###############################################################################
+# Then the games
 
 class Game:
     def __init__(self, row):
@@ -133,6 +134,7 @@ class Game:
         self.day = daytime.split()[0]
         self.time = time_parser(daytime.split()[1])
 
+    WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     def __lt__(self, other):
         if self.day == other.day:
             if self.time == other.time:
@@ -143,7 +145,7 @@ class Game:
             else:
                 return self.time.__lt__(other.time)
         else:
-            return WEEKDAYS.index(self.day).__lt__(WEEKDAYS.index(other.day))
+            return Game.WEEKDAYS.index(self.day).__lt__(Game.WEEKDAYS.index(other.day))
 
     def __repr__(self):
         return f'Game({self.nr} {self.code}, {self.day}, ' \
