@@ -31,9 +31,46 @@ def time_parser(timestr):
         hour += 12
     return datetime.time(hour, int(minute))
 
+workbook = xlrd.open_workbook(sys.argv[1])
+tournament_name = workbook.sheet_by_name('Tournament').cell_value(rowx=0, colx=1)
+
+###############################################################################
+# First get the draws
+
+class Draw:
+    def __init__(self, row):
+        self.code, self.name = row[0:2]
+        # delphi colours are reversed
+        self.colour = f'{row[2][7:]}{row[2][5:7]}{row[2][3:5]}'
+        self.games = []
+
+    def __repr__(self):
+        return self.code
+
+    def __eq__(self, other):
+        return self.code.__eq__(other.code)
+
+    def __hash__(self):
+        return self.code.__hash__()
+
+    def __lt__(self, other):
+
+        # sort the draws and put women first, because we can
+        def women_first(code):
+            return code.replace('W', '1').replace('M', '2')
+        return women_first(self.code).__lt__(women_first(other.code))
+
+    def append_game(self, game):
+        self.games.append(game)
+
+drawrows = workbook.sheet_by_name('Draws')
+draws = [Draw(drawrows.row_values(rowx)) for rowx in range(1, drawrows.nrows)]
+draws.sort()
+
 class Game:
     def __init__(self, row):
         """Initialise a Game structure from a row in the Excel sheet"""
+        self.nr = None
         self.code = row[0]
         self.colour = "#FFFFFF" # default to white
 
@@ -116,22 +153,6 @@ class Game:
     def is_played(self):
         return self.winner
 
-workbook = xlrd.open_workbook(sys.argv[1])
-tournament_name = workbook.sheet_by_name('Tournament').cell_value(rowx=0, colx=1)
-
-# First get the draws
-divs = workbook.sheet_by_name('Draws')
-drawdata, games_by_draw = [], {}
-for rowx in range(1, divs.nrows):
-    row = divs.row_values(rowx=rowx)
-    games_by_draw[row[0]] = []
-    # delphi colours are reversed
-    row[2] = f'{row[2][7:]}{row[2][5:7]}{row[2][3:5]}'
-    drawdata.append(row)
-# sort the draws and put women first, because we can
-drawdata.sort(key=lambda x: x[0].replace('M', '2').replace('W', '1'))
-
-# Then the games
 gamerows = workbook.sheet_by_name('Games')
 played_games, pending_games = [], []
 games = [Game(gamerows.row_values(rowx)) for rowx in range(1, gamerows.nrows)]
@@ -141,10 +162,10 @@ games.sort()
 # as we go
 for i, game in enumerate(games):
     game.nr = i+1
-    for draw in drawdata:
-        if game.code.startswith(draw[0]):
-            game.colour = draw[2]
-            games_by_draw[draw[0]].append(game)
+    for draw in draws:
+        if game.code.startswith(draw.code):
+            game.colour = draw.colour
+            draw.append_game(game)
     if game.is_played():
         played_games.append(game)
     else:
@@ -161,8 +182,7 @@ template = env.get_template('live.j2')
 with open('live.html', 'w') as f:
     print(template.render(tournament_name=tournament_name,
         timestamp=timestamp,
-        drawdata=drawdata,
+        draws=draws,
         pending_games=sorted(pending_games),
         played_games=sorted(played_games),
-        draws=[(*d, sorted(games_by_draw[d[0]])) for d in drawdata]
     ), file=f)
