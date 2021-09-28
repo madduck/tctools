@@ -43,7 +43,7 @@ Last updated: {{timestamp}}
 {% for game in played_games | reverse -%}
   <tr class="{{ loop.cycle('odd', 'even') }}" id="{{game.code}}">
     <td style="background:#{{game.colour}}">
-      <a href="draws.html#{{game.code[:2]}}">🚪</a>
+      <a href="draws.html#{{game.code[:2]}}">&nbsp;</a>
     </td>
     <td style="text-align:right">{{ game.nr }}</td>
     <td>{{ game.day }}</td>
@@ -99,7 +99,7 @@ Last updated: {{timestamp}}
 {% for game in pending_games -%}
   <tr class="{{ loop.cycle('odd', 'even' )}}" id="{{game.code}}">
     <td style="background:#{{game.colour}}">
-      <a style="text-decoration:none" href="draws.html#{{game.code[:2]}}">&nbsp;</a>
+      <a href="draws.html#{{game.code[:2]}}">&nbsp;</a>
     </td>
     <td style="text-align:right">{{ game.nr }}</td>
     <td>{{ game.day }}</td>
