@@ -157,18 +157,12 @@ env = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.getcwd()),
     autoescape=jinja2.select_autoescape(['j2'])
 )
-template = env.get_template('schedule.j2')
-with open('schedule.html', 'w') as f:
+template = env.get_template('live.j2')
+with open('live.html', 'w') as f:
     print(template.render(tournament_name=tournament_name,
-                        timestamp=timestamp,
-                        draws=drawdata,
-                        pending_games=sorted(pending_games),
-                        played_games=sorted(played_games),
-                        ), file=f)
-
-template = env.get_template('draws.j2')
-with open('draws.html', 'w') as f:
-    print(template.render(tournament_name=tournament_name,
-                        timestamp=timestamp,
-                        draws=[(*d, sorted(games_by_draw[d[0]])) for d in drawdata]
-                        ), file=f)
+        timestamp=timestamp,
+        drawdata=drawdata,
+        pending_games=sorted(pending_games),
+        played_games=sorted(played_games),
+        draws=[(*d, sorted(games_by_draw[d[0]])) for d in drawdata]
+    ), file=f)

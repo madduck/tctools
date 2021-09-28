@@ -69,7 +69,7 @@ div.footer a {
   color: #999;
 }
 
-:target {
+tr:target {
   background-color: #fc0 !important;
   scroll-margin-top: 15em;
 }

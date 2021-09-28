@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-FILES="display.css display.png display.html index.html schedule.html draws.html style.css"
+FILES="display.css display.png display.html index.html live.html style.css games.html schedule.html draws.html"
 
 cd "${0%/*}"
 make -s
