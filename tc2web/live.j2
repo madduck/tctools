@@ -7,20 +7,9 @@
 </head>
 <body>
 
-<h1>{{ tournament_name }} Games Schedule</h1>
+{##### MACROS ################################################################}
 
-{% if played_games -%}
-<h2><a name="played">{{ tournament_name}} — Played games</a></h2>
-
-<div class="nav">
-{% if pending_games -%}
-<a href="#now">Now</a>
-{% endif -%}
-{% for draw in drawdata -%}
-<a href="#{{draw[0]}}">{{draw[0]}}</a>
-{% endfor -%}
-</div>
-
+{% macro schedule(games, commentlabel) -%}
 <p>
 Last updated: {{timestamp}}
 </p>
@@ -35,11 +24,12 @@ Last updated: {{timestamp}}
     <td>Code</td>
     <td>Player 1</td>
     <td>Player 2</td>
-    <td>Result</td>
+    <td>Status</td>
+    <td>{{commentlabel}}</td>
   </tr>
 </thead>
 <tbody>
-{% for game in played_games | reverse -%}
+{% for game in games -%}
   <tr class="{{ loop.cycle('odd', 'even') }}" id="{{game.code}}">
     <td style="background:#{{game.colour}}">
       <a href="#{{game.code[:2]}}">&nbsp;</a>
@@ -47,14 +37,51 @@ Last updated: {{timestamp}}
     <td style="text-align:right">{{ game.nr }}</td>
     <td>{{ game.day }}</td>
     <td style="text-align:right">{{ game.time.strftime('%H:%M') }}</td>
-    <td><a href="#{{game.code[:2]}}">{{game.code}}</a></td>
+    <td><a href="#{{game.code[:2]}}">{{game.code[:2]}}</a>{{game.code[2:]}}</td>
     <td class="{{ game.p1classes|join(' ') }}">{{ game.p1 }}</td>
     <td class="{{ game.p2classes|join(' ') }}">{{ game.p2 }}</td>
+    <td>{{ game.status }}</td>
     <td>{{ game.comment }}</td>
   </tr>
 {% endfor -%}
 </tbody>
 </table>
+
+<div class="footer">
+  <p>Made with <a
+    href="https://github.com/madduck/tctools/tree/main/tc2web">tc2web</a>.
+    Copyright &copy; 2021 by <a href="mailto:tctools@pobox.madduck.net">martin f.
+    krafft</a>
+  </p>
+</div>
+
+{% endmacro -%}
+
+{% macro drawnav(draws, curcode) -%}
+{% for d in draws -%}
+{% if d.code == curcode -%}
+<a class="current">{{d.code}}</a>
+{% else -%}
+<a href="#{{d.code}}">{{d.code}}</a>
+{% endif -%}
+{% endfor -%}
+{% endmacro -%}
+
+{##### SCHEDULE ##############################################################}
+
+<h1>{{ tournament_name }} Games Schedule</h1>
+
+{% if played_games -%}
+<h2><a name="played">{{ tournament_name}} — Played games</a></h2>
+
+<div class="nav">
+{% if pending_games -%}
+<a href="#now">Now</a>
+{% endif -%}
+{{ drawnav(draws, None) }}
+</div>
+
+{{ schedule(played_games|reverse, "Result") }}
 {% endif -%}
 
 {% if pending_games -%}
@@ -70,74 +97,24 @@ Last updated: {{timestamp}}
 {% if played_games -%}
 <a href="#played">Played</a>
 {% endif -%}
-{% for draw in draws -%}
-<a href="#{{draw[0]}}">{{draw[0]}}</a>
-{% endfor -%}
+{{ drawnav(draws, None) }}
 </div>
 
-<p>
-Last updated: {{timestamp}}
-</p>
-
-<table style="clear:both">
-<thead>
-  <tr>
-    <td>&nbsp;</td>
-    <td style="text-align:right">#</td>
-    <td>Day</td>
-    <td style="text-align:right">Time</td>
-    <td>Code</td>
-    <td>Player 1</td>
-    <td>Player 2</td>
-    <td>Status</td>
-    <td>Comment</td>
-  </tr>
-</thead>
-<tbody>
-{% for game in pending_games -%}
-  <tr class="{{ loop.cycle('odd', 'even' )}}" id="{{game.code}}">
-    <td style="background:#{{game.colour}}">
-      <a href="#{{game.code[:2]}}">&nbsp;</a>
-    </td>
-    <td style="text-align:right">{{ game.nr }}</td>
-    <td>{{ game.day }}</td>
-    <td style="text-align:right">{{ game.time.strftime('%H:%M') }}</td>
-    <td><a href="#{{game.code[:2]}}">{{game.code[:2]}}</a>{{game.code[2:]}}</td>
-    <td class="{{ game.p1classes|join(' ') }}">{{ game.p1 }}</td>
-    <td class="{{ game.p2classes|join(' ') }}">{{ game.p2 }}</td>
-    <td class="{{ game.statusclasses|join(' ') }}">{{ game.status }}</td>
-    <td>{{ game.comment }}</td>
-  </tr>
-{% endfor -%}
-</tbody>
-</table>
+{{ schedule(pending_games, "Notes") }}
 {% endif -%}
 
-<div class="footer">
-<p>
-Made with <a
-href="https://github.com/madduck/tctools/tree/main/tc2web">tc2web</a>.
-Copyright &copy; 2021 by <a href="mailto:tctools@pobox.madduck.net">martin f.
-krafft</a>
-</p>
-</div>
+{##### DRAWS #################################################################}
 
 <h1>{{ tournament_name }} Draws Overview</h1>
 
-{% for code, name, colour, games in draws -%}
+{% for draw in draws -%}
 
-<h2><a name="{{code}}"></a><span class="tname">{{tournament_name}}</span>
-{{ name }}</h2>
+<h2><a name="{{draw.code}}"></a><span class="tname">{{tournament_name}}</span>
+{{ draw.name }}</h2>
 
 <div class="nav">
 <a href="#now">Schedule</a>
-{% for draw in drawdata -%}
-{% if draw[0] == code -%}
-<a class="current">{{code}}</a>
-{% else -%}
-<a href="#{{draw[0]}}">{{draw[0]}}</a>
-{% endif -%}
-{% endfor -%}
+{{ drawnav(draws, draw.code) }}
 </div>
 
 <p>
@@ -147,7 +124,7 @@ Last updated: {{timestamp}}
 <table>
 <thead>
 <tr>
-<td style="background:#{{colour}}">&nbsp;</td>
+<td style="background:#{{draw.colour}}">&nbsp;</td>
 <td>Day</td>
 <td style="text-align:right">Time</td>
 <td>Code</td>
@@ -158,9 +135,9 @@ Last updated: {{timestamp}}
 </tr>
 </thead>
 <tbody>
-{% for game in games -%}
+{% for game in draw.games -%}
   <tr class="{{ loop.cycle('odd', 'even') }}">
-    <td style="background:#{{colour}}">&nbsp;</td>
+    <td style="background:#{{draw.colour}}">&nbsp;</td>
     <td>{{ game.day }}</td>
     <td style="text-align:right">
       <a href="#{{game.code}}">{{game.time.strftime('%H:%M')}}</a>
