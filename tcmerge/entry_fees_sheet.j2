@@ -51,7 +51,8 @@
   <thead>
     <tr>
       <td>Name</td>
-      <td>Number</td>
+      <td>Phone</td>
+      <td>Mobile</td>
       <td style="text-align:center">Paid</td>
       <td style="text-align:center">Dinner?</td>
     </tr>
@@ -59,6 +60,7 @@
   {% for player in dataset|sort(attribute='name') -%}
   <tr class="{{ loop.cycle('odd', 'even') }}">
     <td>{{player.name}}</td>
+    <td>{{player.phone}}</td>
     <td>{{player.mobile}}</td>
     {% if player["fee paid"] -%}
     <td style="text-align:center">&#10004</td>
