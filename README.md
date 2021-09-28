@@ -23,8 +23,11 @@ by TournamentControl. However, [LibreOffice](https://libreoffice.org), which
 is a great Free Software alternative to Microsoft Excel and Google Docs, can.
 
 To use the tools in this repository, you need to open the exported file in
-LibreOffice, and save it. There is a `Makefile` to automate this, should you
-know what that is.
+LibreOffice, and save it.
+
+There is a script
+[fix-tc-export.sh](https://github.com/madduck/tctools/blob/main/fix-tc-export.sh)
+that does this.
 
 ## Thanks & credits
 

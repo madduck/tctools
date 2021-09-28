@@ -20,7 +20,7 @@ as [TournamentControl](https://tournamentcontrol.dtkapiti.co.nz/) exports.
 ./player_mmerge.py tc-export-fixed.xls -t entry_fees_sheet.j2 > sheet.html
 ```
 
-Note that to use a TC exported spreadsheet, it needs to be fixed by loading and saving it with LibreOffce, since PyExcel cannot read tyhe ancient format TC writes.
+Note that to use a TC exported spreadsheet, it needs to be fixed by loading and saving it with LibreOffce, since PyExcel cannot read the ancient format TC writes. There is a script [fix-tc-export.sh](https://github.com/madduck/tctools/blob/main/fix-tc-export.sh) that does this.
 
 ## Licence
 
