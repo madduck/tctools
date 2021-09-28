@@ -5,7 +5,7 @@ This is a collection of tools I've been using to run squash tournaments at [The 
 The tools include:
 
 * The [SquashNZ Draw Maker](https://github.com/madduck/tctools/tree/main/draw_maker), a [LibreOffice](https://libreoffice.org) spreadsheet to facilitate making draws;
-* A set of [scripts to bulk-process data](https://github.com/madduck/tctools/tree/main/draw_maker), e.g. mail-merging, and exporting email address lists for use in e.g. MailChimp;
+* A set of [scripts to bulk-process data](https://github.com/madduck/tctools/tree/main/tcmerge), e.g. mail-merging, and exporting email address lists for use in e.g. MailChimp;
 * A set of [scripts and templates to publish up-to-date draw and schedule information](https://github.com/madduck/tctools/tree/main/tc2web) from TournamentControl to a web page;
 * A [template for draw posters](https://github.com/madduck/tctools/tree/main/poster_maker), automatically generated from TournamentControl data;
 * A couple of Linux-specific scripts to [automate data entry into iSquash](https://github.com/madduck/tctools/tree/main/isquash_puppeteer) from TournamentControl export files.

@@ -28,15 +28,6 @@ showcase how to use this tool, and how it facilitates your life.
 
 Looking forward to your feedback.
 
-## Scripts
-
-Also included are two simple [Python](https://python.org) scripts that make
-use of [PyExcel](http://www.pyexcel.org/) to give access to the draw data:
-
-* `mail_list_export.py` — designed for MailChimp (ugh!), this script just exports a tab-separated list for MailChimp's audience import. It takes a tag name as argument and will assign this tag to all players, as well as the tag with `-wl` appended to all players on the waiting list.
-
-* `player_mmerge.py` — A simple mail merger tool that just fills in fields in the text provided as argument. It's useful to me because I can send text messages from the command line. Your mileage will probably vary…
-
 ## Screenshots
 
 ### Making draws

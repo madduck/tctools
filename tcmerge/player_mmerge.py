@@ -204,7 +204,7 @@ else:
         autoescape=jinja2.select_autoescape(['j2'])
     )
     template = env.from_string(template)
-    timestamp = datetime.datetime.now(tz=pytz.timezone('Pacific/Auckland')).strftime('%F % T %Z')
+    timestamp = datetime.datetime.now(tz=pytz.timezone('Pacific/Auckland')).strftime('%F %T %Z')
     print(template.render(tournament_name=tournament_name,
                           timestamp=timestamp,
                           dataset=resultset)
