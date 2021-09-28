@@ -20,15 +20,6 @@ import re
 import jinja2
 import pytz
 
-def time_parser(timestr):
-    """Convert silly 12h time to 24h time"""
-    ampm = timestr[-2:]
-    hour, minute = timestr[:-2].split(':')
-    hour = int(hour)
-    if ampm == 'pm' and hour != 12:
-        hour += 12
-    return datetime.time(hour, int(minute))
-
 workbook = xlrd.open_workbook(sys.argv[1])
 tournament_name = workbook.sheet_by_name('Tournament').cell_value(rowx=0, colx=1)
 
@@ -132,7 +123,16 @@ class Game:
             self.statusclasses.append('soon')
 
         self.day = daytime.split()[0]
-        self.time = time_parser(daytime.split()[1])
+        self.time = Game.time_parser(daytime.split()[1])
+
+    def time_parser(timestr):
+        """Convert silly 12h time to 24h time"""
+        ampm = timestr[-2:]
+        hour, minute = timestr[:-2].split(':')
+        hour = int(hour)
+        if ampm == 'pm' and hour != 12:
+            hour += 12
+        return datetime.time(hour, int(minute))
 
     WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     def __lt__(self, other):
