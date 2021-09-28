@@ -6,7 +6,8 @@
 # format not supported by the tools here)
 #
 
-FILE="${1:-tc-export.xls}"
+FILE="${1:-${0%/*}/tc-export.xls}"
+FILE="$(realpath "$FILE")"
 BASENAME="${FILE%.*}"
 
 cd "${0%/*}"

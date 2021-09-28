@@ -1,8 +1,8 @@
 draws.html schedule.html: tc2web.py ../tc-export-fixed.xls schedule.j2 draws.j2
 	./tc2web.py ../tc-export-fixed.xls
 
-../tc-export-fixed.xls::
-	../fix-tc-export.sh
+../%-fixed.xls: ../%.xls
+	../fix-tc-export.sh $<
 
 .PHONY: view clean upload
 view: schedule.html
