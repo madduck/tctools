@@ -15,6 +15,7 @@
 import sys
 import os
 import pyexcel
+import xlrd.compdoc
 import argparse
 import datetime
 import pytz
@@ -71,7 +72,18 @@ if args.file or args.template:
 elif not args.template:
     template = " ".join(args.text)
 
-workbook = pyexcel.load_book(args.spreadsheet[0])
+try:
+    workbook = pyexcel.load_book(args.spreadsheet[0])
+
+except xlrd.compdoc.CompDocError as e:
+    print(f'Could not load file {args.spreadsheet[0]}', file=sys.stderr)
+    if 'size exceeds expected' in e.args[0]:
+        print(f'Try running fix-tc-export.sh on {args.spreadsheet[0]}',
+                file=sys.stderr)
+        print('and rerun this tool on the fixed file generated',
+                file=sys.stderr)
+    sys.exit(-1)
+
 sheets = []
 
 if 'Players' in workbook.sheet_names():
