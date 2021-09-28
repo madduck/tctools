@@ -15,6 +15,9 @@ as [TournamentControl](https://tournamentcontrol.dtkapiti.co.nz/) exports.
 
 # list all male player codes in B grade:
 ./player_mmerge.py -g m -p 2700-3499 tc-export-fixed.xls '{grading code}'
+
+# generate a HTML page to record fees paid
+./player_mmerge.py tc-export-fixed.xls -t entry_fees_sheet.j2 > sheet.html
 ```
 
 Note that to use a TC exported spreadsheet, it needs to be fixed by loading and saving it with LibreOffce, since PyExcel cannot read tyhe ancient format TC writes.
