@@ -59,6 +59,32 @@ for rowx in range(1, drawrows.nrows):
     draws[d.code] = d
 
 ###############################################################################
+# Let's also collect data about all players, indexed by name
+
+class Player:
+    def __init__(self, row):
+        self.id, self.name, self.gender, self.code, \
+                self.points, self.grade, self.club = row[0:7]
+
+    def __hash__(self):
+        return self.name.__hash__()
+
+    def __eq__(self, other):
+        return self.name.__eq__(other.name)
+
+    def __lt__(self, other):
+        return self.name.__lt__(other.name)
+
+    def __repr__(self):
+        return self.name
+
+playerrows = workbook.sheet_by_name('Players')
+players = {}
+for rowx in range(1, playerrows.nrows):
+    p = Player(playerrows.row_values(rowx=rowx))
+    players[p.name] = p
+
+###############################################################################
 # Then the games
 
 class Game:
@@ -81,8 +107,10 @@ class Game:
         # been fiddled with, and so the export is consistent…
         self.winner = None
         self.p1classes = []
+        self.p1data = None
         if row[1]:
             self.p1 = row[1]
+            self.p1data = players[self.p1]
             if int(row[3]) == 1:
                 self.p1classes.append('winner')
                 self.winner = self.p1
@@ -91,8 +119,10 @@ class Game:
             self.p1classes.append('unknown')
 
         self.p2classes = []
+        self.p2data = None
         if row[4]:
             self.p2 = row[4]
+            self.p2data = players[self.p2]
             if int(row[6]) == 1:
                 self.p2classes.append('winner')
                 self.winner = self.p2
@@ -187,6 +217,7 @@ with open('live.html', 'w') as f:
     print(template.render(tournament_name=tournament_name,
         timestamp=timestamp,
         draws=draws,
+        players=players,
         pending_games=sorted(pending_games),
         played_games=sorted(played_games),
     ), file=f)

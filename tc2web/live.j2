@@ -38,8 +38,8 @@ Last updated: {{timestamp}}
     <td>{{ game.day }}</td>
     <td style="text-align:right">{{ game.time.strftime('%H:%M') }}</td>
     <td><a href="#{{game.code[:2]}}">{{game.code[:2]}}</a>{{game.code[2:]}}</td>
-    <td class="{{ game.p1classes|join(' ') }}">{{ game.p1 }}</td>
-    <td class="{{ game.p2classes|join(' ') }}">{{ game.p2 }}</td>
+    <td class="{{ game.p1classes|join(' ') }}">{{ player(game.p1) }}</td>
+    <td class="{{ game.p2classes|join(' ') }}">{{ player(game.p2) }}</td>
     <td>{{ game.status }}</td>
     <td>{{ game.comment }}</td>
   </tr>
@@ -65,6 +65,15 @@ Last updated: {{timestamp}}
 <a href="#{{d.code}}">{{d.code}}</a>
 {% endif -%}
 {% endfor -%}
+{% endmacro -%}
+
+{% macro player(player) -%}
+{% if player in players -%}
+{% set p = players[player] -%}
+{{ p.name }}
+{% else -%}
+{{ player }}
+{% endif -%}
 {% endmacro -%}
 
 {##### SCHEDULE ##############################################################}
@@ -143,8 +152,8 @@ Last updated: {{timestamp}}
       <a href="#S-{{game.code}}">{{game.time.strftime('%H:%M')}}</a>
     </td>
     <td>{{ game.code }}</td>
-    <td class="{{ game.p1classes|join(' ') }}">{{ game.p1 }}</td>
-    <td class="{{ game.p2classes|join(' ') }}">{{ game.p2 }}</td>
+    <td class="{{ game.p1classes|join(' ') }}">{{ player(game.p1) }}</td>
+    <td class="{{ game.p2classes|join(' ') }}">{{ player(game.p2) }}</td>
     <td class="{{ game.statusclasses|join(' ') }}">{{ game.status }}</td>
     <td>{{ game.comment }}</td>
   </tr>
