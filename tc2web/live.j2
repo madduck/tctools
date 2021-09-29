@@ -70,7 +70,13 @@ Last updated: {{timestamp}}
 {% macro player(player) -%}
 {% if player in players -%}
 {% set p = players[player] -%}
-{{ p.name }}
+{#<a class="player" href="#P{{p.id}}">{{ p.name }}</a>#}
+<span class="player">{{ p.name }}</span>
+<div class="playerinfo">
+{{p.club or p.code}}<br/>
+{{p.grade}} @ {{'{0:,d}'.format(p.points|int)}} points<br/>
+{{draws[p.id[:2]].name}} #{{p.id[2:]}}
+</div>
 {% else -%}
 {{ player }}
 {% endif -%}

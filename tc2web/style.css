@@ -100,3 +100,22 @@ tr:target {
 .display {
   margin-bottom: 1em;
 }
+
+.deemph {
+  font-weight: normal;
+}
+
+tr:hover .playerinfo,
+tr:active .playerinfo {
+  display: block;
+}
+
+tr:hover .player,
+tr:active .player {
+  font-weight: bolder;
+}
+
+.playerinfo {
+  font-size: smaller;
+  display: none;
+}
