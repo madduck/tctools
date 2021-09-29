@@ -36,7 +36,7 @@ Last updated: {{timestamp}}
     <td style="text-align:right">{{ game.nr }}</td>
     <td>{{ game.day }}</td>
     <td style="text-align:right">{{ game.time.strftime('%H:%M') }}</td>
-    <td><a href="#{{game.code[:2]}}">{{game.code[:2]}}</a>{{game.code[2:]}}</td>
+    <td><a href="#{{game.name[:2]}}">{{game.name[:2]}}</a> {{game.name[2:]}}</td>
     <td class="{{ game.p1classes|join(' ') }}">{{ player(game.p1) }}</td>
     <td class="{{ game.p2classes|join(' ') }}">{{ player(game.p2) }}</td>
     <td>{{ game.status }}</td>
@@ -156,7 +156,7 @@ Last updated: {{timestamp}}
     <td style="text-align:right">
       <a href="#S-{{game.code}}">{{game.time.strftime('%H:%M')}}</a>
     </td>
-    <td>{{ game.code }}</td>
+    <td>{{ game.name[:2] }} {{ game.name[2:] }}</td>
     <td class="{{ game.p1classes|join(' ') }}">{{ player(game.p1) }}</td>
     <td class="{{ game.p2classes|join(' ') }}">{{ player(game.p2) }}</td>
     <td class="{{ game.statusclasses|join(' ') }}">{{ game.status }}</td>

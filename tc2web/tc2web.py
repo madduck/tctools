@@ -187,6 +187,17 @@ class Game:
     def is_played(self):
         return self.winner
 
+    NAMES = { '301' : 'Final',
+              '302' : 'Sp.Plate',
+              '303' : 'Plate',
+              '304' : 'Co.Plate' }
+    def get_name(self):
+        if self.code[2:] in Game.NAMES:
+            return f'{self.code[:2]} {Game.NAMES[self.code[2:]]}'
+        else:
+            return self.code
+    name = property(get_name)
+
 gamerows = workbook.sheet_by_name('Games')
 played_games, pending_games = [], []
 games = [Game(gamerows.row_values(rowx)) for rowx in range(1, gamerows.nrows)]
