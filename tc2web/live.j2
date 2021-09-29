@@ -30,7 +30,7 @@ Last updated: {{timestamp}}
 </thead>
 <tbody>
 {% for game in games -%}
-  <tr class="{{ loop.cycle('odd', 'even') }}" id="{{game.code}}">
+  <tr class="{{ loop.cycle('odd', 'even') }}" id="S-{{game.code}}">
     <td style="background:#{{game.colour}}">
       <a href="#{{game.code[:2]}}">&nbsp;</a>
     </td>
@@ -140,7 +140,7 @@ Last updated: {{timestamp}}
     <td style="background:#{{draw.colour}}">&nbsp;</td>
     <td>{{ game.day }}</td>
     <td style="text-align:right">
-      <a href="#{{game.code}}">{{game.time.strftime('%H:%M')}}</a>
+      <a href="#S-{{game.code}}">{{game.time.strftime('%H:%M')}}</a>
     </td>
     <td>{{ game.code }}</td>
     <td class="{{ game.p1classes|join(' ') }}">{{ game.p1 }}</td>
