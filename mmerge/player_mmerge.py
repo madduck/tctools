@@ -133,6 +133,9 @@ for i, n in enumerate(colnames):
         continue
     if n in skip_cols:
         continue
+    elif n in cols:
+        # use the first column if there are more than one with the same name
+        continue
     cols[n] = i
 
 if args.points:
