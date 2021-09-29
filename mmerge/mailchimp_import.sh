@@ -16,5 +16,5 @@
 set -eu
 
 echo "Name	First name	Email	Tags"
-${0%/*}/player_mmerge.py -a "$1" "{name}	{first name}	{email} $2{wl}" \
+${0%/*}/player_mmerge.py -a "$1" "{name}	{first name}	{email}	$2{wl}" \
   | sed -e 's,False$,,;s,True$,-wl,'
