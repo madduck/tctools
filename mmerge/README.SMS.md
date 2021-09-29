@@ -29,4 +29,13 @@ For tournament control, I use this in conjunction with the [mmerge](https://gith
 
 This will only output the literal text, but I can append `| sh`, and the command will be executed in bulk. Beware, here be dragons, as evidenced by the Sorceror's Apprentice.
 
+Another example: after sending an email to all players using e.g. MailChimp, I want to send a reminder in case overzealous spam checkers are getting in the way again. However, there is no need to pester those people who have been recorded to have read the email. So, say you've exported a file with email addresses that have read your email to `/tmp/opened.csv`, you can now fire off:
+
+```
+./mmerge/player_mmerge.py dm.ods 'grep -qi "^{email}$" /tmp/opened.csv ||
+echo "sms {number} Hi {first name}, the latest updates for the Sin City Open just went out via email (https://bit.ly/2Y1CXgv). If filed as spam, please teach your mailer. By now you should also be well aware of your draw and 1st game time (https://thorndonclub.co.nz/tc/live.html#{draw}). Looking forward to tomorrow/Friday! -m"'
+```
+
+And now append `| sh | sh` and it will only be sent to those who have not opened the message.
+
 This is Linux-only, and I don't know how to make this run on Windows or Apple, but if you do, let's document it here. And also, please let me know if you want more information.
