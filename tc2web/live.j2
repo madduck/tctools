@@ -58,7 +58,7 @@ Last updated: {{timestamp}}
 {% endmacro -%}
 
 {% macro drawnav(draws, curcode) -%}
-{% for code, d in draws|dictsort -%}
+{% for code, d in draws|dictsort(by='value') -%}
 {% if d.code == curcode -%}
 <a class="current">{{d.code}}</a>
 {% else -%}
@@ -116,7 +116,7 @@ Last updated: {{timestamp}}
 
 <h1>{{ tournament_name }} Draws Overview</h1>
 
-{% for code, draw in draws|dictsort -%}
+{% for code, draw in draws|dictsort(by='value') -%}
 
 <h2><a name="{{draw.code}}"></a><span class="tname">{{tournament_name}}</span>
 {{ draw.name }}</h2>
