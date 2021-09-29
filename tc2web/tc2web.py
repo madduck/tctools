@@ -53,8 +53,10 @@ class Draw:
         self.games.append(game)
 
 drawrows = workbook.sheet_by_name('Draws')
-draws = [Draw(drawrows.row_values(rowx)) for rowx in range(1, drawrows.nrows)]
-draws.sort()
+draws = {}
+for rowx in range(1, drawrows.nrows):
+    d = Draw(drawrows.row_values(rowx=rowx))
+    draws[d.code] = d
 
 ###############################################################################
 # Then the games
@@ -161,10 +163,10 @@ games = [Game(gamerows.row_values(rowx)) for rowx in range(1, gamerows.nrows)]
 games.sort()
 
 # And split them into played and pending, adding the colour attribute
-# as we go
+# as we go, and also assign them to draws
 for i, game in enumerate(games):
     game.nr = i+1
-    for draw in draws:
+    for code, draw in draws.items():
         if game.code.startswith(draw.code):
             game.colour = draw.colour
             draw.append_game(game)
