@@ -51,6 +51,7 @@ td.winner::before {
 td {
   border: 1px #ddd solid;
   padding: 0.5em;
+  vertical-align: top;
 }
 
 td.unknown {
