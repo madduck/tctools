@@ -39,7 +39,7 @@ Last updated: {{timestamp}}
     <td><a href="#{{game.name[:2]}}">{{game.name[:2]}}</a> {{game.name[2:]}}</td>
     <td class="{{ game.p1classes|join(' ') }}">{{ player(game.p1) }}</td>
     <td class="{{ game.p2classes|join(' ') }}">{{ player(game.p2) }}</td>
-    <td>{{ game.status }}</td>
+    <td class="{{ game.statusclasses|join(' ') }}">{{ game.status }}</td>
     <td>{{ game.comment }}</td>
   </tr>
 {% endfor -%}
