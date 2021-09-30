@@ -34,7 +34,7 @@ inputg.add_argument('spreadsheet', metavar='SPREADSHEET', type=str,
 inputg.add_argument('--all', '-a', action="store_true",
         help="Read all players, not just those in draws")
 
-indata = inputg.add_mutually_exclusive_group(required=True)
+indata = inputg.add_mutually_exclusive_group(required=False)
 indata.add_argument('text', metavar='TEMPLATE_TEXT', type=str,
         nargs='*', default='', help='Template text to use for merge')
 indata.add_argument('--file', '-f', metavar='FILE', default=None,
@@ -70,7 +70,8 @@ if args.file or args.template:
         sys.exit(1)
 
 elif not args.template:
-    template = " ".join(args.text)
+    template = " ".join(args.text) if args.text \
+            else '{squash code}\t{name}\t{points}'
 
 try:
     workbook = pyexcel.load_book(args.spreadsheet[0])
