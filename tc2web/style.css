@@ -22,6 +22,10 @@ table {
   border-collapse: collapse;
 }
 
+thead tr {
+  background: #e6e6e6;
+}
+
 thead td {
   font-weight: bold;
 }
