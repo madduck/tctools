@@ -32,6 +32,7 @@ class Draw:
         # delphi colours are reversed
         self.colour = f'{row[2][7:]}{row[2][5:7]}{row[2][3:5]}'
         self.games = []
+        self.players = []
 
     def __repr__(self):
         return self.code
@@ -52,6 +53,11 @@ class Draw:
     def append_game(self, game):
         self.games.append(game)
 
+    def add_player(self, player):
+        for i in range(max(0, player.seed - len(self.players))):
+            self.players.append(None)
+        self.players[player.seed-1] = player
+
 drawrows = workbook.sheet_by_name('Draws')
 draws = {}
 for rowx in range(1, drawrows.nrows):
@@ -65,6 +71,8 @@ class Player:
     def __init__(self, row):
         self.id, self.name, self.gender, self.code, \
                 self.points, self.grade, self.club = row[0:7]
+        self.draw = draws[self.id[:2]]
+        self.seed = int(self.id[2:])
 
     def __hash__(self):
         return self.name.__hash__()
@@ -83,6 +91,7 @@ players = {}
 for rowx in range(1, playerrows.nrows):
     p = Player(playerrows.row_values(rowx=rowx))
     players[p.name] = p
+    draws[p.draw.code].add_player(p)
 
 ###############################################################################
 # Then the games

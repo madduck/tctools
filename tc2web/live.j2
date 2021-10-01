@@ -74,7 +74,7 @@ Last updated: {{timestamp}}
 <div class="playerinfo">
 {{p.club or p.code}}<br/>
 {{p.grade}} @ {{'{0:,d}'.format(p.points|int)}} points<br/>
-{{draws[p.id[:2]].name}} #{{p.id[2:]}}
+{{p.draw.name}} #{{p.seed}}
 </div>
 {% else -%}
 {{ player }}
@@ -161,6 +161,31 @@ Last updated: {{timestamp}}
     <td class="{{ game.p2classes|join(' ') }}">{{ player(game.p2) }}</td>
     <td class="{{ game.statusclasses|join(' ') }}">{{ game.status }}</td>
     <td>{{ game.comment }}</td>
+  </tr>
+{% endfor -%}
+</tbody>
+</table>
+
+<h3>{{draw.code}} seedings</h3>
+
+<table>
+<thead>
+<tr>
+<td>#</td>
+<td>Name</td>
+<td>Points</td>
+<td>Code</td>
+<td>Club</td>
+</tr>
+</thead>
+<tbody>
+{% for player in draw.players -%}
+  <tr class="{{ loop.cycle('odd', 'even') }}">
+    <td>{{loop.index}}</td>
+    <td>{{player.name}}</td>
+    <td>{{'{0:,d}'.format(player.points|int)}}</td>
+    <td>{{player.code}}</td>
+    <td>{{player.club}}</td>
   </tr>
 {% endfor -%}
 </tbody>
