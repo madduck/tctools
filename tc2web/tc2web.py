@@ -12,6 +12,13 @@
 # Released under the MIT Licence
 #
 
+# TODO:
+# 1. At the moment, we rely on the draws being named 'M1' and 'W4' and the
+#    code actually assumes that it's a single digit. So if you find yourself
+#    in the situation to have 12 draws or more for any gender, you will need
+#    to be clever about how the Player class parses the player ID into draw
+#    and seed.
+
 import sys
 import xlrd
 import datetime
