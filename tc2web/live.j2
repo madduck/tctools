@@ -127,7 +127,9 @@ Last updated: {{timestamp}}
 {{ draw.name }}</h2>
 
 <div class="nav">
+{% if pending_games -%}
 <a href="#now">Schedule</a>
+{% endif -%}
 {{ drawnav(draws, draw.code) }}
 </div>
 
