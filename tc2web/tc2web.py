@@ -18,6 +18,8 @@
 #    in the situation to have 12 draws or more for any gender, you will need
 #    to be clever about how the Player class parses the player ID into draw
 #    and seed.
+# 2. The naming of round 3 games is probably specific to 8-draws and won't
+#    apply to 4 and 6 draws as such.
 
 import sys
 import xlrd
