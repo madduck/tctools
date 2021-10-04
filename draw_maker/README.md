@@ -44,8 +44,6 @@ Looking forward to your feedback.
 
 ## Ideas / To-dos:
 
-- A sheet to print to record tournament fees paid;
-
 - Volunteer roster integration;
 
 - A "save-restore" mechanism: provide a view to easily be able to copy-paste player-code-to-draw assignments, such that when a new data set is imported, the previous assignments can be VLOOKUP'd and displayed next to the editable fiels in the draw maker;
