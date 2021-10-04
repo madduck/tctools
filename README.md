@@ -4,11 +4,14 @@ This is a collection of tools I've been using to run squash tournaments at [The 
 
 The tools include:
 
-* The [SquashNZ Draw Maker](https://github.com/madduck/tctools/tree/main/draw_maker), a [LibreOffice](https://libreoffice.org) spreadsheet to facilitate making draws;
-* A set of [scripts to bulk-process data](https://github.com/madduck/tctools/tree/main/mmerge), e.g. mail-merging, and exporting email address lists for use in e.g. MailChimp;
+* The [SquashNZ DrawMaker](https://github.com/madduck/tctools/tree/main/draw_maker), a [LibreOffice](https://libreoffice.org) spreadsheet to facilitate making draws;
+* A set of [scripts to bulk-process data](https://github.com/madduck/tctools/tree/main/scripts), e.g.
+  * mail-merging, and exporting email address lists for use in e.g. MailChimp;
+  * automatically making and seeding draws in iSquash after creating them in DrawMaker;
+  * searching the grading list, and bulk-registering players to waiting lists, so as to use them in the DrawMaker;
+  * automated entering of game scores for tournaments into iSquash.
 * A set of [scripts and templates to publish up-to-date draw and schedule information](https://github.com/madduck/tctools/tree/main/tc2web) from TournamentControl to a web page;
 * A [template for draw posters](https://github.com/madduck/tctools/tree/main/poster_maker), automatically generated from TournamentControl data;
-* A couple of Linux-specific scripts to [automate data entry into iSquash](https://github.com/madduck/tctools/tree/main/isquash_puppeteer) from TournamentControl export files.
 
 There is a [series of videos to explain how to use
 these](https://vimeo.com/user152357033).
@@ -33,9 +36,15 @@ and you will find `tctools` in the subdirectory `tctools`. Easy as.
 
 Finally, to update, change to that directory and run `git pull` to upgrade the local copy to the latest version.
 
+## Installing dependencies
+
+### LibreOffice
+
+The DrawMaker is written using [LibreOffice](https://libreoffice.org), which you will need to install, as it uses functionality not available in Excel or Google Docs. You also need LibreOffice in combination with TournamentControl, as detailed in the next section:
+
 ## About the TournamentControl export
 
-The [Python](https://python.org) libraries I used to read Excel and
+The [Python](https://python.org) libraries I use to read Excel and
 OpenDocument spreadsheets cannot deal with the outdated Excel format exported
 by TournamentControl. However, [LibreOffice](https://libreoffice.org), which
 is a great Free Software alternative to Microsoft Excel and Google Docs, can.

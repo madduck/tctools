@@ -25,6 +25,10 @@ Here are some of the features that might make it interesting to you:
 
 Looking forward to your feedback.
 
+## Installing dependencies
+
+The DrawMaker is a [LibreOffice](https://libreoffice.org) spreadsheet, and uses functionality that is unlikely to be supported by Excel and Google Docs. Please [download and install](https://www.libreoffice.org/get-help/install-howto/) LibreOffice, which is Free Software, to use this tool.
+
 ## How to use the Draw Maker
 
 If videos are your thing: I've recorded a [series of
@@ -39,13 +43,13 @@ Here is the gist:
 
 3. Open each file in turn, select all cells (`Ctrl-a`), copy all (`Ctrl-c`), then switch to the Draw Maker spreadsheet, select the appropriate of the yellow tabs at the bottom, select all cells here (`Ctrl-a`) and paste the registrations (`Ctrl-v`). Now all registrations are imported.
 
-4. Switch to the Men or the Women tabs. You will see all players from both list in decreasing points order. Waitlisted players are marked red. Now use the first column to assign players to draws. I recommend to start with '0' for the Open, then '1' for Div1, etc.;
+4. Switch to the Men or the Women tabs. You will see all players from both list in decreasing points order. Waitlisted players are marked red. Now use the first column to assign players to draws. I recommend to start with '0' for the Open, then '1' for Div1, etc..
 
 5. When all players have been assigned, you can verify the result using the "Men's Draws" and "Women's Draws" tabs. You may need to hit `F9` to update the row colours.
 
 6. As players withdraw, or new players jump on the waitlist, or you move players over from the waitlist to the main draws, and re-export the registrations as per the steps above, you will find that the assignments in the "Men" and "Women" tabs will have shifted, and need to be updated. Unfortunately, there is no smart way around this yet.
 
-   1. If all you do is move someone over from the waitlist to the main draw, then everything should be as before;
+   1. If all you do is move someone over from the waitlist to the main draw, then everything should be as before — just make sure to remove the line in the "Waiting List" tab, and insert it at the right position in the "Registrations" tab;
    2. As players become unavailable, instead of removing them from the registrations tabs, mark them with an 'X' in the "Men" and "Women" tabs;
    3. If you re-download and re-import from iSquash, you may well have to do some manual work. It's a good idea to make a copy of the file each time you re-import, so that you can refer to how things were before.
 
