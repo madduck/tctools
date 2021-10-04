@@ -1,5 +1,5 @@
 live.html: tc2web.py ../tc-export-fixed.xls live.j2
-	./tc2web.py ../tc-export-fixed.xls
+	./rebuild.sh
 
 ../%-fixed.xls: ../%.xls
 	../fix-tc-export.sh $<
