@@ -21,18 +21,17 @@ FTPHOST=ftp.example.org
 TARGETDIR=/tc/
 ```
 
-## Screenshotting TournamentControl
+Which FTP server to use, and what URL can then be used to access the uploaded files is unfortunately something you have to figure out yourself.
 
-There is a component missing that I will import soon, which is intended to be
-run on the Windows PC at the tournament, to screenshot the display and push an
-image every couple of minutes for people to remote-view court allocations.
+## Exporting from TournamentControl
 
-I've thought about recreating the display in HTML, but there is currently no
-way to get updated information from TournamentControl other than when data are
-being saved, and that only happens irregularly, so wouldn't be of much use for
-information that changes before and after each game on every court. Hopefully,
-the guys from TournamentControl will provide us with an API to access the live
-data at some point.
+For once-off exports, use the menu on the main screen:
+
+![Screenshot](https://user-images.githubusercontent.com/195073/135780105-c88bf3be-5280-4ac8-ab62-4d1eefb7cd36.png)
+
+## Running with TournamentControl
+
+As you are running a tournament, you will want to be running this code on the same PC as is used to control the tournament, i.e. the one running TournamentControl. The files to make that happen are included in the `windows` subdirectory, and more information is available in the [the README file](https://github.com/madduck/tctools/blob/main/tc2web/windows/README.md) file.
 
 ## Licence
 
