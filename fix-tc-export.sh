@@ -5,6 +5,10 @@
 # Fix a file exported from TournamentControl (which uses an ancient Excel
 # format not supported by the tools here)
 #
+# Copyright © 2021 martin f. krafft <tctools@pobox.madduck.net>
+# Released under the terms of the MIT Licence.
+#
+set -eu
 
 FILE="${1:-${0%/*}/tc-export.xls}"
 FILE="$(realpath "$FILE")"
