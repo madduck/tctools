@@ -35,7 +35,25 @@ Here is the gist:
 
 1. For each tournament, please create a copy of the file, rather than editing the master copy, as this may change over time when new functionality is added.
 
+2. Start by "Extracting registrations" from iSquash, which should yield a file `registrations.xls`. Do the same for your waiting list event, if you have one.
 
+3. Open each file in turn, select all cells (`Ctrl-a`), copy all (`Ctrl-c`), then switch to the Draw Maker spreadsheet, select the appropriate of the yellow tabs at the bottom, select all cells here (`Ctrl-a`) and paste the registrations (`Ctrl-v`). Now all registrations are imported.
+
+4. Switch to the Men or the Women tabs. You will see all players from both list in decreasing points order. Waitlisted players are marked red. Now use the first column to assign players to draws. I recommend to start with '0' for the Open, then '1' for Div1, etc.;
+
+5. When all players have been assigned, you can verify the result using the "Men's Draws" and "Women's Draws" tabs. You may need to hit `F9` to update the row colours.
+
+6. As players withdraw, or new players jump on the waitlist, or you move players over from the waitlist to the main draws, and re-export the registrations as per the steps above, you will find that the assignments in the "Men" and "Women" tabs will have shifted, and need to be updated. Unfortunately, there is no smart way around this yet.
+
+   1. If all you do is move someone over from the waitlist to the main draw, then everything should be as before;
+   2. As players become unavailable, instead of removing them from the registrations tabs, mark them with an 'X' in the "Men" and "Women" tabs;
+   3. If you re-download and re-import from iSquash, you may well have to do some manual work. It's a good idea to make a copy of the file each time you re-import, so that you can refer to how things were before.
+
+7. Player restrictions can be captured on the "Restrictions" tab. The idea here is to put their player code in the first white column, verify that there is a match by checking the name to the left (only works for players in the main draw, not on the waiting list; you can add restrictions for the waitlisted players all the same, you just don't get the name displayed), and then recording the days when a player cannot play. This information will be taken into account when the 1st and 2nd round game days and are computed in the "Men's Draws" and "Women's Draws" tabs, and will also inform the number of games listed for each day in the "Planning" tab.
+
+8. The "Statistics" are automatically computed, but you have to tell the tool which players you consider home players, and which are regional. The way to do this is through the player code, and you may need to expand columns H&I to show the configurables. The format is called [regular expressions](https://en.wikipedia.org/wiki/Regular_expression) and the example listed should give you enough to work with. Just for kicks, if I wanted to consider Levin regional in addition to all the Wellington clubs, I could just use: `WN|CDLV`, or `CD(LV|FN|PN)|WN(TH|IB|CK|MA|TA|KH|WO|HC|UH)`.
+
+9. Finally, the prize money calculator should be straight forward and self-explanatory.
 
 ## Screenshots
 
