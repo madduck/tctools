@@ -71,7 +71,7 @@ if args.file or args.template:
 
 elif not args.template:
     template = " ".join(args.text) if args.text \
-            else '{squash code}\t{name}\t{points}'
+            else '{code}\t{name}\t{points}'
 
 try:
     workbook = pyexcel.load_book(args.spreadsheet[0])
@@ -107,6 +107,7 @@ if 'Players' in workbook.sheet_names():
 
     row_offset = 1
     skip_cols = []
+    code_col = 'grading code'
 
 elif 'Restrictions' in workbook.sheet_names():
     if args.all:
@@ -118,6 +119,8 @@ elif 'Restrictions' in workbook.sheet_names():
         sheet_name = "{gender}'s Draws"
         row_offset = 8
         skip_cols = ['men', 'women']
+
+    code_col = 'squash code'
 
     wb = workbook.sheet_by_name('Info')
     tournament_name = wb.row_at(3)[2]
@@ -205,6 +208,8 @@ for players, gender in sheets:
                     (data['points'] >= points_min and
                      data['points'] <= points_max):
                 continue
+
+        data['code'] = data[code_col]
 
         resultset.append(data)
 
