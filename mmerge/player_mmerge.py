@@ -89,6 +89,16 @@ sheets = []
 
 if 'Players' in workbook.sheet_names():
 
+    if args.all:
+        print('--all/-a only makes sense with draw maker spreadsheet',
+                file=sys.stderr)
+        sys.exit(-1)
+
+    if args.waitlist:
+        print('--waitlist/-w only makes sense with draw maker spreadsheet',
+                file=sys.stderr)
+        sys.exit(-1)
+
     wb = workbook.sheet_by_name('Tournament')
     tournament_name = wb.row_at(0)[1]
 
