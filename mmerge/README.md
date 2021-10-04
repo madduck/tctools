@@ -11,7 +11,10 @@ as [TournamentControl](https://tournamentcontrol.dtkapiti.co.nz/) exports.
 ./player_mmerge.py draw_maker.ods 'sms {number} Kia ora {first name}, welcome to the {tournament}!'
 
 # send a message to people on the waiting list:
-./player_mmerge.py draw_maker.ods -w 'sms {number} Sorry we cannot host you, {first name}!'
+./player_mmerge.py draw_maker.ods -a -w 'sms {number} Sorry we cannot host you, {first name}!'
+
+# send a message to waitlisted people in the draws:
+./player_mmerge.py draw_maker.ods -w 'sms {number} {first name}, still keen?'
 
 # list all male player codes in B grade:
 ./player_mmerge.py -g m -p 2700-3499 tc-export-fixed.xls '{grading code}'
