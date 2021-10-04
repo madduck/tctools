@@ -21,6 +21,8 @@ Change the draw name, and the data should update.
 
 This only works for 4 round-robin, 6 type B, and 8 draws for now.
 
+Please make a copy of this file for every tournament, so that when things change upstream, you don't get conflicts.
+
 ## Licence
 
 You are free to use this under the terms of the [MIT
