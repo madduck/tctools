@@ -24,6 +24,14 @@ Note that to use a TC exported spreadsheet, it needs to be fixed by loading and 
 
 Have a look at how I [send bulk SMS](https://github.com/madduck/tctools/blob/main/mmerge/README.SMS.md), which is an essential ability for running successful tournaments.
 
+## Prerequisites
+
+To run this, you need:
+
+* [Python](https://python.org) 3.9 or newer;
+* A couple of libraries: `pip install pyexcel pyexcel-ods`
+* And if you want to do mail-merging with templates, you also need to run `pip install jinja2 pytz`
+
 ## Licence
 
 You are free to use this under the terms of the [MIT

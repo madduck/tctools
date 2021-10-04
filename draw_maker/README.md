@@ -23,10 +23,19 @@ Here are some of the features that might make it interesting to you:
 
 - Prize money scratchpad, which auto-calculates the denominations of bills you need to withdraw.
 
-I've recorded a [series of videos](https://vimeo.com/user152357033) to
-showcase how to use this tool, and how it facilitates your life.
-
 Looking forward to your feedback.
+
+## How to use the Draw Maker
+
+If videos are your thing: I've recorded a [series of
+videos](https://vimeo.com/user152357033) to showcase how to use this tool, and
+how it facilitates your life.
+
+Here is the gist:
+
+1. For each tournament, please create a copy of the file, rather than editing the master copy, as this may change over time when new functionality is added.
+
+
 
 ## Screenshots
 
