@@ -17,24 +17,6 @@ Once Python is installed, you also need to pull a couple of libraries with the f
 pip install jinja2 xlrd pytz
 ```
 
-## Downloading `tctools` to the TC computer
-
-There are two ways in which you can download `tctools` to the TC computer:
-
-1. By [downloading a Zip file](https://github.com/madduck/tctools/archive/refs/heads/main.zip), which you then unpack wherever you want it to live. This is very simple, but if there are updates, you have to download the Zip file again, or else you won't get any improvements and fixes;
-
-2. Using [Git for Windows](https://git-scm.com/download/win), which allows you to easily update as changes are made upstream.
-
-Downloading Git and installing it might be scary at first, as there are a lot of questions asked. However, you are fine just accepting the defaults for everything. Then, once installed, use the command line / PowerShell and enter:
-
-```
-git clone https://github.com/madduck/tctools.git
-```
-
-and you will find `tctools` in the subdirectory `tctools`. Easy as.
-
-Finally, to update, change to that directory and run `git pull`:
-
 ## Configuring TournamentControl to auto-export
 
 The settings are accessible from the top right of the TournamentControl screen:
