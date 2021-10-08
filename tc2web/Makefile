@@ -1,8 +1,5 @@
-live.html: tc2web.py ../tc-export-fixed.xls live.j2
+live.html: tc2web.py ../tc-export-demo.xls live.j2
 	./rebuild.sh
-
-../%-fixed.xls: ../%.xls
-	../fix-tc-export.sh $<
 
 .PHONY: view clean upload
 view: live.html

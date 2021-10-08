@@ -41,7 +41,11 @@ td.on {
 }
 
 td.next {
-  background: #ffff00;
+  background: #fb0;
+}
+
+td.soon {
+  background: #ff0;
 }
 
 td.winner {

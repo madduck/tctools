@@ -7,5 +7,5 @@
 #
 set -eu
 
-exec "${0%/*}/tc2web.py" ../tc-export-fixed.xls
-
+exec "${0%/*}/tc2web.py" --input ../tc-export-demo.xls --template live.j2 \
+  --output live.html

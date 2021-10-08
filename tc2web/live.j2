@@ -2,13 +2,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=0.75">
   <title>{{ tournament_name }} Live Info</title>
-  <link rel="stylesheet" href="style.css" type="text/css">
+<link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
 
 {##### MACROS ################################################################}
 
-{% macro schedule(games, commentlabel) -%}
+{% macro schedule(games, commentlabel, reverse=False, nroffset=0) -%}
 <p>
 Last updated: {{timestamp}}
 </p>
@@ -28,19 +28,22 @@ Last updated: {{timestamp}}
   </tr>
 </thead>
 <tbody>
-{% for game in games -%}
-  <tr class="{{ loop.cycle('odd', 'even') }}" id="S-{{game.code}}">
+{% for game in games|sort(reverse=reverse) -%}
+  {% set draw = game.draw.name -%}
+  {% set gameid = game.name.replace(draw, '') -%}
+  <!-- {{'{!r}'.format(game)}} -->
+  <tr class="{{ loop.cycle('odd', 'even') }}" id="S-{{game.name}}">
     <td style="background:#{{game.colour}}">
-      <a href="#{{game.code[:2]}}">&nbsp;</a>
+      <a href="#{{draw}}">&nbsp;</a>
     </td>
-    <td style="text-align:right">{{ game.nr }}</td>
-    <td>{{ game.day }}</td>
-    <td style="text-align:right">{{ game.time.strftime('%H:%M') }}</td>
-    <td><a href="#{{game.name[:2]}}">{{game.name[:2]}}</a> {{game.name[2:]}}</td>
-    <td class="{{ game.p1classes|join(' ') }}">{{ player(game.p1) }}</td>
-    <td class="{{ game.p2classes|join(' ') }}">{{ player(game.p2) }}</td>
-    <td class="{{ game.statusclasses|join(' ') }}">{{ game.status }}</td>
-    <td>{{ game.comment }}</td>
+    <td style="text-align:right">{{ (loop.revindex if reverse else loop.index) + nroffset }}</td>
+    <td>{{ game.datetime.strftime('%a') }}</td>
+    <td style="text-align:right">{{ game.datetime.strftime('%H:%M') }}</td>
+    <td><a href="#{{draw}}">{{draw}}</a>&nbsp;{{gameid}}</td>
+    <td class="{{ game.get_player_class(0) }}">{{ player(game.players[0]) }}</td>
+    <td class="{{ game.get_player_class(1) }}">{{ player(game.players[1]) }}</td>
+    <td class="{{ game.get_status_class() }}">{{ game.get_status() }}</td>
+    <td>{{ game.get_comment() }}</td>
   </tr>
 {% endfor -%}
 </tbody>
@@ -56,25 +59,25 @@ Last updated: {{timestamp}}
 
 {% endmacro -%}
 
-{% macro drawnav(draws, curcode) -%}
-{% for code, d in draws|dictsort(by='value') -%}
-{% if d.code == curcode -%}
-<a class="current">{{d.code}}</a>
+{% macro drawnav(draws, curdraw) -%}
+{% for d in draws|sort %}
+{% if d.name == curdraw -%}
+<a class="current">{{d.name}}</a>
 {% else -%}
-<a href="#{{d.code}}">{{d.code}}</a>
+<a href="#{{d.name}}">{{d.name}}</a>
 {% endif -%}
 {% endfor -%}
 {% endmacro -%}
 
 {% macro player(player) -%}
-{% if player in players -%}
+{% if player and player in players -%}
 {% set p = players[player] -%}
-{#<a class="player" href="#P{{p.id}}">{{ p.name }}</a>#}
 <span class="player">{{ p.name }}</span>
+<!-- {{'{!r}'.format(p)}} -->
 <div class="playerinfo">
 {{p.club or p.code}}<br/>
 {{p.grade}} @ {{'{0:,d}'.format(p.points|int)}} points<br/>
-{{p.draw.name}} #{{p.seed}}
+{{p.draw.desc}} #{{p.seed}}
 </div>
 {% else -%}
 {{ player }}
@@ -95,7 +98,7 @@ Last updated: {{timestamp}}
 {{ drawnav(draws, None) }}
 </div>
 
-{{ schedule(played_games|reverse, "Result") }}
+{{ schedule(played_games, "Result", reverse=True) }}
 {% endif -%}
 
 {% if pending_games -%}
@@ -114,23 +117,23 @@ Last updated: {{timestamp}}
 {{ drawnav(draws, None) }}
 </div>
 
-{{ schedule(pending_games, "Notes") }}
+{{ schedule(pending_games, "Notes", nroffset=played_games|length) }}
 {% endif -%}
 
 {##### DRAWS #################################################################}
 
 <h1>{{ tournament_name }} Draws Overview</h1>
 
-{% for code, draw in draws|dictsort(by='value') -%}
+{% for draw in draws|sort -%}
 
-<h2><a name="{{draw.code}}"></a><span class="tname">{{tournament_name}}</span>
-{{ draw.name }}</h2>
+<h2><a name="{{draw.name}}"></a><span class="tname">{{tournament_name}}</span>
+{{ draw.desc }}</h2>
 
 <div class="nav">
 {% if pending_games -%}
 <a href="#now">Schedule</a>
 {% endif -%}
-{{ drawnav(draws, draw.code) }}
+{{ drawnav(draws, draw.name) }}
 </div>
 
 <p>
@@ -151,24 +154,25 @@ Last updated: {{timestamp}}
 </tr>
 </thead>
 <tbody>
-{% for game in draw.games -%}
+{% for game in draw.games|sort -%}
+  <!-- {{'{!r}'.format(game)}} -->
   <tr class="{{ loop.cycle('odd', 'even') }}">
     <td style="background:#{{draw.colour}}">&nbsp;</td>
-    <td>{{ game.day }}</td>
+    <td>{{ game.datetime.strftime('%a') }}</td>
     <td style="text-align:right">
-      <a href="#S-{{game.code}}">{{game.time.strftime('%H:%M')}}</a>
+      <a href="#S-{{game.name}}">{{game.datetime.strftime('%H:%M')}}</a>
     </td>
     <td>{{ game.name[:2] }} {{ game.name[2:] }}</td>
-    <td class="{{ game.p1classes|join(' ') }}">{{ player(game.p1) }}</td>
-    <td class="{{ game.p2classes|join(' ') }}">{{ player(game.p2) }}</td>
-    <td class="{{ game.statusclasses|join(' ') }}">{{ game.status }}</td>
-    <td>{{ game.comment }}</td>
+    <td class="{{ game.get_player_class(0) }}">{{ player(game.players[0]) }}</td>
+    <td class="{{ game.get_player_class(1) }}">{{ player(game.players[1]) }}</td>
+    <td class="{{ game.get_status_class() }}">{{ game.get_status() }}</td>
+    <td>{{ game.get_comment() }}</td>
   </tr>
 {% endfor -%}
 </tbody>
 </table>
 
-<h3>{{draw.code}} seedings</h3>
+<h3>{{draw.name}} seedings</h3>
 
 <table>
 <thead>

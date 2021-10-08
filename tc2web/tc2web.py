@@ -12,241 +12,120 @@
 # Released under the MIT Licence
 #
 
-# TODO:
-# 1. At the moment, we rely on the draws being named 'M1' and 'W4' and the
-#    code actually assumes that it's a single digit. So if you find yourself
-#    in the situation to have 12 draws or more for any gender, you will need
-#    to be clever about how the Player class parses the player ID into draw
-#    and seed.
-# 2. The naming of round 3 games is probably specific to 8-draws and won't
-#    apply to 4 and 6 draws as such.
-
-import sys
-import xlrd
+import argparse
 import datetime
-import os
-import re
-import jinja2
 import pytz
+import os
+import jinja2
 
-workbook = xlrd.open_workbook(sys.argv[1])
-tournament_name = workbook.sheet_by_name('Tournament').cell_value(rowx=0, colx=1)
+from pytcnz.dtkapiti.tcexport_reader import TCExportReader
+from pytcnz.dtkapiti.game import Game as BaseGame
 
-###############################################################################
-# First get the draws
+parser = argparse.ArgumentParser(
+    description="Collect games & draws info and fill a template"
+)
 
-class Draw:
-    def __init__(self, row):
-        self.code, self.name = row[0:2]
-        # delphi colours are reversed
-        self.colour = f'{row[2][7:]}{row[2][5:7]}{row[2][3:5]}'
-        self.games = []
-        self.players = []
+parser.add_argument(
+    "--input",
+    "-i",
+    metavar="EXPORT_FILE",
+    type=str,
+    required=True,
+    dest="spreadsheet",
+    help="TC export file to read",
+)
+parser.add_argument(
+    "--template",
+    "-t",
+    metavar="TEMPLATE_FILE",
+    type=str,
+    required=True,
+    help="Jinja2 template to use",
+)
+parser.add_argument(
+    "--output",
+    "-o",
+    metavar="OUTPUT_FILE",
+    type=str,
+    required=True,
+    help="File to write",
+)
+args = parser.parse_args()
 
-    def __repr__(self):
-        return self.code
 
-    def __eq__(self, other):
-        return self.code.__eq__(other.code)
+class Game(BaseGame):
+    def get_player_class(self, which):
+        if self.is_player_known(which):
+            if self.get_winner() == self.players[which]:
+                return "winner"
+        else:
+            return "unknown"
 
-    def __hash__(self):
-        return self.code.__hash__()
+    def get_status(self):
+        if self.status <= Game.Status.justfinished:
+            winner = self.get_winner()
+            if not winner:
+                return "Awaiting result"
+            else:
+                return f"Won by {winner} in {len(self.scores)}"
 
-    def __lt__(self, other):
+        elif self.status == Game.Status.on:
+            r = f"On {self.court}"
+            if self.venue:
+                r += f" at {self.venue}"
+            return r
 
-        # sort the draws and put women first, because we can
-        def women_first(code):
-            return code.replace('W', '1').replace('M', '2')
-        return women_first(self.code).__lt__(women_first(other.code))
+        elif self.status == Game.Status.next:
+            return f"Next on {self.court}"
 
-    def append_game(self, game):
-        self.games.append(game)
+        elif self.status == Game.Status.scheduled:
+            return ""
 
-    def add_player(self, player):
-        for i in range(max(0, player.seed - len(self.players))):
-            self.players.append(None)
-        self.players[player.seed-1] = player
+        elif self.status == Game.Status.soon:
+            return "Soon"
 
-drawrows = workbook.sheet_by_name('Draws')
-draws = {}
-for rowx in range(1, drawrows.nrows):
-    d = Draw(drawrows.row_values(rowx=rowx))
-    draws[d.code] = d
+        else:
+            self.status = ""
 
-###############################################################################
-# Let's also collect data about all players, indexed by name
+    def get_status_class(self):
+        return self.status.name
 
-class Player:
-    def __init__(self, row):
-        self.id, self.name, self.gender, self.code, \
-                self.points, self.grade, self.club = row[0:7]
-        self.draw = draws[self.id[:2]]
-        self.seed = int(self.id[2:])
-
-    def __hash__(self):
-        return self.name.__hash__()
-
-    def __eq__(self, other):
-        return self.name.__eq__(other.name)
-
-    def __lt__(self, other):
-        return self.name.__lt__(other.name)
-
-    def __repr__(self):
-        return self.name
-
-playerrows = workbook.sheet_by_name('Players')
-players = {}
-for rowx in range(1, playerrows.nrows):
-    p = Player(playerrows.row_values(rowx=rowx))
-    players[p.name] = p
-    draws[p.draw.code].add_player(p)
-
-###############################################################################
-# Then the games
-
-class Game:
-    def __init__(self, row):
-        """Initialise a Game structure from a row in the Excel sheet"""
-        self.nr = None
-        self.code = row[0]
-        self.colour = "#FFFFFF" # default to white
-
-        def replace_winner_loser(s):
-            if s[0:2] == 'W ':
-                return f'Winner of {s[2:]}'
-            elif s[0:2] == 'L ':
-                return f'Loser of {s[2:]}'
+    def get_comment(self):
+        if self.scores:
+            s = str(self.scores)
+            if len(self.comment) > 0:
+                return f"{s} ({self.comment})"
             else:
                 return s
-
-        # Parse the TournamentControl export format. We don't do much
-        # sanity checking here because we trust that the file has not
-        # been fiddled with, and so the export is consistent…
-        self.winner = None
-        self.p1classes = []
-        self.p1data = None
-        if row[1]:
-            self.p1 = row[1]
-            self.p1data = players[self.p1]
-            if int(row[3]) == 1:
-                self.p1classes.append('winner')
-                self.winner = self.p1
         else:
-            self.p1 = replace_winner_loser(row[2])
-            self.p1classes.append('unknown')
+            return self.comment
 
-        self.p2classes = []
-        self.p2data = None
-        if row[4]:
-            self.p2 = row[4]
-            self.p2data = players[self.p2]
-            if int(row[6]) == 1:
-                self.p2classes.append('winner')
-                self.winner = self.p2
-        else:
-            self.p2 = replace_winner_loser(row[5])
-            self.p2classes.append('unknown')
 
-        daytime = row[7]
-        self.venue = row[8]
-        self.court = row[9]
-        self.comment = row[11]
+data = TCExportReader(
+    args.spreadsheet,
+    Game_class=Game,
+    add_games_to_draws=True,
+    add_players_to_draws=True,
+)
+data.read_all()
 
-        self.statusclasses = []
-        if row[10] <= 0:
-            if not self.winner:
-                self.status = 'Awaiting result'
-            else:
-                self.status = f'Won by {self.winner} in {len(row[11].split())}'
-        elif row[10] == 1:
-            self.status = f'On {self.court}'
-            self.statusclasses.append('on')
-        elif row[10] == 2 and self.court:
-            self.status = f'Next on {self.court}'
-            self.statusclasses.append('next')
-        elif row[10] == 99:
-            self.status = ''
-            self.statusclasses.append('scheduled')
-        else:
-            self.status = 'Soon'
-            self.statusclasses.append('soon')
-
-        self.day = daytime.split()[0]
-        self.time = Game.time_parser(daytime.split()[1])
-
-    def time_parser(timestr):
-        """Convert silly 12h time to 24h time"""
-        ampm = timestr[-2:]
-        hour, minute = timestr[:-2].split(':')
-        hour = int(hour)
-        if ampm == 'pm' and hour != 12:
-            hour += 12
-        return datetime.time(hour, int(minute))
-
-    WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    def __lt__(self, other):
-        if self.day == other.day:
-            if self.time == other.time:
-                # This ensures that "Loser" games sort before "Winner" games
-                # and also otherwise it should not make a difference that
-                # games at the same time are sorted by player 1's name
-                return self.p1.__lt__(other.p1)
-            else:
-                return self.time.__lt__(other.time)
-        else:
-            return Game.WEEKDAYS.index(self.day).__lt__(Game.WEEKDAYS.index(other.day))
-
-    def __repr__(self):
-        return f'Game({self.nr} {self.code}, {self.day}, ' \
-               f'{self.time.strftime("%H:%M")}, ' \
-               f'{self.p1}, {self.p2}, {self.status})'
-
-    def is_played(self):
-        return self.winner
-
-    NAMES = { '301' : 'Final',
-              '302' : 'Sp.Plate',
-              '303' : 'Plate',
-              '304' : 'Co.Plate' }
-    def get_name(self):
-        if self.code[2:] in Game.NAMES:
-            return f'{self.code[:2]} {Game.NAMES[self.code[2:]]}'
-        else:
-            return self.code
-    name = property(get_name)
-
-gamerows = workbook.sheet_by_name('Games')
-played_games, pending_games = [], []
-games = [Game(gamerows.row_values(rowx)) for rowx in range(1, gamerows.nrows)]
-games.sort()
-
-# And split them into played and pending, adding the colour attribute
-# as we go, and also assign them to draws
-for i, game in enumerate(games):
-    game.nr = i+1
-    for code, draw in draws.items():
-        if game.code.startswith(draw.code):
-            game.colour = draw.colour
-            draw.append_game(game)
-    if game.is_played():
-        played_games.append(game)
-    else:
-        pending_games.append(game)
-
-# And finally write out the HTML files. There's a bit of logic in
-# the templates still…
-timestamp = datetime.datetime.now(tz=pytz.timezone('Pacific/Auckland')).strftime('%F %T %Z')
+timestamp = datetime.datetime.now(
+    tz=pytz.timezone("Pacific/Auckland")
+).strftime("%F %T %Z")
 env = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.getcwd()),
-    autoescape=jinja2.select_autoescape(['j2'])
+    autoescape=jinja2.select_autoescape(["j2"]),
 )
-template = env.get_template('live.j2')
-with open('live.html', 'w') as f:
-    print(template.render(tournament_name=tournament_name,
-        timestamp=timestamp,
-        draws=draws,
-        players=players,
-        pending_games=sorted(pending_games),
-        played_games=sorted(played_games),
-    ), file=f)
+template = env.get_template(args.template)
+with open(args.output, "w") as f:
+    print(
+        template.render(
+            timestamp=timestamp,
+            tournament_name=data.get_tournament_name(),
+            draws=data.get_draws(),
+            players=data.get_players(),
+            pending_games=data.get_pending_games(),
+            played_games=data.get_played_games(),
+        ),
+        file=f,
+    )

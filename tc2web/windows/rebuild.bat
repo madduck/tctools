@@ -7,5 +7,5 @@
 
 set "CALLDIR=%CD%"
 cd %~dp0\..
-python.exe tc2web.py ..\tc-export-fixed.xls
+python.exe tc2web.py -i ..\tc-export-fixed.xls -t live.j2 -o live.html
 cd %CALLDIR%
