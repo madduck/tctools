@@ -11,7 +11,7 @@ from pytcnz.dtkapiti.tcexport_reader import TCExportReader
 from pytcnz.tctools.drawmaker_reader import DrawMakerReader, DrawsReader
 from pytcnz.gender import Gender
 from pytcnz.util import get_timestamp
-from pytcnz.meta import epilog
+import pytcnz.meta as META
 
 try:
     import jinja2
@@ -21,7 +21,7 @@ except ImportError:
     HAVE_JINJA2 = False
 
 parser = argparse.ArgumentParser(description='"Mail"-merge player data')
-parser.epilog = epilog
+parser.epilog = META.epilog
 
 inputg = parser.add_argument_group(title="Input")
 insheets = inputg.add_mutually_exclusive_group(required=True)
@@ -237,6 +237,7 @@ else:
     template = env.from_string(template)
     print(
         template.render(
+            meta=META,
             tournament_name=data.get_tournament_name(),
             timestamp=get_timestamp(),
             dataset=resultset,
