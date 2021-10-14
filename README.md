@@ -40,9 +40,13 @@ Finally, to update, change to that directory and run `git pull` to upgrade the l
 
 ### LibreOffice
 
-The DrawMaker is written using [LibreOffice](https://libreoffice.org), which you will need to install, as it uses functionality not available in Excel or Google Docs. You also need LibreOffice in combination with TournamentControl, as detailed in the next section:
+The DrawMaker is written using [LibreOffice](https://libreoffice.org), which
+you will need to
+[install](https://www.libreoffice.org/get-help/install-howto/), as it uses
+functionality not available in Excel or Google Docs. You also need LibreOffice
+in combination with TournamentControl, as detailed in the next section:
 
-## About the TournamentControl export
+### About the TournamentControl export
 
 The [Python](https://python.org) libraries I use to read Excel and
 OpenDocument spreadsheets cannot deal with the outdated Excel format exported
@@ -56,12 +60,39 @@ There is a script
 [fix-tc-export.sh](https://github.com/madduck/tctools/blob/main/fix-tc-export.sh)
 that does this.
 
+### Python and pytcnz
+
+If you want to use the [scripts](https://github.com/madduck/tctools/tree/main/scripts) or [tc2web](https://github.com/madduck/tctools/tree/main/tc2web) — and trust me, you do, unless you want to make and seed draws manually, or enter results by hand – you will need to install [Python](https://python.org), as [detailed here](https://www.python.org/downloads/).
+
+Once installed, you need to obtain the [pytcnz](https://github.com/madduck/pytcnz library, which used to be part of `tctools`, but has been split off into a separate library.
+
+Once Python is installed, the `pytcnz` library, as well as all dependencies can be installed with a single command (you might need to install `pip` first, if the following gives an error).
+
+```
+pip install git+https://github.com/madduck/pytcnz
+python -m pytcnz.welcome
+```
+
+This is also the command to run to upgrade the library.
+
+If you saw my little message, you should be good to go, e.g.
+
+```
+python scripts\search_grading_list --name martin --club WNTH --grade b
+```
+
+### Gecko web driver
+
+To remote-control iSquash, you need to install [geckodriver](https://github.com/mozilla/geckodriver). Grab the [latest release](https://github.com/mozilla/geckodriver/releases/latest) ([`geckodriver-v0.30.0-win64.zip`](https://github.com/mozilla/geckodriver/releases/download/v0.30.0/geckodriver-v0.30.0-win64.zip) at time of writing), open the Zip file, and copy the contained `geckodriver.exe` file into the `scripts` subdirectory of `tctools`, or anywhere else where the operating system can find it (your "`$PATH`").
+
+Please note that if you install `geckodriver` to the scripts directory, you can only run the scripts controlling iSquash from within that directory.
+
 ## Thanks & credits
 
 Kelsey Mackay from KP sent me the draw templates she was using, which gave me
-the idea, and informed the design.
+the idea for the [poster-maker](https://github.com/madduck/tctools/tree/main/poster_maker), and informed the design.
 
-Brent Gribbon, also from KP, inspired me with the idea to publish draw and schedule data to a website, and provided his Windows-specific scripts, which I couldn't get working, and rewrote in Python.
+Brent Gribbon, also from KP, inspired me with the idea to publish draw and schedule data to a website, and provided his Windows-specific scripts, which I couldn't get working, and rewrote in Python. It was all downhill from there.
 
 Thanks also go to Brad Watts, Nicole Georgel, and the rest of the folks at [The Thorndon Club](https://thorndonclub.co.nz) in Wellington for passing on their knowledge, and coaching me to get up and running quickly. None of what's here would be if it weren't for you, and the opportunity to serve as Squash Club Captain.
 
