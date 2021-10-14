@@ -20,6 +20,7 @@ import jinja2
 
 from pytcnz.dtkapiti.tcexport_reader import TCExportReader
 from pytcnz.dtkapiti.game import Game as BaseGame
+import pytcnz.meta as META
 
 parser = argparse.ArgumentParser(
     description="Collect games & draws info and fill a template"
@@ -120,6 +121,7 @@ template = env.get_template(args.template)
 with open(args.output, "w") as f:
     print(
         template.render(
+            meta=META,
             timestamp=timestamp,
             tournament_name=data.get_tournament_name(),
             draws=data.get_draws(),
