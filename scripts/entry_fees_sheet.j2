@@ -50,24 +50,24 @@
 <table>
   <thead>
     <tr>
+      <td style="text-align:center">Paid</td>
+      <td style="text-align:center">Dinner?</td>
       <td>Name</td>
       <td>Phone</td>
       <td>Mobile</td>
-      <td style="text-align:center">Paid</td>
-      <td style="text-align:center">Dinner?</td>
     </tr>
   </thead>
   {% for player in dataset|sort(attribute='name') -%}
   <tr class="{{ loop.cycle('odd', 'even') }}">
-    <td>{{player.name}}</td>
-    <td>{{player.phone}}</td>
-    <td>{{player.mobile}}</td>
     {% if player["fee_paid"] -%}
     <td style="text-align:center">&#10004</td>
     {% else -%}
     <td>&nbsp;</td>
     {% endif -%}
     <td>&nbsp;</td>
+    <td>{{player.name}}</td>
+    <td>{{player.phone}}</td>
+    <td>{{player.mobile}}</td>
   </tr>
   {% endfor -%}
 </table>
