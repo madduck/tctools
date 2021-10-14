@@ -7,5 +7,19 @@
 #
 set -eu
 
-exec "${0%/*}/tc2web.py" --input ../tc-export-demo.xls --template live.j2 \
-  --output live.html
+for i in "${1:-../tc-export-fixed.xls}" ../tc-export-demo.xls; do
+  if [ -r "$i" ]; then
+    FILE="$i"
+    break
+  fi
+done
+
+case "$FILE" in
+  (*-demo.xls) echo >&2 WARNING: Running on demo data ;;
+  ('')
+    echo >&2 No input file specified, aborting.
+    exit 1
+    ;;
+esac
+
+exec "${0%/*}/tc2web.py" --input "$FILE" --template live.j2 --output live.html
