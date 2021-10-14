@@ -11,8 +11,18 @@ As TournamentViewer is only available for Android, this provides a nice
 cross-platform way for people to keep up-to-date on a tournament without
 having to install software that may not be available for their phone.
 
+## Installing dependencies
+
+For this to work, you need to install:
+
+* Python 3.9 or later, as well as `pytcnz`. Please refer to [the section in tctools' README file](https://github.com/madduck/tctools#python-and-pytcnz) on how to install those;
+* The `python-jinja2` templating library, which you can install from the Windows PowerShell like so: `pip install Jinja2`;
+* [NcFTP](https://www.ncftp.com/download/) to handle the FTP upload.
+
+## Uploading
+
 The included `upload.sh` file takes care of simply pushing the resulting files
-to an FTP server. It expects a file `upload.creds` with the access data:
+to an FTP server, and you need to install [NcFTP](https://www.ncftp.com/download/) for that to work. The script expects a file `upload.creds` with the access data:
 
 ```
 FTPUSER=username
