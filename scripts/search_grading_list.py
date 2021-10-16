@@ -73,9 +73,9 @@ data.read_players(
 if args.template:
     template = " ".join(args.template)
 else:
-    template = (
-        "{code}{separator}{name}{separator}{gender}"
-        "{separator}{grade}{separator}{points}"
+    template = "{separator}".join(
+        f"{{{f}}}"
+        for f in ("code", "name", "gender", "grade", "points", "club")
     )
 
 for player in data.players.values():
