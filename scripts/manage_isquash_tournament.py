@@ -59,6 +59,9 @@ drawp.add_argument(
     '--delete', action="store_true", dest="deldraws",
     help='Delete draw or draws first, where possible')
 drawp.add_argument(
+    '--register-players', action="store_true", dest="register",
+    help='Register seeded players not yet registered')
+drawp.add_argument(
     '--make', action="store_true", dest="makedraws",
     help='Make draws that do not exist yet')
 makeg = drawp.add_argument_group(
@@ -81,12 +84,14 @@ drawp.add_argument(
     help='Update Web diagram when done')
 
 args = parser.parse_args(namespace=argparse.Namespace(
-    makedraws=False,
-    deldraws=False,
-    seeddraws=False,
-    webupdate=False,
     clearregs=False,
     register=False,
+    update=False,
+    sleep=0,
+    deldraws=False,
+    makedraws=False,
+    seeddraws=False,
+    webupdate=False,
     drawtypemap=[],
     drawdescmap=[],
     ))
