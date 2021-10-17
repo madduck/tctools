@@ -21,7 +21,7 @@ The tools include:
 There is a [series of videos to explain how to use
 these](https://vimeo.com/user152357033).
 
-Feedback welcome!
+[Feedback welcome](mailto:tctools@pobox.madduck.net)!
 
 I am not affiliated with Squash New Zealand. Fair use of their infrastructure is claimed.
 
