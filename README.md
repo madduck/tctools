@@ -5,7 +5,7 @@ Thorndon Club](https://thorndonclub.co.nz) for [Squash New
 Zealand](https://www.squashnz.co.nz), working around some of the peculiarities
 of [iSquash](https://www.squash.org.nz/sit/grading#/summary), and using
 [TournamentControl](https://tournamentcontrol.dtkapiti.co.nz/) to schedule and
-run the tournaments.
+run the tournaments. The use of TournamentControl is optional, but highly recommended. Other tournament software may be integrated into these tools in the future.
 
 The tools include:
 
