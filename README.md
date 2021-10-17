@@ -53,20 +53,6 @@ you will need to
 functionality not available in Excel or Google Docs. You also need LibreOffice
 in combination with TournamentControl, as detailed in the next section:
 
-### About the TournamentControl export
-
-The [Python](https://python.org) libraries I use to read Excel and
-OpenDocument spreadsheets cannot deal with the outdated Excel format exported
-by TournamentControl. However, [LibreOffice](https://libreoffice.org), which
-is a great Free Software alternative to Microsoft Excel and Google Docs, can.
-
-To use the tools in this repository, you need to open the exported file in
-LibreOffice, and save it.
-
-There is a script
-[fix-tc-export.sh](https://github.com/madduck/tctools/blob/main/fix-tc-export.sh)
-that does this.
-
 ### Python and pytcnz
 
 If you want to use the [scripts](https://github.com/madduck/tctools/tree/main/scripts) or [tc2web](https://github.com/madduck/tctools/tree/main/tc2web) — and trust me, you do, unless you want to make and seed draws manually, or enter results by hand – you will need to install [Python](https://python.org), as [detailed here](https://www.python.org/downloads/).
@@ -93,6 +79,20 @@ python scripts\search_grading_list --name martin --club WNTH --grade b
 To remote-control iSquash, you need to install [geckodriver](https://github.com/mozilla/geckodriver). Grab the [latest release](https://github.com/mozilla/geckodriver/releases/latest) ([`geckodriver-v0.30.0-win64.zip`](https://github.com/mozilla/geckodriver/releases/download/v0.30.0/geckodriver-v0.30.0-win64.zip) at time of writing), open the Zip file, and copy the contained `geckodriver.exe` file into the `scripts` subdirectory of `tctools`, or anywhere else where the operating system can find it (your "`$PATH`").
 
 Please note that if you install `geckodriver` to the scripts directory, you can only run the scripts controlling iSquash from within that directory.
+
+### About the TournamentControl export
+
+The [Python](https://python.org) libraries I use to read Excel and
+OpenDocument spreadsheets cannot deal with the outdated Excel format exported
+by TournamentControl. However, [LibreOffice](https://libreoffice.org), which
+is a great Free Software alternative to Microsoft Excel and Google Docs, can.
+
+To use the tools in this repository, you need to open the exported file in
+LibreOffice, and save it.
+
+There is a script
+[fix-tc-export.sh](https://github.com/madduck/tctools/blob/main/fix-tc-export.sh)
+that does this.
 
 ## Thanks & credits
 
