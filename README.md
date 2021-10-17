@@ -1,6 +1,11 @@
 # tctools
 
-This is a collection of tools I've been using to run squash tournaments at [The Thorndon Club](https://thorndonclub.co.nz), working around some of the inflexibilities of [iSquash](https://www.squash.org.nz/sit/grading#/summary), and using [TournamentControl](https://tournamentcontrol.dtkapiti.co.nz/) to schedule and run the tournaments.
+This is a collection of tools I've been using to run squash tournaments at [The
+Thorndon Club](https://thorndonclub.co.nz) for [Squash New
+Zealand](https://www.squashnz.co.nz), working around some of the peculiarities
+of [iSquash](https://www.squash.org.nz/sit/grading#/summary), and using
+[TournamentControl](https://tournamentcontrol.dtkapiti.co.nz/) to schedule and
+run the tournaments.
 
 The tools include:
 
@@ -17,6 +22,8 @@ There is a [series of videos to explain how to use
 these](https://vimeo.com/user152357033).
 
 Feedback welcome!
+
+I am not affiliated with Squash New Zealand. Fair use of their infrastructure is claimed.
 
 ## Downloading `tctools`
 
