@@ -23,7 +23,7 @@ these](https://vimeo.com/user152357033).
 
 [Feedback welcome](mailto:tctools@pobox.madduck.net)!
 
-I am not affiliated with Squash New Zealand. Fair use of their infrastructure is claimed.
+I am not affiliated with Squash New Zealand. Fair use of their infrastructure is claimed. If you (ab)use these tools for any other purpose than squash tournament control, you may be held liable, as access *is* logged.
 
 ## Downloading `tctools`
 
