@@ -21,25 +21,27 @@ pip install jinja2 xlrd pytz
 
 The settings are accessible from the top right of the TournamentControl screen:
 
-[Screenshot](https://user-images.githubusercontent.com/195073/135780176-5cc9383c-     b653-4e59-8536-1c0bb7677c5c.png)
+![Screenshot](https://user-images.githubusercontent.com/195073/135780176-5cc9383c-b653-4e59-8536-1c0bb7677c5c.png)
 
 Then at the bottom of the settings, you will find the auto-export function:
 
-~ ![Screenshot](https://user-images.githubusercontent.com/195073/135780204-afbf46f2-    c8de-47ee-9889-2dd108abfc09.png)
+![Screenshot](https://user-images.githubusercontent.com/195073/135780204-afbf46f2-c8de-47ee-9889-2dd108abfc09.png)
 
 For file location, please make sure that you have selected the top directory of the   `tctools`, and chosen `tc-export.xls` as the filename.
 
 It is also advisable to configure auto-save in the settings, so that the file is      exported if the machine is left idle, otherwise changes are only propagated if you hit "save" explicitly.
 
-![Screenshot](https://user-images.githubusercontent.com/195073/135780292-fd8a2b8f-    1e8e-4071-9fda-b5edd88df970.png)
+![Screenshot](https://user-images.githubusercontent.com/195073/135780292-fd8a2b8f-1e8e-4071-9fda-b5edd88df970.png)
 
 ## Running the update loop
 
 The main script `bgupdater.bat` is designed to run in the background and will loop indefinitely, which is fine even if TournamentControl is not running. Therefore, it might be a good idea to start it automatically on the TC computer:
 
-1. Find the `bgupdater.lnk` Shortcut in `tcweb\windows`, select it, and hit `Ctrl-c`;
+1. Create a shortcut to the `bgupdater.bat` (using the right-click context menu in the Explorer);
+2. Modify its properties (also right-click), and change "Run: Normal Window" to "Run: Minimized".
+3. Select it, and hit `Ctrl-c`;
 2. Hit `Windows-R` and type `shell:startup` into the dialog;
-3. Hit `Ctrl-v` and the file should appear in the new destination.
+3. Hit `Ctrl-v` and the file should appear in the new destination. Overwrite or remove any previous shortcuts;
 4. Reboot and verify that there now a minimised command line window in the task bar:
 
 ![image](https://user-images.githubusercontent.com/195073/135781870-2bab72e3-1709-44d4-9b6d-1e42da2208c5.png)
