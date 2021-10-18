@@ -27,13 +27,17 @@ I am not affiliated with Squash New Zealand. Fair use of their infrastructure is
 
 ## Downloading `tctools`
 
-There are two ways in which you can download `tctools` to your computer, or the one used for a tournament.
+There are two ways in which you can download `tctools` to your computer, or the one used for a tournament: downloading a Zip file, or using special software to track development of the tools.
 
-1. By [downloading a Zip file](https://github.com/madduck/tctools/archive/refs/heads/main.zip), which you then unpack wherever you want it to live. This is very simple, but if there are updates, you have to download the Zip file again, or else you won't get any improvements and fixes;
+### A Zip-file for every tournament (simple/beginner)
 
-2. Using [Git for Windows](https://git-scm.com/download/win), which allows you to easily update as changes are made upstream.
+The **generally recommended way is to [download a Zip file](https://github.com/madduck/tctools/archive/refs/heads/main.zip)** for every tournament, which you then unpack wherever you want it to live, and never worry about again post-tournament. In the event of bug fixes, you can either directly replace the affected files, or just re-download as required.
 
-Downloading Git and installing it might be scary at first, as there are a lot of questions asked. However, you are fine just accepting the defaults for everything. Then, once installed, use the command line / PowerShell and enter:
+### Using a version control system (harder/advanced)
+
+On the other hand, and especially if you are keen on contributing and helping making the tools better, please consider to use [Git for Windows](https://git-scm.com/download/win), which allows you to easily update as changes are made upstream, and also submit your changes and improvements back upstream.
+
+Downloading Git and installing it might seem scary at first, as there are a lot of questions asked. However, you are fine just accepting the defaults for everything. Then, once installed, use the command line / PowerShell and enter:
 
 ```
 git clone https://github.com/madduck/tctools.git
@@ -41,7 +45,7 @@ git clone https://github.com/madduck/tctools.git
 
 and you will find `tctools` in the subdirectory `tctools`. Easy as.
 
-Finally, to update, change to that directory and run `git pull` to upgrade the local copy to the latest version.
+To update, change to that directory and run `git pull` to upgrade the local copy to the latest version. Git is very cool, and here's [starter article to read](https://guides.github.com/introduction/git-handbook/) in case you're keen to learn.
 
 ## Installing dependencies
 
