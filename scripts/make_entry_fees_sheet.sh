@@ -15,4 +15,4 @@ SELF="${SELF##*/}"
 outfile=$(mktemp --tmpdir ${SELF}.XXXXXXXX.html)
 
 ./player_mmerge.py -t entry_fees_sheet.j2 --tcexport ${1:-} > $outfile
-x-www-browser $outfile
+xdg-open $outfile

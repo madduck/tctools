@@ -62,7 +62,7 @@ Once installed, you need to obtain the [pytcnz](https://github.com/madduck/pytcn
 Once Python is installed, the `pytcnz` library, as well as all dependencies can be installed with a single command (you might need to install `pip` first, if the following gives an error).
 
 ```
-pip install git+https://github.com/madduck/pytcnz
+pip install git+https://github.com/madduck/pytcnz@main
 python -m pytcnz.welcome
 ```
 

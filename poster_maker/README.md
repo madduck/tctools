@@ -15,8 +15,8 @@ define some other aspects, such as:
     is PAR11, enter 0 into both…
 * What common notes you want printed on all sheets.
 
-Then, go to one of the draw sheets, enter the draw name (e.g. "m0") into `A1`,
-and export the result to PDF to take to the printer, or print right away.
+Then, go to one of the draw sheets, enter the draw name (e.g. "m0") into `A1`
+cell, and export the result to PDF to take to the printer, or print right away.
 Change the draw name, and the data should update.
 
 This only works for 4 round-robin, 6 type B, and 8 draws for now.

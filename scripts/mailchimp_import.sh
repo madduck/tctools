@@ -8,7 +8,7 @@
 # players on the waiting list.
 #
 # Usage:
-#   ./mailchimp_import.sh draw_maker.ods 2021-10-open | xclip -i
+#   ./mailchimp_import.sh draw_maker.ods 2021-10-open
 #
 # Copyright © 2021 martin f. krafft <tctools@pobox.madduck.net>
 # Released under the MIT Licence
