@@ -32,13 +32,16 @@ Last updated: {{timestamp}}
   {% set draw = game.draw.name -%}
   {% set gameid = game.name.replace(draw, '') -%}
   <!-- {{'{!r}'.format(game)}} -->
+  {% set dt = game.datetime -%}
   <tr class="{{ loop.cycle('odd', 'even') }}" id="S-{{game.name}}">
     <td style="background:#{{game.colour}}">
       <a href="#{{draw}}">&nbsp;</a>
     </td>
     <td style="text-align:right">{{ (loop.revindex if reverse else loop.index) + nroffset }}</td>
-    <td>{{ game.datetime.strftime('%a') }}</td>
-    <td style="text-align:right">{{ game.datetime.strftime('%H:%M') }}</td>
+    <td>{{ dt.strftime('%a') if dt else '' }}</td>
+    <td style="text-align:right">
+      <a href="#S-{{game.name}}">{{dt.strftime('%H:%M') if dt else ''}}</a>
+    </td>
     <td><a href="#{{draw}}">{{draw}}</a>&nbsp;{{gameid}}</td>
     <td class="{{ game.get_player_class(0) }}">{{ player(game.players[0]) }}</td>
     <td class="{{ game.get_player_class(1) }}">{{ player(game.players[1]) }}</td>
@@ -161,11 +164,12 @@ Last updated: {{timestamp}}
 <tbody>
 {% for game in draw.games|sort -%}
   <!-- {{'{!r}'.format(game)}} -->
+  {% set dt = game.datetime -%}
   <tr class="{{ loop.cycle('odd', 'even') }}">
     <td style="background:#{{draw.colour}}">&nbsp;</td>
-    <td>{{ game.datetime.strftime('%a') }}</td>
+    <td>{{ dt.strftime('%a') if dt else '' }}</td>
     <td style="text-align:right">
-      <a href="#S-{{game.name}}">{{game.datetime.strftime('%H:%M')}}</a>
+      <a href="#S-{{game.name}}">{{dt.strftime('%H:%M') if dt else ''}}</a>
     </td>
     <td>{{ game.name[:2] }} {{ game.name[2:] }}</td>
     <td class="{{ game.get_player_class(0) }}">{{ player(game.players[0]) }}</td>
