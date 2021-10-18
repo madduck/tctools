@@ -103,9 +103,13 @@ that does this.
 Kelsey Mackay from KP sent me the draw templates she was using, which gave me
 the idea for the [poster-maker](https://github.com/madduck/tctools/tree/main/poster_maker), and informed the design.
 
-Brent Gribbon, also from KP, inspired me with the idea to publish draw and schedule data to a website, and provided his Windows-specific scripts, which I couldn't get working, and rewrote in Python. It was all downhill from there.
+Brent Gribbon of [Attivo Design](https://attivo.co.nz), also from KP, inspired me with the idea to publish draw and schedule data to a website, and provided his Windows-specific scripts, which I couldn't get working, and rewrote in Python. It was all downhill from there.
 
-Thanks also go to Brad Watts, Nicole Georgel, and the rest of the folks at [The Thorndon Club](https://thorndonclub.co.nz) in Wellington for passing on their knowledge, and coaching me to get up and running quickly. None of what's here would be if it weren't for you, and the opportunity to serve as Squash Club Captain.
+Thanks to Nick and Simon of [DTKapiti](https://dtkapiti.co.nz/) for their
+software, and also for their patience and support answering questions, and
+setting up test tournaments.
+
+And last but not least: huge thanks to Brad Watts, Nicole Georgel, and the rest of the folks at [The Thorndon Club](https://thorndonclub.co.nz) in Wellington for passing on their knowledge, and coaching me to get up and running quickly. None of what's here would be if it weren't for you, and the opportunity to serve as Squash Club Captain.
 
 ## Licence
 
