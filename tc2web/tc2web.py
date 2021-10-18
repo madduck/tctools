@@ -125,7 +125,7 @@ with open(args.output, "w") as f:
             timestamp=timestamp,
             tournament_name=data.get_tournament_name(),
             draws=data.get_draws(),
-            players=data.get_players(),
+            players=data.players,
             pending_games=data.get_pending_games(),
             played_games=data.get_played_games(),
         ),
