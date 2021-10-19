@@ -82,57 +82,147 @@ This will open the browser from where you can print the sheet.
 
 ### Managing iSquash tournaments
 
-This tool provides 4 modes of operation, which we'll introduce in turn:
+The `manage_isquash_tournament.py` script takes care of all your pre-tournament and tournament management/design needs. It exposes pretty much all of the functionality of iSquash's tournament module for the pre-tournament phase. To get your bearing, call it with `--help`:
 
-#### Registering players
+```PowerShell
+> python ./manage_isquash_tournament.py --help
+usage: manage_isquash_tournament.py [-h] --username USERNAME --password PASSWORD
+                                    --tournament TOURNAMENT_CODE [--debug]
+                                    [--headless] --input DRAWMAKER_FILE [--register]
+                                    [--update] [--seed]
+                                    [--extract-registrations REGISTRATIONS_FILE]
+                                    [--delete] [--make] [--draw-type DRAW=TYPE]
+                                    [--draw-desc DRAW=DESC] [--populate]
+                                    [--extract-draws DRAWS_FILE] [--update-web]
+                                    [--draw DRAW_CODE]
 
-To ensure that all players assigned to draws in the DrawMaker are also registered to the tournament on iSquash, run:
+Manage tournaments on iSquash
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+iSquash interaction:
+  Data required to interact with iSquash
+
+  --username USERNAME, -u USERNAME
+                        iSquash user name for login
+  --password PASSWORD, -p PASSWORD
+                        iSquash password for login
+  --tournament TOURNAMENT_CODE, -t TOURNAMENT_CODE
+                        iSquash tournament code
+
+Runtime control:
+  --debug               Drop into debugger on error
+  --headless            Operate without a browser window (invisible)
+
+Input:
+  --input DRAWMAKER_FILE, -i DRAWMAKER_FILE
+                        DrawMaker file to read
+
+Operations:
+  The main operations relating to managing tournaments on iSquash. All of these
+  can be combined, or run individually, as needed.
+
+  --register            Ensure all players are registered for the draws being
+                        processed
+  --seed                Adjust the grading list points for ALL players. It is not
+                        possible to do this just for a subset, or per-draw. Use with
+                        care. If you need to override grading points for a player,
+                        you will need to do this manually for now.
+  --extract-registrations REGISTRATIONS_FILE
+                        Extract registrations file when done
+  --delete              Delete draw or draws. Run this before making them if there
+                        were structural changes. Draws with results entered already
+                        cannot be deleted.
+  --make                Make draws that do not exist yet, or which have been
+                        deleted.
+  --populate            Populate draws with players. This will also initialise the
+                        matches.
+  --extract-draws DRAWS_FILE
+                        Extract draws file when done.
+  --update-web          Update Web diagram when done
+
+Registering players:
+  These options only make sense in the presence of --register
+
+  --update              Update player comments for registered players
+
+Making draws:
+  These options only make sense in the presence of --make
+
+  --draw-type DRAW=TYPE, -y DRAW=TYPE
+                        Specify types for draws, e.g. M4=6b; Choices: 8, 16, 16no34,
+                        32, 4rr, 5rr, 6rr, 6b, 6c, 16swiss
+  --draw-desc DRAW=DESC, -n DRAW=DESC
+                        Override long descriptions for draws, e.g. M4="Mens 4th
+                        Division"
+
+Limiting:
+  Use these options to limit operations
+
+  --draw DRAW_CODE, -d DRAW_CODE
+                        Only operate on the given draw, or draws if specified more
+                        than once
+```
+
+Typically, you'd use the tool once you've assigned players to draws in the DrawMaker spreadsheet, and invoke it like this:
 
 ```PowerShell
 > python ./manage_isquash_tournament.py -u username -p password -t TOURNAMENTCODE \
->   -i ../draw_maker.ods regs --register
+    --input ../draw_maker.ods \
+    --register --update \
+    --extract-registrations ../TIMESTAMP-registrations.xls \
+    --make --populate \
+    --extract-draws ../TIMESTAMP-draws.xls \
+    --update-web
 ```
 
-You can also specify `--update` to update the player comments for all players, in case you have made changes to those in the draw maker.
+and then go and grab a coffee or beverage of choice while it works its magic. Invoked like this, the tool will:
 
-#### Clearing all registrations
+1. Ensure that all players assigned to draws are registered to the event on iSquash, and register those that aren't yet (`--register`). It'll also update the comments of all registered players with what you have in the DrawMaker (`--update`). If you have not made any changes to the player comments, you do not need this, and it'll save a minute or two of runtime not to include this flag.
 
-If, for whatever reason, you'd like to clear all registrations of an event on iSquash, run this:
+2. Once all players are registered, the tool will extract the registrations spreadsheet to `../TIMESTAMP-registrations.xls`; `TIMESTAMP` will be replaced by the current date and time, if part of the name. This is optional.
+
+3. Make all draws (which don't exist yet) (`--make`), populate them with the assigned players, and initialise the matches (`--populate`). This will overwrite previous seedings as required, and is idempotent in that it can be run again and again. If you made structural changes to the draws and e.g. split an 8-draw into two 4-draws, you will need to specify `--delete` to remove the draws prior to remaking them.
+
+4. Extract the draws to `../TIMESTAMP-draws.xls`. As before, if the filename includes `TIMESTAMP`, it will be replaced by the current date and time, which is optional.
+
+5. Finally, the tool will update the Web diagram on iSquash.
+
+When making draws, the tool tries to induce the draw type from the number of players, and will assume sensible defaults, e.g. a 6 Type B draw when there are 6 players. You can override this heuristic by appending e.g. `--draw-type M6=6c`, which will make the M6 draw a 6 Type C draw. See the `--help` output for the available choices.
+
+Draw names/descriptions are also automatically generated form the draw code, and can be overridden by appending e.g. `--draw-desc M4="Mens 4th Division"` for each draw you'd like to name differently.
+
+Finally, if you know that you only need to work on a subset of draws, chuck a filter at the end of the command: `--draw M2 --draw M3` will make the script only work on those two draws, and leave the others untouched. Note, however, that if you specify `--seed` to update the player seedings, this will happen for *all registered players*.
+
+#### Snapshotting registrations
+
+Another use-case of `manage_isquash_tournament.py` is to snapshot registrations at regular intervals:
 
 ```PowerShell
 > python ./manage_isquash_tournament.py -u username -p password -t TOURNAMENTCODE \
->   -i ../draw_maker.ods regs --clear
+    --extract-registrations ../TIMESTAMP-registrations.xls
 ```
 
-#### Making and seeding draws
+This will create a series of files, which can later be used to identify the first `n` players that have signed up, i.e. when you need to make a call whom to exclude from the tournament because you have too many players.
 
-To create a draw on iSquash for every draw you've created in the DrawMaker, run the tool as follows:
+### Resetting a tournament
+
+Should you, for whatever reason, want to reset a tournament, you can do so using `reset_isquash_tournament.py`:
 
 ```PowerShell
-> python ./manage_isquash_tournament.py -u username -p password -t TOURNAMENTCODE \
->   -i ../draw_maker.ods draws --make
+## Delete all draws
+> python ./reset_isquash_tournament.py -u username -p password -t TOURNAMENT_CODE \
+    --draws
+
+## Also unregister all players:
+> python ./reset_isquash_tournament.py -u username -p password -t TOURNAMENT_CODE \
+    --draws --players
+
+## Unregister all players not assigned to draws:
+> python ./reset_isquash_tournament.py -u username -p password -t TOURNAMENT_CODE \
+    --players
 ```
-
-Optionally, also specify:
-
-* `--delete` to first delete each draw, i.e. remaking it (for when there are structural changes);
-* `--seed` to seed it with the assigned players, and initialise all matches;
-* `--update-web` to update the Web diagram at the end of the run
-* `--draw CODE` for each draw to which you want to limit this run, i.e. if you only want the above to happen for the Women's Open and Div 1 draws, specify `-d W0 -d W1`;
-* `--draw-type` if you want to override the default draw type chosen, e.g. if you want a type C 6 draw instead of the type B default for the Men's Div 6: `--draw-type M6=6c` (specify once for each draw);
-* `--draw-desc` if you don't like the default names given to the draws, e.g. `--draw-desc M4="Mens 4th Division"` (specified once for each draw);
-* `--register-players` to register any players not yet registered prior to seeding the draws.
-
-#### Deleting draws
-
-To delete draws, use as follows:
-
-```PowerShell
-> python ./manage_isquash_tournament.py -u username -p password -t TOURNAMENTCODE \
->   -i ../draw_maker.ods draws --delete
-```
-
-and optionally specify which draws to delete using the `--draw`/`-d-` arguments, as above.
 
 ### Entering scores into iSquash
 
