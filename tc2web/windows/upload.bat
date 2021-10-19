@@ -18,7 +18,7 @@ setlocal enableExtensions enableDelayedExpansion
 
 if not exist "%~dp0%upload.creds" (
   echo The file %~dp0%upload.creds is missing >&2
-  exit 1
+  exit /b 1
 )
 
 for /F "eol=; tokens=1,2* delims==" %%i in (%~dp0%upload.creds) do (
