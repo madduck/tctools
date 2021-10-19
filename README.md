@@ -19,7 +19,7 @@ The tools include:
 * A [template for draw posters](https://github.com/madduck/tctools/tree/main/poster_maker), automatically generated from TournamentControl data;
 
 There is a [series of videos to explain how to use
-these](https://vimeo.com/user152357033).
+these](https://vimeo.com/tctools).
 
 [Feedback welcome](mailto:tctools@pobox.madduck.net)!
 

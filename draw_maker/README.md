@@ -32,7 +32,7 @@ The DrawMaker is a [LibreOffice](https://libreoffice.org) spreadsheet, and uses 
 ## How to use the Draw Maker
 
 If videos are your thing: I've recorded a [series of
-videos](https://vimeo.com/user152357033) to showcase how to use this tool, and
+videos](https://vimeo.com/tctools) to showcase how to use this tool, and
 how it facilitates your life.
 
 Here is the gist:
