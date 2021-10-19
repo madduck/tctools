@@ -46,5 +46,5 @@ call upload.bat upload\* || (
 
 del /q upload\*
 
-choice /t 30 /n /d y /m "Hit y to reload"
-goto again
+choice /c qa /t 30 /n /d a /m "Waiting 30 seconds; hit 'a' to run again, or 'q' to quit"
+if ERRORLEVEL 2 goto again
