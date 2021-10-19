@@ -40,7 +40,9 @@ for %%a in (%FILES%) do (
 )
 xcopy /i /y /m display.png upload
 
-call upload.bat upload\*
+call upload.bat upload\* || (
+  echo No upload.creds file, so skipping upload
+)
 
 del /q upload\*
 

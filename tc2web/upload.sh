@@ -15,7 +15,7 @@
 #
 set -eu
 
-FILES="display.css display.png display.html index.html live.html style.css games.html schedule.html draws.html"
+FILES="display.css display.png display.html index.html live.html style.css"
 
 cd "${0%/*}"
 
@@ -26,5 +26,11 @@ fi
 
 shasum $FILES > .shasums
 
-. ./upload.creds
-exec ncftpput -u "$FTPUSER" -p "$FTPPASS" $FTPHOST ${TARGETDIR:-.} $FILES
+if [ -r ./upload.creds ]; then
+  . ./upload.creds
+  exec ncftpput -u "$FTPUSER" -p "$FTPPASS" $FTPHOST ${TARGETDIR:-.} $FILES
+
+else
+  echo >&2 No upload.creds file, so cannot upload.
+  exit 1
+fi
