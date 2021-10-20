@@ -201,10 +201,35 @@ Another use-case of `manage_isquash_tournament.py` is to snapshot registrations 
 
 ```PowerShell
 > python ./manage_isquash_tournament.py -u username -p password -t TOURNAMENTCODE \
-    --extract-registrations ../TIMESTAMP-registrations.xls
+    --extract-registrations ../TIMESTAMP-registrations.xls --headless
 ```
 
-This will create a series of files, which can later be used to identify the first `n` players that have signed up, i.e. when you need to make a call whom to exclude from the tournament because you have too many players.
+Note the use of the `--headless` option, which will essentially just run this without even showing you the browser window, so it won't disturb your workflow.
+
+Run regularly, this will create a series of files, which can later be used to identify the first `n` players that have signed up, i.e. when you need to make a call whom to exclude from the tournament because you have too many players. Check out the `split_off_waitinglist.py` tool, which does just that.
+
+### Splitting off a waiting list
+
+If you do not have a separate waiting list event for your tournament, you will possibly end up with too many registrations, and no easy way to determine whom to slash, other than cutting at the low end of points, but that's not how squash in New Zealand works. Unfortunately, iSquash does not record the date and time when a player registers, so you have to make do:
+
+1. Run the `./manage_isquash_tournament.py` tool to [extract registrations at regular intervals and with the `TIMESTAMP` placeholder in the filename](#snapshotting-registrations);
+
+2. Use `split_off_waitinglist.py` to select the `N` players who registered before the others, and move everyone else to a waiting list:
+
+```PowerShell
+> python ./split_off_waitinglist.py -o ../registrations.ods -c 64 \
+>   ../*-registrations.xls
+```
+
+Note how the last argument includes an asterisk, causing it to consider all files matching that pattern in the parent directory.
+
+This will create a new file `../registrations.ods` with two tabs; The first 64 players who have registered are on the first tab, and the rest on the second tab. Should you prefer two separate files, you can pass `-w ../waitlist.ods` as well to have the waitlisted players moved there.
+
+If you want to write an Excel file, e.g. `registrations.xls`, you need to install the `xlwt` library: `pip install xlwt`.
+
+For the logic to work, you must use the `TIMESTAMP` placeholder in the file name when extracting registrations, and the accuracy depends on how often you've extracted snapshots of the registrations.
+
+If the limit is reached between two snapshots, then higher-graded players are given precedence over lower-graded players.
 
 ### Resetting a tournament
 
