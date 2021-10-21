@@ -8,6 +8,7 @@
 import sys
 import re
 import glob
+import os.path
 import argparse
 import functools
 import pyexcel
@@ -66,13 +67,14 @@ files = functools.reduce(
 )
 
 for regfile in files:
-    stampstr = re.match(r"^\d{4}(?:-\d{2}){5}", regfile)
+    basename = os.path.basename(regfile)
+    stampstr = re.match(r"^\d{4}(?:-\d{2}){5}", basename)
     if stampstr:
         timestamp = datetime.datetime.strptime(
             stampstr[0], "%Y-%m-%d-%H-%M-%S"
         )
     else:
-        print(f"Cannot parse timestamp from {regfile}", file=sys.stderr)
+        print(f"Cannot parse timestamp from {basename}", file=sys.stderr)
         sys.exit(1)
 
     print(
