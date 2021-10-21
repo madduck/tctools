@@ -83,7 +83,7 @@ Copyright &copy; {{meta.years}} by
 <span class="player">{{ p.name }}</span>
 <!-- {{'{!r}'.format(p)}} -->
 <div class="playerinfo">
-{{p.club or p.code}}<br/>
+{{p.club or p.grading_code}}<br/>
 {{p.grade}} @ {{'{0:,d}'.format(p.points|int)}} points<br/>
 {{p.draw.desc}} #{{p.seed}}
 </div>
@@ -201,7 +201,7 @@ Last updated: {{timestamp}}
     <td>{{loop.index}}</td>
     <td>{{player.name}}</td>
     <td>{{'{0:,d}'.format(player.points|int)}}</td>
-    <td>{{player.code}}</td>
+    <td>{{player.grading_code}}</td>
     <td>{{player.club}}</td>
   </tr>
 {% endfor -%}
