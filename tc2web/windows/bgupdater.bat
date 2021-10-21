@@ -11,7 +11,7 @@
 @echo off
 setlocal
 
-set "FILES=display.css display.html index.html live.html style.css games.html schedule.html draws.html"
+set "FILES=display.css display.html index.html live.html style.css"
 
 cd /d %~dp0"
 
