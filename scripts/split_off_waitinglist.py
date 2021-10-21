@@ -7,7 +7,9 @@
 
 import sys
 import re
+import glob
 import argparse
+import functools
 import pyexcel
 import datetime
 from collections import namedtuple
@@ -59,7 +61,11 @@ args = parser.parse_args()
 StampedPlayer = namedtuple("StampedPlayer", ["timestamp", "player"])
 players = {}
 
-for regfile in sorted(args.registrations_file):
+files = functools.reduce(
+    lambda a, i: a + glob.glob(i), sorted(args.registrations_file), []
+)
+
+for regfile in files:
     stampstr = re.match(r"^\d{4}(?:-\d{2}){5}", regfile)
     if stampstr:
         timestamp = datetime.datetime.strptime(
