@@ -40,7 +40,7 @@ Last updated: {{timestamp}}
     <td style="text-align:right">{{ (loop.revindex if reverse else loop.index) + nroffset }}</td>
     <td>{{ dt.strftime('%a') if dt else '' }}</td>
     <td style="text-align:right">
-      <a href="#S-{{game.name}}">{{dt.strftime('%H:%M') if dt else ''}}</a>
+      {{dt.strftime('%H:%M') if dt else ''}}
     </td>
     <td><a href="#{{draw}}">{{draw}}</a>&nbsp;{{gamename}}</td>
     <td class="{{ game.get_player_class(0) }}">{{ player(game.players[0]) }}</td>
