@@ -292,7 +292,7 @@ with iSquashController(headless=args.headless, debug=args.debug) as c:
                 print(c, file=sys.stderr)
 
     if args.extractdraws:
-        filename = timestamp_filename(args.extractregs)
+        filename = timestamp_filename(args.extractdraws)
         print(
             f"  Extracting draws to {filename} (takes a while)…",
             file=sys.stderr,
