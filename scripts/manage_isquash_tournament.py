@@ -168,7 +168,9 @@ if args.register or args.makedraws or args.populate:
         data.read_draws()
         data.read_players()
     else:
-        parser.error("Must specify DrawMaker spreadsheet to read using --input/-i")
+        parser.error(
+            "Must specify DrawMaker spreadsheet to read using --input/-i"
+        )
 
 drawtypemap = {}
 for pair in args.drawtypemap or ():
@@ -233,7 +235,11 @@ with iSquashController(headless=args.headless, debug=args.debug) as c:
     if args.deldraws:
 
         def callback(draw_name):
-            draw_name = repr(data.draws[draw_name]) if data else draw_name
+            draw_name = (
+                repr(data.draws.get(draw_name, draw_name))
+                if data
+                else draw_name
+            )
             print(f"  {draw_name} deleted", file=sys.stderr)
 
         c.go_delete_draws(args.draws, draw_cb=callback)
