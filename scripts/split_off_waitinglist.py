@@ -38,7 +38,6 @@ parser.add_argument(
     "--output",
     "-o",
     metavar="REGISTRATIONS_FILE",
-    required=True,
     type=str,
     help="Registrations file to write",
 )
@@ -116,43 +115,15 @@ colnames = [
     "Comments",
 ]
 
+
 def make_player_row(player):
     return [str(player[DataSource.sanitise_colname(c)]) for c in colnames]
 
+
 players_in = sorted(players[: args.cutoff], key=lambda p: -p.player.points)
-players_wl = sorted(players[args.cutoff :], key=lambda p: -p.player.points)  # noqa:E203
-
-regs = pyexcel.Sheet(
-    name="Registrations",
-    colnames=colnames + ["Timestamp"],
-    sheet=[
-        make_player_row(p.player) + [p.timestamp.strftime("%F %H:%M:%S")]
-        for p in players_in
-    ],
-)
-
-sheets = {regs.name: regs}
-
-if args.cutoff < len(players):
-
-    wl = pyexcel.Sheet(
-        name="Waiting list",
-        colnames=colnames + ["Timestamp"],
-        sheet=[
-            make_player_row(p.player) + [p.timestamp.strftime("%F %H:%M:%S")]
-            for p in players_wl
-        ],
-    )
-
-    if args.waitlist:
-        outwl = pyexcel.Book(sheets={wl.name: wl})
-        outwl = outwl.save_as(args.waitlist)
-
-    else:
-        sheets[wl.name] = wl
-
-outbook = pyexcel.Book(sheets=sheets)
-outbook.save_as(args.output)
+players_wl = sorted(
+    players[args.cutoff :], key=lambda p: -p.player.points
+)  # noqa:E203
 
 if players_wl:
     print("\nPlayers moved to waiting list:", file=sys.stderr)
@@ -174,3 +145,38 @@ for p in players_in:
         continue
     cnt += 1
     print(f"   {cnt:3d}:{p.player!r}", file=sys.stderr)
+
+if args.output:
+
+    regs = pyexcel.Sheet(
+        name="Registrations",
+        colnames=colnames + ["Timestamp"],
+        sheet=[
+            make_player_row(p.player) + [p.timestamp.strftime("%F %H:%M:%S")]
+            for p in players_in
+        ],
+    )
+
+    sheets = {regs.name: regs}
+
+    if args.cutoff < len(players):
+
+        wl = pyexcel.Sheet(
+            name="Waiting list",
+            colnames=colnames + ["Timestamp"],
+            sheet=[
+                make_player_row(p.player)
+                + [p.timestamp.strftime("%F %H:%M:%S")]
+                for p in players_wl
+            ],
+        )
+
+        if args.waitlist:
+            outwl = pyexcel.Book(sheets={wl.name: wl})
+            outwl = outwl.save_as(args.waitlist)
+
+        else:
+            sheets[wl.name] = wl
+
+    outbook = pyexcel.Book(sheets=sheets)
+    outbook.save_as(args.output)
