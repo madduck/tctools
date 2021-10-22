@@ -63,9 +63,9 @@ args = parser.parse_args()
 TimestampPlayer = namedtuple("TimestampPlayer", ["timestamp", "player"])
 players = {}
 
-files = functools.reduce(
-    lambda a, i: a + glob.glob(i), sorted(args.registrations_file), []
-)
+files = sorted(functools.reduce(
+    lambda a, i: a + glob.glob(i), args.registrations_file, []
+))
 
 for regfile in files:
     basename = os.path.basename(regfile)
