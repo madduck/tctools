@@ -1,4 +1,4 @@
-# tctools
+# SquashNZ Tournament Control Tools
 
 This is a collection of tools I've been using to run squash tournaments at [The
 Thorndon Club](https://thorndonclub.co.nz) for [Squash New
