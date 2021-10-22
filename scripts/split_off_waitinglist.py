@@ -126,11 +126,11 @@ players_wl = sorted(
 )  # noqa:E203
 
 if players_wl:
-    print("\nPlayers moved to waiting list:", file=sys.stderr)
+    print(f"\n{len(players_wl)} players moved to waiting list:", file=sys.stderr)
     for i, p in enumerate(players_wl):
         print(f"   {i:3d}:{p.player!r}", file=sys.stderr)
 
-print("\nPlayers who made the cut-off:", file=sys.stderr)
+print(f"\n{len(players_in)} players made the cut-off:", file=sys.stderr)
 print("  Women:", file=sys.stderr)
 cnt = 0
 for p in players_in:
