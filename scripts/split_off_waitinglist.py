@@ -15,6 +15,7 @@ import pyexcel
 import datetime
 from collections import namedtuple
 from pytcnz.meta import epilog
+from pytcnz.gender import Gender
 from pytcnz.squashnz.player import Player
 from pytcnz.squashnz.registrations_reader import (
     RegistrationsReader,
@@ -115,20 +116,18 @@ colnames = [
     "Comments",
 ]
 
-
 def make_player_row(player):
-    print(f"  {player!r}", file=sys.stderr)
     return [str(player[DataSource.sanitise_colname(c)]) for c in colnames]
 
-
-print("\nPlayers who made the cut-off:", file=sys.stderr)
+players_in = sorted(players[: args.cutoff], key=lambda p: -p.player.points)
+players_wl = sorted(players[args.cutoff :], key=lambda p: -p.player.points)  # noqa:E203
 
 regs = pyexcel.Sheet(
     name="Registrations",
     colnames=colnames + ["Timestamp"],
     sheet=[
         make_player_row(p.player) + [p.timestamp.strftime("%F %H:%M:%S")]
-        for p in sorted(players[: args.cutoff], key=lambda p: -p.player.points)
+        for p in players_in
     ],
 )
 
@@ -136,16 +135,12 @@ sheets = {regs.name: regs}
 
 if args.cutoff < len(players):
 
-    print("\nPlayers moved to waiting list:", file=sys.stderr)
-
     wl = pyexcel.Sheet(
         name="Waiting list",
         colnames=colnames + ["Timestamp"],
         sheet=[
             make_player_row(p.player) + [p.timestamp.strftime("%F %H:%M:%S")]
-            for p in sorted(
-                players[args.cutoff :], key=lambda p: -p.player.points  # noqa:E203
-            )
+            for p in players_wl
         ],
     )
 
@@ -158,3 +153,24 @@ if args.cutoff < len(players):
 
 outbook = pyexcel.Book(sheets=sheets)
 outbook.save_as(args.output)
+
+if players_wl:
+    print("\nPlayers moved to waiting list:", file=sys.stderr)
+    for i, p in enumerate(players_wl):
+        print(f"   {i:3d}:{p.player!r}", file=sys.stderr)
+
+print("\nPlayers who made the cut-off:", file=sys.stderr)
+print("  Women:", file=sys.stderr)
+cnt = 0
+for p in players_in:
+    if p.player.gender != Gender.W:
+        continue
+    cnt += 1
+    print(f"   {cnt:3d}:{p.player!r}", file=sys.stderr)
+print("  Men:", file=sys.stderr)
+cnt = 0
+for p in players_in:
+    if p.player.gender != Gender.M:
+        continue
+    cnt += 1
+    print(f"   {cnt:3d}:{p.player!r}", file=sys.stderr)
