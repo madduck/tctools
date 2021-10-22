@@ -105,6 +105,7 @@ class Game(BaseGame):
 data = TCExportReader(
     args.spreadsheet,
     Game_class=Game,
+    autoflip_scores=True,
     add_games_to_draws=True,
     add_players_to_draws=True,
 )
