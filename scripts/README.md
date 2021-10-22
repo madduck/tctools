@@ -273,7 +273,7 @@ As soon as the first game scores have been entered into the comment field of pla
 
 ```PowerShell
 > python ./enter_isquash_results.py -u username -p password -t TOURNAMENTCODE \
->   -i ../tc-export-fixed.xls
+    -i ../tc-export-fixed.xls
 ```
 
 You can use `-d`/`--draw` any number of times to limit processing to the given

@@ -75,7 +75,7 @@ This is also the command to run to upgrade the library.
 If you saw my little message, you should be good to go, e.g.
 
 ```
-python scripts\search_grading_list --name martin --club WNTH --grade b
+python scripts\search_grading_list.py --name martin --club WNTH --grade b
 ```
 
 ### Gecko web driver
