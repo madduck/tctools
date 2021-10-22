@@ -1,0 +1,7 @@
+# Copy this file to `tctools.ini` and provide the requested information, and
+# you won't have to specify these details on the command-line anymore
+
+[iSquash]
+username = [replace with iSquash username]
+password = [replace with iSquash password]
+tournament = [replace with tournament code]

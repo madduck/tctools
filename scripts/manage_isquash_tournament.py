@@ -7,6 +7,7 @@
 
 import argparse
 import sys
+import os.path
 import datetime
 from pytcnz.tctools.drawmaker_reader import DrawsReader
 from pytcnz.squashnz.isquash_controller import (
@@ -14,9 +15,10 @@ from pytcnz.squashnz.isquash_controller import (
     DRAW_TYPES,
     make_argument_parser as make_is_argument_parser,
 )
+from pytcnz.util import get_config_filename
 from pytcnz.meta import epilog
 
-is_argparser = make_is_argument_parser()
+is_argparser = make_is_argument_parser(configfile=get_config_filename())
 
 parser = argparse.ArgumentParser(
     description="Manage tournaments on iSquash",

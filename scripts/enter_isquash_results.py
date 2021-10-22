@@ -8,11 +8,18 @@
 import argparse
 import sys
 from pytcnz.dtkapiti.tcexport_reader import TCExportReader
-from pytcnz.squashnz.isquash_controller import iSquashController
+from pytcnz.squashnz.isquash_controller import (
+    iSquashController,
+    make_argument_parser as make_is_argument_parser,
+)
+from pytcnz.util import get_config_filename
 from pytcnz.meta import epilog
 
+is_argparser = make_is_argument_parser(configfile=get_config_filename())
+
 parser = argparse.ArgumentParser(
-    description="Automatically enter tournament results into iSquash"
+    description="Automatically enter tournament results into iSquash",
+    parents=[is_argparser],
 )
 parser.epilog = epilog
 
@@ -24,33 +31,6 @@ parser.add_argument(
     required=True,
     dest="spreadsheet",
     help="TC export file to read",
-)
-parser.add_argument(
-    "--headless",
-    action="store_true",
-    dest="headless",
-    help="Operate without a browser window (invisible)",
-)
-parser.add_argument(
-    "--username",
-    "-u",
-    metavar="USERNAME",
-    required=True,
-    help="iSquash user name for login",
-)
-parser.add_argument(
-    "--password",
-    "-p",
-    metavar="PASSWORD",
-    required=True,
-    help="iSquash password for login",
-)
-parser.add_argument(
-    "--tournament",
-    "-t",
-    metavar="TOURNAMENT_CODE",
-    required=True,
-    help="iSquash tournament code",
 )
 parser.add_argument(
     "--draw",

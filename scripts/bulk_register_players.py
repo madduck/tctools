@@ -7,33 +7,49 @@
 
 import argparse
 import sys
-from pytcnz.squashnz.gradinglist_reader import GradingListReader, \
-        make_argument_parser as make_gl_argument_parser
-from pytcnz.squashnz.isquash_controller import iSquashController, \
-        make_argument_parser as make_is_argument_parser
+from pytcnz.squashnz.gradinglist_reader import (
+    GradingListReader,
+    make_argument_parser as make_gl_argument_parser,
+)
+from pytcnz.squashnz.isquash_controller import (
+    iSquashController,
+    make_argument_parser as make_is_argument_parser,
+)
+from pytcnz.util import get_config_filename
 from pytcnz.meta import epilog
 
 data = GradingListReader()
 
-gl_argparser = make_gl_argument_parser(gender_choices=data.gender_choices,
-                                       district_choices=data.district_choices,
-                                       age_choices=data.age_choices,
-                                       grade_choices=data.grade_choices,
-                                       sleep_default=5)
+gl_argparser = make_gl_argument_parser(
+    gender_choices=data.gender_choices,
+    district_choices=data.district_choices,
+    age_choices=data.age_choices,
+    grade_choices=data.grade_choices,
+    sleep_default=5,
+)
 
-is_argparser = make_is_argument_parser()
+is_argparser = make_is_argument_parser(configfile=get_config_filename())
 
 parser = argparse.ArgumentParser(
-    description='Bulk-register players for a tournament',
-    parents=[is_argparser, gl_argparser])
+    description="Bulk-register players for a tournament",
+    parents=[is_argparser, gl_argparser],
+)
 parser.epilog = epilog
 
 args = parser.parse_args()
 
-data.read_players(name=args.name, districts=args.district, clubs=args.club,
-                  gender=args.gender, age=args.age, grade=args.grade,
-                  points_min=args.minpoints, points_max=args.maxpoints,
-                  sleep=args.sleep, colmap=dict(squashcode='squash_code'))
+data.read_players(
+    name=args.name,
+    districts=args.district,
+    clubs=args.club,
+    gender=args.gender,
+    age=args.age,
+    grade=args.grade,
+    points_min=args.minpoints,
+    points_max=args.maxpoints,
+    sleep=args.sleep,
+    colmap=dict(squashcode="squash_code"),
+)
 
 with iSquashController(headless=args.headless, debug=args.debug) as c:
     print(c, file=sys.stderr)

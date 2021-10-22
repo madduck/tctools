@@ -14,6 +14,8 @@ To run most of these, you need:
 
 All Python scripts can be invoked with `--help` to get information on the arguments and parameters they take.
 
+Those scripts interacting with iSquash either need the user credentials and tournament code passed on the command line, or you may create a file `tctools.ini` in the tournament's root directory, and provide the details there. Please have a look at the [`tctools.ini.example`](https://github.com/madduck/tctools/blob/main/tctools.ini.example) file.
+
 ### Searching the grading list
 
 If you're not keen on using the Web interface for grading list searches, you can use this script to do so from the command line:
