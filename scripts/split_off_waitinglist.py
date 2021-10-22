@@ -15,6 +15,7 @@ import pyexcel
 import datetime
 from collections import namedtuple
 from pytcnz.meta import epilog
+from pytcnz.squashnz.player import Player
 from pytcnz.squashnz.registrations_reader import (
     RegistrationsReader,
     DataSource,
@@ -59,7 +60,7 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-StampedPlayer = namedtuple("StampedPlayer", ["timestamp", "player"])
+TimestampPlayer = namedtuple("TimestampPlayer", ["timestamp", "player"])
 players = {}
 
 files = functools.reduce(
@@ -82,8 +83,8 @@ for regfile in files:
         f"{timestamp.strftime('%a %F %H:%M')}"
     )
 
-    data = RegistrationsReader(regfile)
-    data.read_players()
+    data = RegistrationsReader(regfile, Player_class=Player)
+    data.read_players(strict=False)
     codes = {p.squash_code for p in data.get_players()}
 
     for code, player in list(players.items()):
@@ -96,7 +97,7 @@ for regfile in files:
         if player.squash_code not in players:
             # The player is new
             print(f"  New: {player!r}")
-            players[player.squash_code] = StampedPlayer(timestamp, player)
+            players[player.squash_code] = TimestampPlayer(timestamp, player)
 
 players = sorted(
     players.values(), key=lambda p: (p.timestamp, -p.player.points)
