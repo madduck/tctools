@@ -233,6 +233,18 @@ For the logic to work, you must use the `TIMESTAMP` placeholder in the file name
 
 If the limit is reached between two snapshots, then higher-graded players are given precedence over lower-graded players.
 
+#### Convenience wrapper
+
+For Linux users, `snapshot_registrations.sh` is a convenience script which:
+
+1. Headlessly downloads current registrations;
+
+2. Removes the file if there have not been any changes;
+
+3. Runs `split_off_waitinglist.py` against all files in the `snapshots` directory.
+
+The tool takes the cut-off count as first argument, and optionally an output filename, or it will skip writing a file.
+
 ### Resetting a tournament
 
 Should you, for whatever reason, want to reset a tournament, you can do so using `reset_isquash_tournament.py`:
