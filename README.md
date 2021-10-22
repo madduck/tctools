@@ -57,11 +57,11 @@ you will need to
 functionality not available in Excel or Google Docs. You also need LibreOffice
 in combination with TournamentControl, as detailed in the next section:
 
-### Python and pytcnz
+### Python and `pytcnz`
 
 If you want to use the [scripts](https://github.com/madduck/tctools/tree/main/scripts) or [tc2web](https://github.com/madduck/tctools/tree/main/tc2web) — and trust me, you do, unless you want to make and seed draws manually, or enter results by hand – you will need to install [Python](https://python.org), as [detailed here](https://www.python.org/downloads/).
 
-Once installed, you need to obtain the [pytcnz](https://github.com/madduck/pytcnz) library, which used to be part of `tctools`, but has been split off into a separate library.
+Once installed, you need to obtain the [`pytcnz`](https://github.com/madduck/pytcnz) library, which used to be part of `tctools`, but has been split off into a separate library.
 
 Once Python is installed, the `pytcnz` library, as well as all dependencies can be installed with a single command (you might need to install `pip` first, if the following gives an error).
 
