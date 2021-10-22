@@ -253,6 +253,8 @@ Should you, for whatever reason, want to reset a tournament, you can do so using
 
 As soon as the first game scores have been entered into the comment field of played games using TournamentControl, you can fire off this script to start entering the results. It will do as much as it can, and then just exit and wait for you to run it again, and again… or just run it at the very end.
 
+**Heads-up!** For this to work, you must enter the results of played games into the comments field of played games. This can be done either before or after telling TournamentControl who won the game, and thus moving the game up to the "Marking" row. It's good practice to maintain the player order, i.e. record "4-11 5-11 10-12" if player 2 won. The tools will attempt to automatically flip the scores if entered wrongly, but it's best if they don't have to be smart.
+
 **Warning**: the script does not change the game status to "Not Played" for byes, so this has to be done manually, although you can record those games as "11-0 11-0 11-0" for the time being.
 
 ```PowerShell

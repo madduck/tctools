@@ -43,6 +43,10 @@ For once-off exports, use the menu on the main screen:
 
 As you are running a tournament, you will want to be running this code on the same PC as is used to control the tournament, i.e. the one running TournamentControl. The files to make that happen are included in the `windows` subdirectory, and more information is available in the [the README file](https://github.com/madduck/tctools/blob/main/tc2web/windows/README.md) file.
 
+## Entering scores during the tournament
+
+`tc2web` needs you to enter match results into the game comments in TournamentControl to be able to parse and display them. This can be done either before or after telling TournamentControl who won the game, and thus moving the game up to the "Marking" row. It's good practice to maintain the player order, i.e. record "4-11 5-11 10-12" if player 2 won. The tools will attempt to automatically flip the scores if entered wrongly, but it's best if they don't have to be smart.
+
 ## Licence
 
 You are free to use this under the terms of the [MIT
