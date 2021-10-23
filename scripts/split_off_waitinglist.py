@@ -101,7 +101,7 @@ for regfile in files:
             print(f"  New: {player!r}")
             players[player.squash_code] = TimestampPlayer(timestamp, player)
 
-        elif (prev := players[player.squash_code]).player != player:
+        elif (prev := players[player.squash_code]).player.points != player.points:
             print(f"  Upd: {player!r}")
             players[player.squash_code] = TimestampPlayer(
                 prev.timestamp, player
