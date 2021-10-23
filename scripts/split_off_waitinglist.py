@@ -63,9 +63,11 @@ args = parser.parse_args()
 TimestampPlayer = namedtuple("TimestampPlayer", ["timestamp", "player"])
 players = {}
 
-files = sorted(functools.reduce(
-    lambda a, i: a + glob.glob(i), args.registrations_file, []
-))
+files = sorted(
+    functools.reduce(
+        lambda a, i: a + glob.glob(i), args.registrations_file, []
+    )
+)
 
 for regfile in files:
     basename = os.path.basename(regfile)
@@ -99,6 +101,12 @@ for regfile in files:
             print(f"  New: {player!r}")
             players[player.squash_code] = TimestampPlayer(timestamp, player)
 
+        elif (prev := players[player.squash_code]).player != player:
+            print(f"  Upd: {player!r}")
+            players[player.squash_code] = TimestampPlayer(
+                prev.timestamp, player
+            )
+
 players = sorted(
     players.values(), key=lambda p: (p.timestamp, -p.player.points)
 )
@@ -126,7 +134,9 @@ players_wl = sorted(
 )  # noqa:E203
 
 if players_wl:
-    print(f"\n{len(players_wl)} players moved to waiting list:", file=sys.stderr)
+    print(
+        f"\n{len(players_wl)} players moved to waiting list:", file=sys.stderr
+    )
     for i, p in enumerate(players_wl):
         print(f"   {i:3d}:{p.player!r}", file=sys.stderr)
 
