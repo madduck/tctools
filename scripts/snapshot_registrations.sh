@@ -18,7 +18,7 @@ esac
 DIR="${0%/*}"
 
 SNAPSHOTDIR=$(realpath -e --relative-base="$PWD" "$DIR"/../snapshots)
-"$DIR"/manage_isquash_tournament.py --headless \
+"$DIR"/manage_isquash_tournament.py --headless --seed \
   --extract-registrations "$SNAPSHOTDIR"/TIMESTAMP-registrations.xls
 
 ls -1 "$SNAPSHOTDIR"/*-registrations.xls | while read f; do
