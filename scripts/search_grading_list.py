@@ -6,6 +6,7 @@
 #
 
 import argparse
+import sys
 from pytcnz.squashnz.gradinglist_reader import (
     GradingListReader,
     make_argument_parser,
@@ -37,6 +38,14 @@ parser.add_argument(
     "available also as {separator}",
 )
 parser.add_argument(
+    "--list",
+    "-l",
+    metavar="SEPARATOR",
+    type=str,
+    choices=('districts', 'clubs', 'ages', 'grades'),
+    help="List all known entities in the given category",
+)
+parser.add_argument(
     "--force",
     "-f",
     action="store_true",
@@ -54,6 +63,13 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
+
+if args.list:
+    try:
+        print('\n'.join(f"{i['code']}: {i['desc']}" for i in getattr(data, args.list)))
+    except TypeError:
+        print('\n'.join(getattr(data, args.list)))
+    sys.exit(0)
 
 if not (args.district or args.club) and not args.force:
     parser.error("Will not search all districts/clubs without --force")
