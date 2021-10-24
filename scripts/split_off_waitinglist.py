@@ -96,15 +96,19 @@ for regfile in files:
             del players[code]
 
     for player in data.get_players():
-        if player.squash_code not in players:
+        known = players.get(player.squash_code)
+        if not known:
             # The player is new
             print(f"  New: {player!r}")
             players[player.squash_code] = TimestampPlayer(timestamp, player)
 
-        elif (prev := players[player.squash_code]).player.points != player.points:
-            print(f"  Upd: {player!r}")
+        elif known.player != player:
+            s1 = set((known.player.data | dict(id=None)).items())
+            s2 = set((player.data | dict(id=None)).items())
+            diff = [v[0] for v in s2 - s1 if not v[0].startswith('grad')]
+            print(f"  Upd: {player!r} ({', '.join(diff)})")
             players[player.squash_code] = TimestampPlayer(
-                prev.timestamp, player
+                known.timestamp, player
             )
 
 players = sorted(
