@@ -20,8 +20,8 @@ Those scripts interacting with iSquash either need the user credentials and tour
 
 If you're not keen on using the Web interface for grading list searches, you can use this script to do so from the command line:
 
-```PowerShell
-> python ./search_grading_list.py --name Martin --grade B --club WNTH
+```shell
+⌨ python ./search_grading_list.py --name Martin --grade B --club WNTH
 WNTHMK	Martin Krafft	M	B2	2790	The Thorndon Club
 ```
 
@@ -29,8 +29,8 @@ WNTHMK	Martin Krafft	M	B2	2790	The Thorndon Club
 
 Given a set of search criteria, register players for a tournament in bulk. This is mainly useful when you need to fill in a hole in the draws, and you do not have matching players on your waiting list. In this case, running e.g.
 
-```PowerShell
-> python ./bulk_register_players.py -u username -p password -t TOURNAMENTCODE \
+```shell
+⌨ python ./bulk_register_players.py -u username -p password -t TOURNAMENTCODE \
     --district WN --gender f --min 1250 --max 1420
 ```
 
@@ -40,25 +40,25 @@ will go to the grading list, get a list of all female players in that points ran
 
 This tool constructs lines of text with player data, similar to how "mail-merge" functionality might fill in a mail letter template. What you then do with these lines is up to you. Have a look at how I [send bulk text messages](https://github.com/madduck/tctools/blob/main/mmerge/HOWTO-SMS.md) for inspiration.
 
-```
+```shell
 ## send a message to all players in all draws:
-> python ./player_mmerge.py --drawmaker draw_maker.ods \
+⌨ python ./player_mmerge.py --drawmaker draw_maker.ods \
     'sms {number} Kia ora {first name}, welcome to the {tournament}!'
 
 ## send a message to people on the waiting list:
-> python ./player_mmerge.py --drawmaker draw_maker.ods --all --waitlist \
+⌨ python ./player_mmerge.py --drawmaker draw_maker.ods --all --waitlist \
     'sms {number} Sorry we cannot host you, {first name}!'
 
 ## send a message to waitlisted people in the draws:
-> python ./player_mmerge.py --drawmaker draw_maker.ods --waitlist \
+⌨ python ./player_mmerge.py --drawmaker draw_maker.ods --waitlist \
     'sms {number} {first name}, still keen?'
 
 ## list all male player codes in B grade:
-> python ./player_mmerge.py --gender m --points 2700-3499 \
+⌨ python ./player_mmerge.py --gender m --points 2700-3499 \
     --tcexport tc-export-fixed.xls '{grading code}'
 
 ## generate a HTML page to record fees paid (see make_entry_fees_sheet.sh)
-> python ./player_mmerge.py --tcexport tc-export-fixed.xls \
+⌨ python ./player_mmerge.py --tcexport tc-export-fixed.xls \
     --template entry_fees_sheet.j2 > sheet.html
 ```
 
@@ -66,18 +66,18 @@ This tool constructs lines of text with player data, similar to how "mail-merge"
 
 The `mailchimp_import.sh` script invokes the mail-merge tool to create data that one can copy-paste into the audience import function of Mailchimp, to register players, and also tag them accordingly. You need the `xclip` utility installed, or just modify the script to print to the console, so you can copy it from there.
 
-```
+```shell
 # Tag all players in the draws with the tag 2021-10-open,
 # as well as all waitlisted players with 2021-10-open-wl
-> ./mailchimp_import.sh ../draw_maker.ods 2021-10-open
+⌨ ./mailchimp_import.sh ../draw_maker.ods 2021-10-open
 ```
 
 #### Make a sheet to record entry fees
 
 To create a table allowing your bar staff to record who has paid entry fees, use the `make_entry_fees_sheet.sh` script (or just run the command therein by hand):
 
-```PowerShell
-> ./make_entry_fees_sheet.sh ../tc-export-fixed.xls
+```shell
+⌨ ./make_entry_fees_sheet.sh ../tc-export-fixed.xls
 ```
 
 This will open the browser from where you can print the sheet.
@@ -86,8 +86,8 @@ This will open the browser from where you can print the sheet.
 
 The `manage_isquash_tournament.py` script takes care of all your pre-tournament and tournament management/design needs. It exposes pretty much all of the functionality of iSquash's tournament module for the pre-tournament phase. To get your bearing, call it with `--help`:
 
-```PowerShell
-> python ./manage_isquash_tournament.py --help
+```
+⌨ python ./manage_isquash_tournament.py --help
 usage: manage_isquash_tournament.py [-h] --username USERNAME --password PASSWORD
                                     --tournament TOURNAMENT_CODE [--debug]
                                     [--headless] --input DRAWMAKER_FILE [--register]
@@ -169,8 +169,8 @@ Limiting:
 
 Typically, you'd use the tool once you've assigned players to draws in the DrawMaker spreadsheet, and invoke it like this:
 
-```PowerShell
-> python ./manage_isquash_tournament.py -u username -p password -t TOURNAMENTCODE \
+```shell
+⌨ python ./manage_isquash_tournament.py -u username -p password -t TOURNAMENTCODE \
     --input ../draw_maker.ods \
     --register --update \
     --extract-registrations ../TIMESTAMP-registrations.xls \
@@ -201,8 +201,8 @@ Finally, if you know that you only need to work on a subset of draws, chuck a fi
 
 Another use-case of `manage_isquash_tournament.py` is to snapshot registrations at regular intervals:
 
-```PowerShell
-> python ./manage_isquash_tournament.py -u username -p password -t TOURNAMENTCODE \
+```shell
+⌨ python ./manage_isquash_tournament.py -u username -p password -t TOURNAMENTCODE \
     --extract-registrations ../TIMESTAMP-registrations.xls --headless
 ```
 
@@ -218,9 +218,9 @@ If you do not have a separate waiting list event for your tournament, you will p
 
 2. Use `split_off_waitinglist.py` to select the `N` players who registered before the others, and move everyone else to a waiting list:
 
-```PowerShell
-> python ./split_off_waitinglist.py -o ../registrations.ods -c 64 \
->   ../*-registrations.xls
+```shell
+⌨ python ./split_off_waitinglist.py -o ../registrations.ods -c 64 \
+    ../*-registrations.xls
 ```
 
 Note how the last argument includes an asterisk, causing it to consider all files matching that pattern in the parent directory.
@@ -249,17 +249,17 @@ The tool takes the cut-off count as first argument, and optionally an output fil
 
 Should you, for whatever reason, want to reset a tournament, you can do so using `reset_isquash_tournament.py`:
 
-```PowerShell
+```shell
 ## Delete all draws
-> python ./reset_isquash_tournament.py -u username -p password -t TOURNAMENT_CODE \
+⌨ python ./reset_isquash_tournament.py -u username -p password -t TOURNAMENT_CODE \
     --draws
 
 ## Also unregister all players:
-> python ./reset_isquash_tournament.py -u username -p password -t TOURNAMENT_CODE \
+⌨ python ./reset_isquash_tournament.py -u username -p password -t TOURNAMENT_CODE \
     --draws --players
 
 ## Unregister all players not assigned to draws:
-> python ./reset_isquash_tournament.py -u username -p password -t TOURNAMENT_CODE \
+⌨ python ./reset_isquash_tournament.py -u username -p password -t TOURNAMENT_CODE \
     --players
 ```
 
@@ -271,8 +271,8 @@ As soon as the first game scores have been entered into the comment field of pla
 
 **Warning**: the script does not change the game status to "Not Played" for byes, so this has to be done manually, although you can record those games as "11-0 11-0 11-0" for the time being.
 
-```PowerShell
-> python ./enter_isquash_results.py -u username -p password -t TOURNAMENTCODE \
+```shell
+⌨ python ./enter_isquash_results.py -u username -p password -t TOURNAMENTCODE \
     -i ../tc-export-fixed.xls
 ```
 
