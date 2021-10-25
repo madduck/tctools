@@ -1,7 +1,7 @@
 # TC scripts
 
 This directory contains scripts that facilitate aspects of squash tournament
-control. Most of these are written in [Python](https://python.org), and make use of the [pytcnz](https://github.com/madduck/pytcnz) library, except for the ones whose names end in `.sh` — these are simple shell scripts that just call the Python scripts in specific ways.
+control. Most of these are written in [Python](https://python.org), and make use of the [pytcnz](https://github.com/madduck/pytcnz) library, except for the ones whose names end in `.sh` — these are simple shell scripts that just call the Python scripts in specific ways, and getting them to run on Windows is definitely beyond the scope of this document.
 
 ## Prerequisites
 
