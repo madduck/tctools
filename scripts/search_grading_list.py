@@ -71,7 +71,7 @@ if args.list:
         print('\n'.join(getattr(data, args.list)))
     sys.exit(0)
 
-if not (args.district or args.club) and not args.force:
+if not (args.district or args.club) and not args.force and not args.name:
     parser.error("Will not search all districts/clubs without --force")
 
 data.read_players(
