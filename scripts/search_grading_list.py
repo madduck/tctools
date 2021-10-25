@@ -66,8 +66,8 @@ args = parser.parse_args()
 
 if args.list:
     try:
-        print('\n'.join(f"{i['code']}: {i['desc']}" for i in getattr(data, args.list)))
-    except TypeError:
+        print('\n'.join(f"{k}: {v}" for k, v in getattr(data, args.list).items()))
+    except AttributeError:
         print('\n'.join(getattr(data, args.list)))
     sys.exit(0)
 
