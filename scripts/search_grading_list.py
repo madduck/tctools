@@ -17,7 +17,6 @@ data = GradingListReader()
 
 gl_argparser = make_argument_parser(
     gender_choices=data.gender_choices,
-    district_choices=data.district_choices,
     age_choices=data.age_choices,
     grade_choices=data.grade_choices,
     sleep_default=5,
