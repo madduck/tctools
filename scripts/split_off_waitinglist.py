@@ -123,21 +123,21 @@ players = sorted(
     players.values(), key=lambda p: (p.timestamp, -p.player.points)
 )
 colnames = [
-    "ID",
-    "Name",
-    "Gender",
-    "Squash Code",
-    "Points",
-    "DOB",
-    "Phone",
-    "Mobile",
-    "Email",
-    "Comments",
+    ("ID", int),
+    ("Name", str),
+    ("Gender", Gender.to_sex),
+    ("Squash Code", str),
+    ("Points", int),
+    ("DOB", lambda d: d.strftime("%d-%b-%Y") if d else ""),
+    ("Phone", str),
+    ("Mobile", str),
+    ("Email", str),
+    ("Comments", str),
 ]
 
 
 def make_player_row(player):
-    return [str(player[DataSource.sanitise_colname(c)]) for c in colnames]
+    return [fn(player[DataSource.sanitise_colname(c)]) for c, fn in colnames]
 
 
 players_in = sorted(players[: args.cutoff], key=lambda p: -p.player.points)
@@ -168,7 +168,7 @@ if args.output:
 
     regs = pyexcel.Sheet(
         name="Registrations",
-        colnames=colnames + ["Timestamp"],
+        colnames=[col[0] for col in colnames] + ["Timestamp"],
         sheet=[
             make_player_row(p.player) + [p.timestamp.strftime("%F %H:%M:%S")]
             for p in players_in
@@ -181,7 +181,7 @@ if args.output:
 
         wl = pyexcel.Sheet(
             name="Waiting list",
-            colnames=colnames + ["Timestamp"],
+            colnames=[col[0] for col in colnames] + ["Timestamp"],
             sheet=[
                 make_player_row(p.player)
                 + [p.timestamp.strftime("%F %H:%M:%S")]
