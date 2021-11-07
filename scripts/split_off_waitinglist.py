@@ -151,7 +151,7 @@ players_wl = sorted(
 if players_wl:
     print(f"\n{len(players_wl)} players moved to waiting list:")
     for i, p in enumerate(players_wl):
-        print(f"   {i:3d}:{p.player!r}")
+        print(f"   {i+1:3d}:{p.player!r}")
 
 print(f"\n{len(players_in)} players made the cut-off:")
 for gender, title in (
