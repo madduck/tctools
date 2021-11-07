@@ -83,7 +83,8 @@ for regfile in files:
 
     print(
         "Processing registrations as per "
-        f"{timestamp.strftime('%a %F %H:%M')}"
+        f"{timestamp.strftime('%a %F %H:%M')}",
+        file=sys.stderr,
     )
 
     data = RegistrationsReader(regfile, Player_class=Player)
@@ -99,21 +100,21 @@ for regfile in files:
     for code, player in list(players.items()):
         if code not in codes:
             # The player is no longer registered
-            print(f"  Out: {player.player!r}")
+            print(f"  Out: {player.player!r}", file=sys.stderr)
             del players[code]
 
     for player in data.get_players():
         known = players.get(player.squash_code)
         if not known:
             # The player is new
-            print(f"  New: {player!r}")
+            print(f"  New: {player!r}", file=sys.stderr)
             players[player.squash_code] = TimestampPlayer(timestamp, player)
 
         elif known.player != player:
             s1 = set((known.player.data | dict(id=None)).items())
             s2 = set((player.data | dict(id=None)).items())
-            diff = [v[0] for v in s2 - s1 if not v[0].startswith('grad')]
-            print(f"  Upd: {player!r} ({', '.join(diff)})")
+            diff = [v[0] for v in s2 - s1 if not v[0].startswith("grad")]
+            print(f"  Upd: {player!r} ({', '.join(diff)})", file=sys.stderr)
             players[player.squash_code] = TimestampPlayer(
                 known.timestamp, player
             )
@@ -145,9 +146,7 @@ players_wl = sorted(
 )  # noqa:E203
 
 if players_wl:
-    print(
-        f"\n{len(players_wl)} players moved to waiting list:", file=sys.stderr
-    )
+    print(f"\n{len(players_wl)} players moved to waiting list:")
     for i, p in enumerate(players_wl):
         print(f"   {i:3d}:{p.player!r}", file=sys.stderr)
 
