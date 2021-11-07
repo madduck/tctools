@@ -136,8 +136,11 @@ colnames = [
 ]
 
 
-def make_player_row(player):
-    return [fn(player[DataSource.sanitise_colname(c)]) for c, fn in colnames]
+def make_player_row(player, id=None):
+    cols = [fn(player[DataSource.sanitise_colname(c)]) for c, fn in colnames]
+    if id:
+        cols[0] = id
+    return cols
 
 
 players_in = sorted(players[: args.cutoff], key=lambda p: -p.player.points)
@@ -170,8 +173,9 @@ if args.output:
         name="Registrations",
         colnames=[col[0] for col in colnames] + ["Timestamp"],
         sheet=[
-            make_player_row(p.player) + [p.timestamp.strftime("%F %H:%M:%S")]
-            for p in players_in
+            make_player_row(p.player, i + 1)
+            + [p.timestamp.strftime("%F %H:%M:%S")]
+            for i, p in enumerate(players_in)
         ],
     )
 
@@ -183,9 +187,9 @@ if args.output:
             name="Waiting list",
             colnames=[col[0] for col in colnames] + ["Timestamp"],
             sheet=[
-                make_player_row(p.player)
+                make_player_row(p.player, i + 1)
                 + [p.timestamp.strftime("%F %H:%M:%S")]
-                for p in players_wl
+                for i, p in enumerate(players_wl)
             ],
         )
 
