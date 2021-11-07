@@ -21,6 +21,7 @@ from pytcnz.squashnz.registrations_reader import (
     RegistrationsReader,
     DataSource,
 )
+from pytcnz.datasource import DataSource
 
 parser = argparse.ArgumentParser(
     description="Move late entries to waiting list"
@@ -86,7 +87,13 @@ for regfile in files:
     )
 
     data = RegistrationsReader(regfile, Player_class=Player)
-    data.read_players(strict=False)
+    try:
+        data.read_players(strict=False)
+
+    except DataSource.ReadError as e:
+        print(f"In file {regfile}: {e}", file=sys.stderr)
+        continue
+
     codes = {p.squash_code for p in data.get_players()}
 
     for code, player in list(players.items()):
