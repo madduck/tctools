@@ -148,23 +148,21 @@ players_wl = sorted(
 if players_wl:
     print(f"\n{len(players_wl)} players moved to waiting list:")
     for i, p in enumerate(players_wl):
-        print(f"   {i:3d}:{p.player!r}", file=sys.stderr)
+        print(f"   {i:3d}:{p.player!r}")
 
-print(f"\n{len(players_in)} players made the cut-off:", file=sys.stderr)
-print("  Women:", file=sys.stderr)
-cnt = 0
-for p in players_in:
-    if p.player.gender != Gender.W:
-        continue
-    cnt += 1
-    print(f"   {cnt:3d}:{p.player!r}", file=sys.stderr)
-print("  Men:", file=sys.stderr)
-cnt = 0
-for p in players_in:
-    if p.player.gender != Gender.M:
-        continue
-    cnt += 1
-    print(f"   {cnt:3d}:{p.player!r}", file=sys.stderr)
+print(f"\n{len(players_in)} players made the cut-off:")
+for gender, title in (
+    (Gender.W, "Women"),
+    (Gender.M, "Men"),
+    (Gender.N, "Ungendered"),
+):
+    print(f"  {title}:")
+    cnt = 0
+    for p in players_in:
+        if p.player.gender != gender:
+            continue
+        cnt += 1
+        print(f"   {cnt:3d}:{p.player!r}")
 
 if args.output:
 
