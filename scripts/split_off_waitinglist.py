@@ -62,7 +62,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 TimestampPlayer = namedtuple("TimestampPlayer", ["timestamp", "player"])
-players = {}
+known_players = {}
 
 files = sorted(
     functools.reduce(
@@ -95,32 +95,63 @@ for regfile in files:
         print(f"In file {regfile}: {e}", file=sys.stderr)
         continue
 
-    codes = {p.squash_code for p in data.get_players()}
+    cur_codes = {p.squash_code for p in data.get_players() if p.squash_code}
 
-    for code, player in list(players.items()):
-        if code not in codes:
-            # The player is no longer registered
-            print(f"  Out: {player.player!r}", file=sys.stderr)
-            del players[code]
+    for known_code, known_player in list(known_players.items()):
+        if (
+            known_code in cur_codes
+            or known_player.player.name in known_players
+        ):
+            # The player is still registered
+            continue
+
+            continue
+
+        # The player is no longer registered
+        print(f"  Out: {known_player.player!r}", file=sys.stderr)
+        del known_players[
+            known_code
+            if (known_code not in cur_codes)
+            else known_player.player.name
+        ]
 
     for player in data.get_players():
-        known = players.get(player.squash_code)
-        if not known:
-            # The player is new
-            print(f"  New: {player!r}", file=sys.stderr)
-            players[player.squash_code] = TimestampPlayer(timestamp, player)
+        code = player.squash_code
+        known_player = known_players.get(code)
+        if not known_player:
+            if player.name in known_players:
+                if player.squash_code:
+                    # The player was previously registered without a squash code, so
+                    # migrate
+                    known_players[player.squash_code] = TimestampPlayer(
+                        known_players[player.name].timestamp, player
+                    )
+                    del known_players[player.name]
+                    print(
+                        f"  Chg: {player!r} ({player.squash_code})",
+                        file=sys.stderr,
+                    )
 
-        elif known.player != player:
-            s1 = set((known.player.data | dict(id=None)).items())
+            else:
+                # The player is new
+                print(
+                    f"  New: {player!r} ({code or 'No code'})", file=sys.stderr
+                )
+                known_players[code or player.name] = TimestampPlayer(
+                    timestamp, player
+                )
+
+        elif known_player.player != player:
+            s1 = set((known_player.player.data | dict(id=None)).items())
             s2 = set((player.data | dict(id=None)).items())
             diff = [v[0] for v in s2 - s1 if not v[0].startswith("grad")]
             print(f"  Upd: {player!r} ({', '.join(diff)})", file=sys.stderr)
-            players[player.squash_code] = TimestampPlayer(
-                known.timestamp, player
+            known_players[code] = TimestampPlayer(
+                known_player.timestamp, player
             )
 
-players = sorted(
-    players.values(), key=lambda p: (p.timestamp, -p.player.points)
+known_players = sorted(
+    known_players.values(), key=lambda p: (p.timestamp, -p.player.points)
 )
 colnames = [
     ("ID", int),
@@ -143,9 +174,11 @@ def make_player_row(player, id=None):
     return cols
 
 
-players_in = sorted(players[: args.cutoff], key=lambda p: -p.player.points)
+players_in = sorted(
+    known_players[: args.cutoff], key=lambda p: -p.player.points
+)
 players_wl = sorted(
-    players[args.cutoff :], key=lambda p: -p.player.points
+    known_players[args.cutoff :], key=lambda p: -p.player.points
 )  # noqa:E203
 
 if players_wl:
@@ -181,7 +214,7 @@ if args.output:
 
     sheets = {regs.name: regs}
 
-    if args.cutoff < len(players):
+    if args.cutoff < len(known_players):
 
         wl = pyexcel.Sheet(
             name="Waiting list",
