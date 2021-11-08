@@ -167,6 +167,7 @@ data = None
 if args.register or args.makedraws or args.populate:
     if args.drawmaker:
         data = DrawsReader(args.drawmaker, add_players_to_draws=True)
+        # TODO drawdescmap should be taken into account here
         data.read_draws()
         data.read_players()
     else:
@@ -184,7 +185,7 @@ for pair in args.drawtypemap or ():
 drawdescmap = {}
 for pair in args.drawdescmap or ():
     d, t = pair.split("=")
-    drawtypemap[d] = t
+    drawdescmap[d] = t
 
 
 def timestamp_filename(filename):
