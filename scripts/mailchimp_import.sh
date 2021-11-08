@@ -36,5 +36,5 @@ fi
     | sed -e 's,0$,,;s,1$,-wl,'
 } | xclip -i -selection clipboard
 
-xclip -o -selection clipboard | echo "$(wc -l) records ready in the clipboard."
+xclip -o -selection clipboard | echo "$(($(wc -l) - 1)) records ready in the clipboard."
 echo "Now go to Mailchimp, Audience, Import, Cut-n-paste, and hit Ctrl-v."
