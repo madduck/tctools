@@ -22,7 +22,6 @@ data = GradingListReader()
 
 gl_argparser = make_gl_argument_parser(
     gender_choices=data.gender_choices,
-    district_choices=data.district_choices,
     age_choices=data.age_choices,
     grade_choices=data.grade_choices,
     sleep_default=5,
@@ -42,13 +41,11 @@ data.read_players(
     name=args.name,
     districts=args.district,
     clubs=args.club,
-    gender=args.gender,
-    age=args.age,
-    grade=args.grade,
+    genders=args.gender,
+    ages=args.age,
+    grades=args.grade,
     points_min=args.minpoints,
-    points_max=args.maxpoints,
-    sleep=args.sleep,
-    colmap=dict(squashcode="squash_code"),
+    points_max=args.maxpoints
 )
 
 with iSquashController(headless=args.headless, debug=args.debug) as c:
