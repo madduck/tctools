@@ -170,7 +170,7 @@ elif args.drawmaker:
     colmap = dict(squash_code="code")
 
 data.read_tournament_name()
-data.read_players(colmap=colmap)
+data.read_players(colmap=colmap, strict=False)
 
 if args.points:
     p = args.points.split("-")
