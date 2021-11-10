@@ -55,9 +55,10 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-data = TCExportReader(args.spreadsheet, add_games_to_draws=True)
-data.read_draws()
-data.read_games()
+data = TCExportReader(
+    args.spreadsheet, add_games_to_draws=True, add_players_to_games=True
+)
+data.read_all()
 
 with iSquashController(headless=args.headless) as c:
     print(c, file=sys.stderr)
