@@ -78,8 +78,8 @@ Copyright &copy; {{meta.years}} by
 {% endmacro -%}
 
 {% macro player(player) -%}
-{% if player and player in players -%}
-{% set p = players[player] -%}
+{% if player and player.name in players -%}
+{% set p = players[player.name] -%}
 <span class="player">{{ p.name }}</span>
 <!-- {{'{!r}'.format(p)}} -->
 <div class="playerinfo">

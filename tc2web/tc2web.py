@@ -63,7 +63,9 @@ class Game(BaseGame):
             return "unknown"
 
     def get_status(self):
-        if self.status <= Game.Status.justfinished:
+        if self.status == Game.Status.notplayed:
+            return "Not played"
+        elif self.status <= Game.Status.justfinished:
             winner = self.get_winner()
             if not winner:
                 return "Awaiting result"
@@ -108,6 +110,7 @@ data = TCExportReader(
     autoflip_scores=True,
     add_games_to_draws=True,
     add_players_to_draws=True,
+    add_players_to_games=True,
 )
 data.read_all()
 
