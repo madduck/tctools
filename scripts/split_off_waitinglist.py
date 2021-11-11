@@ -192,11 +192,12 @@ for gender, title in (
     (Gender.M, "Men"),
     (Gender.N, "Ungendered"),
 ):
-    print(f"  {title}:")
     cnt = 0
     for p in players_in:
         if p.player.gender != gender:
             continue
+        elif cnt == 0:
+            print(f"  {title}:")
         cnt += 1
         print(f"   {cnt:3d}:{p.player!r}")
 
