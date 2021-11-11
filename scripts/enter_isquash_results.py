@@ -112,7 +112,7 @@ with iSquashController(headless=args.headless) as c:
                     f"{len(entered)} entered, {len(failed)} failed)"
                 )
                 break
-            elif not entered:
+            elif not entered and not skipped:
                 raise RuntimeError(f"Not making progress on draw {draw}")
             else:
                 done.extend(entered)
