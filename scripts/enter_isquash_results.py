@@ -80,6 +80,12 @@ with iSquashController(headless=args.headless) as c:
 
         done = []
         games = [g for g in draw.get_games() if g.is_finished()]
+        if not games:
+            print(
+                f"  {draw!r} no games to enter",
+                file=sys.stderr,
+            )
+            continue
         while True:
             print(
                 f"  {draw!r} {len(done)} games already entered",
