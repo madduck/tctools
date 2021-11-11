@@ -1,8 +1,10 @@
 #!/bin/sh
 set -eu
 
-if [ -e "${0%/*}/tc-export-fixed.xls" ]; then
-  set -- "${0%/*}/tc-export-fixed.xls"
+MYDIR="${0%/*}"
+
+if [ -e "$MYDIR/../tc-export-fixed.xls" ]; then
+  set -- "$MYDIR/../tc-export-fixed.xls"
 fi
 
 if [ ! -r "${1:-}" ]; then
@@ -14,5 +16,5 @@ SELF="${0%.*}"
 SELF="${SELF##*/}"
 outfile=$(mktemp --tmpdir ${SELF}.XXXXXXXX.html)
 
-./player_mmerge.py -t entry_fees_sheet.j2 --tcexport ${1:-} > $outfile
+"$MYDIR"/player_mmerge.py -t "$MYDIR"/entry_fees_sheet.j2 --tcexport ${1:-} > $outfile
 xdg-open $outfile
