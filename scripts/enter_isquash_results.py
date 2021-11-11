@@ -91,14 +91,15 @@ with iSquashController(headless=args.headless) as c:
                 f"  {draw!r} {len(done)} games already entered",
                 file=sys.stderr,
             )
-            entered = c.go_enter_results_for_draw(
+            entered, failed = c.go_enter_results_for_draw(
                 draw, games=games, done=done, reset=args.reset
             )
             if args.reset:
                 print(f"  {draw!r} reset ({len(entered)} games)")
                 break
-            elif len(entered) + len(done) == len(games):
-                print(f"  {draw!r} done ({len(games)} games)")
+            elif len(failed) + len(entered) + len(done) == len(games):
+                print(f"  {draw!r} done ({len(done)} previously done, "
+                      f"{len(entered)} entered, {len(failed)} failed)")
                 break
             elif not entered:
                 raise RuntimeError(f"Not making progress on draw {draw}")
