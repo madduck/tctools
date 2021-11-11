@@ -58,7 +58,8 @@
       <td>Mobile</td>
     </tr>
   </thead>
-  {% for player in dataset|sort(attribute='name') -%}
+  {% for player in dataset|sort(attribute='name')
+       if not player.has_defaulted() and player.draw.name -%}
   <tr class="{{ loop.cycle('odd', 'even') }}">
     <td>&nbsp;</td>
     <td>&nbsp;</td>
