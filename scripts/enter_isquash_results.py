@@ -53,6 +53,12 @@ parser.add_argument(
     dest="publish",
     help="Publish to grading list",
 )
+parser.add_argument(
+    "--update-web",
+    action="store_true",
+    dest="updateweb",
+    help="Update the web diagrams",
+)
 args = parser.parse_args()
 
 data = TCExportReader(
@@ -107,6 +113,11 @@ with iSquashController(headless=args.headless) as c:
                 done.extend(entered)
 
     print(c, file=sys.stderr)
+
+    if args.updateweb:
+        print("  Updating web diagrams…", file=sys.stderr)
+        c.go_update_web_diagram()
+        print(c, file=sys.stderr)
 
     if args.publish:
         c.go_send_to_gradinglist()
