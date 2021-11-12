@@ -120,7 +120,9 @@ with iSquashController(headless=args.headless) as c:
         print(c, file=sys.stderr)
 
     if args.publish:
+        print("  Publishing to grading list…", file=sys.stderr)
         c.go_send_to_gradinglist()
+        print(c, file=sys.stderr)
 
     c.go_logout()
     print(c, file=sys.stderr)
