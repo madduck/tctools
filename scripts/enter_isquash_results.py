@@ -62,7 +62,10 @@ parser.add_argument(
 args = parser.parse_args()
 
 data = TCExportReader(
-    args.spreadsheet, add_games_to_draws=True, add_players_to_games=True
+    args.spreadsheet,
+    add_games_to_draws=True,
+    add_players_to_games=True,
+    autoflip_scores=True,
 )
 data.read_all()
 
