@@ -107,8 +107,10 @@ with iSquashController(headless=args.headless) as c:
                 print(f"  {draw!r} reset ({len(entered)} games)")
                 break
             elif len(failed) + len(entered) + len(done) == len(games):
-                print(f"  {draw!r} done ({len(done)} previously done, "
-                      f"{len(entered)} entered, {len(failed)} failed)")
+                print(
+                    f"  {draw!r} done ({len(done)} previously done, "
+                    f"{len(entered)} entered, {len(failed)} failed)"
+                )
                 break
             elif not entered:
                 raise RuntimeError(f"Not making progress on draw {draw}")
