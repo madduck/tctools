@@ -20,6 +20,8 @@ import jinja2
 
 from pytcnz.dtkapiti.tcexport_reader import TCExportReader
 from pytcnz.dtkapiti.game import Game as BaseGame
+from pytcnz.warnings import Warnings
+from pytcnz.scores import Scores
 import pytcnz.meta as META
 
 parser = argparse.ArgumentParser(
@@ -55,6 +57,57 @@ args = parser.parse_args()
 
 
 class Game(BaseGame):
+    def __init__(
+        self,
+        name,
+        player1,
+        from1,
+        score1,
+        player2,
+        from2,
+        score2,
+        status,
+        *,
+        autoflip_scores=False,
+        drawnamepat=r"\w\d{1}",
+        **kwargs,
+    ):
+        try:
+            super().__init__(
+                name,
+                player1,
+                from1,
+                score1,
+                player2,
+                from2,
+                score2,
+                status,
+                autoflip_scores=autoflip_scores,
+                drawnamepat=drawnamepat,
+                **kwargs,
+            )
+        except Scores.BaseException as e:
+            comment = kwargs["comment"]
+            del kwargs["comment"]
+
+            msg = f'Unable to parse scores from "{comment}": {e}'
+            Warnings.add(msg, context=f"Parsing scores for game {name}")
+
+            super().__init__(
+                name,
+                player1,
+                from1,
+                score1,
+                player2,
+                from2,
+                score2,
+                Game.Status.error,
+                autoflip_scores=autoflip_scores,
+                drawnamepat=drawnamepat,
+                error=msg,
+                **kwargs,
+            )
+
     def get_player_class(self, which):
         if self.is_player_known(which):
             if self.get_winner() == self.players[which]:
@@ -63,6 +116,9 @@ class Game(BaseGame):
             return "unknown"
 
     def get_status(self):
+        if self.get("error"):
+            return "ERROR"
+
         if self.status == Game.Status.notplayed:
             return "Not played"
         elif self.status <= Game.Status.justfinished:
@@ -94,7 +150,10 @@ class Game(BaseGame):
         return self.status.name
 
     def get_comment(self):
-        if self.scores:
+        if error := self.get("error"):
+            return error
+
+        elif self.scores:
             s = str(self.scores)
             if len(self.comment) > 0:
                 return f"{s} ({self.comment})"

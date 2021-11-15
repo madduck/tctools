@@ -66,11 +66,16 @@ td.unknown {
   color: #999;
 }
 
-p.warning {
+.warning, .error {
   background: #f00;
   color: #fff;
   font-weight: bold;
+}
+p.warning {
   padding: 1em;
+}
+td.error {
+  text-align: center;
 }
 
 a {
