@@ -97,7 +97,7 @@ with iSquashController(headless=args.headless) as c:
             continue
         while True:
             print(
-                f"  {draw!r} {len(done)} games already entered",
+                f"  {draw!r} {len(done)}/{len(games)} games already entered",
                 file=sys.stderr,
             )
             entered, failed = c.go_enter_results_for_draw(
