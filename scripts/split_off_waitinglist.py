@@ -105,8 +105,6 @@ for regfile in files:
             # The player is still registered
             continue
 
-            continue
-
         # The player is no longer registered
         print(f"  Out: {known_player.player!r}", file=sys.stderr)
         del known_players[
