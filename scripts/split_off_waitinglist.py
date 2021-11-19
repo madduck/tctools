@@ -16,7 +16,7 @@ import datetime
 from collections import namedtuple
 from pytcnz.meta import epilog
 from pytcnz.gender import Gender
-from pytcnz.squashnz.player import Player
+from pytcnz.squashnz.player import Player as BasePlayer
 from pytcnz.squashnz.registrations_reader import (
     RegistrationsReader,
     DataSource,
@@ -63,6 +63,15 @@ args = parser.parse_args()
 
 TimestampPlayer = namedtuple("TimestampPlayer", ["timestamp", "player"])
 known_players = {}
+
+
+class Player(BasePlayer):
+    def __str__(self):
+        return (
+            f"{self.name} ({self.squash_code or 'No code'}), {self.get_age_group()}, "
+            f"{self.grading.grade} @ {self.grading.points:,d} pts"
+        )
+
 
 files = sorted(
     functools.reduce(
@@ -182,7 +191,7 @@ players_wl = sorted(
 if players_wl:
     print(f"\n{len(players_wl)} players moved to waiting list:")
     for i, p in enumerate(players_wl):
-        print(f"   {i+1:3d}:{p.player!r} ({p.timestamp})")
+        print(f"   {i+1:3d}:{p.player} ({p.timestamp})")
 
 print(f"\n{len(players_in)} players made the cut-off:")
 for gender, title in (
@@ -197,7 +206,7 @@ for gender, title in (
         elif cnt == 0:
             print(f"  {title}:")
         cnt += 1
-        print(f"   {cnt:3d}:{p.player!r}")
+        print(f"   {cnt:3d}:{p.player}")
 
 if args.output:
 
