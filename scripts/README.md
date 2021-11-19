@@ -233,6 +233,8 @@ For the logic to work, you must use the `TIMESTAMP` placeholder in the file name
 
 If the limit is reached between two snapshots, then higher-graded players are given precedence over lower-graded players.
 
+Finally, if you add `--verbose` (or `-v`) to the command line, you'll get shown a lot of information about how registrations change between two snapshots.
+
 #### Convenience wrapper
 
 For Linux users, `snapshot_registrations.sh` is a convenience script which:

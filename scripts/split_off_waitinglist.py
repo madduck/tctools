@@ -29,6 +29,12 @@ parser = argparse.ArgumentParser(
 parser.epilog = epilog
 
 parser.add_argument(
+    "--verbose",
+    "-v",
+    action="store_true",
+    help="Be verbose while parsing registration files",
+)
+parser.add_argument(
     "--cutoff",
     "-c",
     required=True,
@@ -90,11 +96,12 @@ for regfile in files:
         print(f"Cannot parse timestamp from {basename}", file=sys.stderr)
         sys.exit(1)
 
-    print(
-        "Processing registrations as per "
-        f"{timestamp.strftime('%a %F %H:%M')}",
-        file=sys.stderr,
-    )
+    if args.verbose:
+        print(
+            "Processing registrations as per "
+            f"{timestamp.strftime('%a %F %H:%M')}",
+            file=sys.stderr,
+        )
 
     data = RegistrationsReader(regfile, Player_class=Player)
     try:
@@ -115,7 +122,8 @@ for regfile in files:
             continue
 
         # The player is no longer registered
-        print(f"  Out: {known_player.player!r}", file=sys.stderr)
+        if args.verbose:
+            print(f"  Out: {known_player.player!r}", file=sys.stderr)
         del known_players[
             known_code
             if (known_code not in cur_codes)
@@ -134,16 +142,18 @@ for regfile in files:
                         known_players[player.name].timestamp, player
                     )
                     del known_players[player.name]
-                    print(
-                        f"  Chg: {player!r} ({player.squash_code})",
-                        file=sys.stderr,
-                    )
+                    if args.verbose:
+                        print(
+                            f"  Chg: {player!r} ({player.squash_code})",
+                            file=sys.stderr,
+                        )
 
             else:
                 # The player is new
-                print(
-                    f"  New: {player!r} ({code or 'No code'})", file=sys.stderr
-                )
+                if args.verbose:
+                    print(
+                        f"  New: {player!r} ({code or 'No code'})", file=sys.stderr
+                    )
                 known_players[code or player.name] = TimestampPlayer(
                     timestamp, player
                 )
@@ -152,7 +162,8 @@ for regfile in files:
             s1 = set((known_player.player.data | dict(id=None)).items())
             s2 = set((player.data | dict(id=None)).items())
             diff = [v[0] for v in s2 - s1 if not v[0].startswith("grad")]
-            print(f"  Upd: {player!r} ({', '.join(diff)})", file=sys.stderr)
+            if args.verbose:
+                print(f"  Upd: {player!r} ({', '.join(diff)})", file=sys.stderr)
             known_players[code] = TimestampPlayer(
                 known_player.timestamp, player
             )
