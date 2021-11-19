@@ -233,6 +233,20 @@ For the logic to work, you must use the `TIMESTAMP` placeholder in the file name
 
 If the limit is reached between two snapshots, then higher-graded players are given precedence over lower-graded players.
 
+It is also possible to give preference to individual players, thus pulling them into the draws even if they registered after the deadline::
+
+```shell
+⌨ python ./split_off_waitinglist.py -o ../registrations.ods -c 64 \
+    ../*-registrations.xls -i WNTHMK
+```
+
+This will ensure that WNTHMK gets to play, moving the last player prior to cutoff to the waiting list instead. Add the following to `tctools.ini` in the tournament root directory to persist these choices:
+
+```ini
+[split_off_waitinglist]
+include = WNTHMK WNTHHDT
+```
+
 Finally, if you add `--verbose` (or `-v`) to the command line, you'll get shown a lot of information about how registrations change between two snapshots.
 
 #### Convenience wrapper

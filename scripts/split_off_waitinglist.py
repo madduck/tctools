@@ -10,6 +10,7 @@ import re
 import glob
 import os.path
 import argparse
+import configparser
 import functools
 import pyexcel
 import datetime
@@ -21,12 +22,20 @@ from pytcnz.squashnz.registrations_reader import (
     RegistrationsReader,
     DataSource,
 )
+from pytcnz.util import get_config_filename
 from pytcnz.datasource import DataSource
 
 parser = argparse.ArgumentParser(
     description="Move late entries to waiting list"
 )
 parser.epilog = epilog
+
+config = configparser.ConfigParser()
+config.read(get_config_filename())
+if config.has_section("split_off_waitinglist"):
+    include = config["split_off_waitinglist"].get("include", "").split()
+else:
+    include = []
 
 parser.add_argument(
     "--verbose",
@@ -40,6 +49,15 @@ parser.add_argument(
     required=True,
     type=int,
     help="Split-off to waiting list after NUMBER players",
+)
+parser.add_argument(
+    "--include",
+    "-i",
+    metavar="CODE",
+    action="append",
+    default=include,
+    type=str,
+    help="Ensure these players don't end up on the waiting list",
 )
 parser.add_argument(
     "--output",
@@ -168,9 +186,13 @@ for regfile in files:
                 known_player.timestamp, player
             )
 
-known_players = sorted(
-    known_players.values(), key=lambda p: (p.timestamp, -p.player.points)
-)
+def key_fn(tsplayer):
+    if tsplayer.player.squash_code in args.include:
+        return (datetime.datetime(1900, 1, 1), 0)
+    else:
+        return (tsplayer.timestamp, -tsplayer.player.points)
+known_players = sorted(known_players.values(), key=key_fn)
+
 colnames = [
     ("ID", int),
     ("Name", str),
@@ -190,7 +212,6 @@ def make_player_row(player, id=None):
     if id:
         cols[0] = id
     return cols
-
 
 players_in = sorted(
     known_players[: args.cutoff], key=lambda p: -p.player.points
@@ -217,7 +238,8 @@ for gender, title in (
         elif cnt == 0:
             print(f"  {title}:")
         cnt += 1
-        print(f"   {cnt:3d}:{p.player}")
+        special = p.player.squash_code in args.include
+        print(f"   {'*' if special else ' '}{cnt:3d}:{p.player}")
 
 if args.output:
 
