@@ -185,8 +185,8 @@ players_in = sorted(
     known_players[: args.cutoff], key=lambda p: -p.player.points
 )
 players_wl = sorted(
-    known_players[args.cutoff :], key=lambda p: -p.player.points
-)  # noqa:E203
+    known_players[args.cutoff :], key=lambda p: (p.timestamp, -p.player.points)
+)
 
 if players_wl:
     print(f"\n{len(players_wl)} players moved to waiting list:")
