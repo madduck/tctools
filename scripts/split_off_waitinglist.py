@@ -34,8 +34,12 @@ config = configparser.ConfigParser()
 config.read(get_config_filename())
 if config.has_section("split_off_waitinglist"):
     include = config["split_off_waitinglist"].get("include", "").split()
+    codemap = dict(
+        i.split("=", 1)
+        for i in config["split_off_waitinglist"].get("codemap", "").split()
+    )
 else:
-    include = []
+    include, codemap = [], []
 
 parser.add_argument(
     "--verbose",
@@ -58,6 +62,16 @@ parser.add_argument(
     default=include,
     type=str,
     help="Ensure these players don't end up on the waiting list",
+)
+parser.add_argument(
+    "--map",
+    "-m",
+    metavar="CODE=CODE",
+    action="append",
+    dest="codemap",
+    default=codemap,
+    type=str,
+    help="Map old grading codes to new ones",
 )
 parser.add_argument(
     "--output",
@@ -129,7 +143,11 @@ for regfile in files:
         print(f"In file {regfile}: {e}", file=sys.stderr)
         continue
 
-    cur_codes = {p.squash_code for p in data.get_players() if p.squash_code}
+    cur_codes = {
+        codemap.get(p.squash_code, p.squash_code)
+        for p in data.get_players()
+        if p.squash_code
+    }
 
     for known_code, known_player in list(known_players.items()):
         if (
@@ -149,7 +167,7 @@ for regfile in files:
         ]
 
     for player in data.get_players():
-        code = player.squash_code
+        code = codemap.get(player.squash_code, player.squash_code)
         known_player = known_players.get(code)
         if not known_player:
             if player.name in known_players:
@@ -170,7 +188,8 @@ for regfile in files:
                 # The player is new
                 if args.verbose:
                     print(
-                        f"  New: {player!r} ({code or 'No code'})", file=sys.stderr
+                        f"  New: {player!r} ({code or 'No code'})",
+                        file=sys.stderr,
                     )
                 known_players[code or player.name] = TimestampPlayer(
                     timestamp, player
@@ -181,16 +200,21 @@ for regfile in files:
             s2 = set((player.data | dict(id=None)).items())
             diff = [v[0] for v in s2 - s1 if not v[0].startswith("grad")]
             if args.verbose:
-                print(f"  Upd: {player!r} ({', '.join(diff)})", file=sys.stderr)
+                print(
+                    f"  Upd: {player!r} ({', '.join(diff)})", file=sys.stderr
+                )
             known_players[code] = TimestampPlayer(
                 known_player.timestamp, player
             )
+
 
 def key_fn(tsplayer):
     if tsplayer.player.squash_code in args.include:
         return (datetime.datetime(1900, 1, 1), 0)
     else:
         return (tsplayer.timestamp, -tsplayer.player.points)
+
+
 known_players = sorted(known_players.values(), key=key_fn)
 
 colnames = [
@@ -212,6 +236,7 @@ def make_player_row(player, id=None):
     if id:
         cols[0] = id
     return cols
+
 
 players_in = sorted(
     known_players[: args.cutoff], key=lambda p: -p.player.points

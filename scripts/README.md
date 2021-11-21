@@ -247,6 +247,20 @@ This will ensure that WNTHMK gets to play, moving the last player prior to cutof
 include = WNTHMK WNTHHDT
 ```
 
+In the case that a player's grading code has changed, and their position in the registration queue should be preserved, it's possible to specify a mapping:
+
+```shell
+⌨ python ./split_off_waitinglist.py -o ../registrations.ods -c 64 \
+    ../*-registrations.xls -m WNIBMK=WNTHMK
+```
+
+This will mean that the player previously coded "WNIBMK" whould be treated as the same player that's now got the code "WNTHMK" assigned. And this can too be persisted in `tctools.ini`, by specifying space-separated pairs:
+
+```ini
+[split_off_waitinglist]
+codemap = WNIBMK=WNTHMK
+```
+
 Finally, if you add `--verbose` (or `-v`) to the command line, you'll get shown a lot of information about how registrations change between two snapshots.
 
 #### Convenience wrapper
