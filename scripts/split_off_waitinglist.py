@@ -113,8 +113,9 @@ known_players = {}
 class Player(BasePlayer):
     def __str__(self):
         return (
-            f"{self.name} ({self.squash_code or 'No code'}), {self.get_age_group()}, "
-            f"{self.grading.grade} @ {self.grading.points:,d} pts"
+            f"{self.grading.points:4d} {self.grading.grade:2s} "
+            f"{self.get_age_group()} {(self.squash_code or 'No code'):7s}  "
+            f"{self.name}"
         )
 
 
@@ -282,7 +283,7 @@ for gender, title in (
             print(f"  {title}:")
         cnt += 1
         special = p.player.squash_code in args.include
-        print(f"   {'*' if special else ' '}{cnt:3d}:{p.player}")
+        print(f"  {'*' if special else ' '}{cnt:3d}:{p.player}")
 
 if args.output:
 
