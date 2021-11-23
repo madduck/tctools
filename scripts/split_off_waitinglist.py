@@ -91,6 +91,13 @@ parser.add_argument(
     """,
 )
 parser.add_argument(
+    "--delete-nodiff",
+    "-d",
+    action="store_true",
+    dest="delete",
+    help="Delete registrations files that add no new information",
+)
+parser.add_argument(
     "registrations_file",
     nargs="+",
     type=str,
@@ -118,6 +125,7 @@ files = sorted(
 )
 
 for regfile in files:
+    changecount = 0
     basename = os.path.basename(regfile)
     stampstr = re.match(r"^\d{4}(?:-\d{2}){5}", basename)
     if stampstr:
@@ -165,6 +173,7 @@ for regfile in files:
             if (known_code not in cur_codes)
             else known_player.player.name
         ]
+        changecount += 1
 
     for player in data.get_players():
         code = codemap.get(player.squash_code, player.squash_code)
@@ -183,6 +192,7 @@ for regfile in files:
                             f"  Chg: {player!r} ({player.squash_code})",
                             file=sys.stderr,
                         )
+                    changecount += 1
 
             else:
                 # The player is new
@@ -194,6 +204,7 @@ for regfile in files:
                 known_players[code or player.name] = TimestampPlayer(
                     timestamp, player
                 )
+                changecount += 1
 
         elif known_player.player != player:
             s1 = set((known_player.player.data | dict(id=None)).items())
@@ -206,6 +217,13 @@ for regfile in files:
             known_players[code] = TimestampPlayer(
                 known_player.timestamp, player
             )
+            changecount += 1
+
+    if not changecount:
+        if args.verbose:
+            print(f"  {regfile} adds no new information", file=sys.stderr)
+        if args.delete:
+            os.remove(regfile)
 
 
 def key_fn(tsplayer):
