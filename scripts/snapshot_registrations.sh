@@ -21,14 +21,5 @@ SNAPSHOTDIR=$(realpath -e --relative-base="$PWD" "$DIR"/../snapshots)
 "$DIR"/manage_isquash_tournament.py --headless --seed \
   --extract-registrations "$SNAPSHOTDIR"/TIMESTAMP-registrations.xls
 
-ls -1 "$SNAPSHOTDIR"/*-registrations.xls | while read f; do
-  cur=$(md5sum "$f" | cut -d' ' -f1)
-  if [ "$cur" = "${last:-}" ]; then
-    echo >&2 "No changes since last snapshot."
-    rm "$f"
-  fi
-  last="$cur"
-done
-
 exec "$DIR"/split_off_waitinglist.py --cutoff $1${2:+ --output $2} \
-  "$SNAPSHOTDIR"/*-registrations.xls
+  --delete-nodiff "$SNAPSHOTDIR"/*-registrations.xls
