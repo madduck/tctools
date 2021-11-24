@@ -301,6 +301,7 @@ if args.output:
 
     if args.cutoff < len(known_players):
 
+        players_wl.sort(key=lambda p: -p.player.points)
         wl = pyexcel.Sheet(
             name="Waiting list",
             colnames=[col[0] for col in colnames] + ["Timestamp"],
