@@ -9,6 +9,7 @@ import sys
 import os
 from pytcnz.dtkapiti.tcexport_reader import TCExportReader
 from pytcnz.tctools.drawmaker_reader import DrawMakerReader, DrawsReader
+from pytcnz.squashnz.registrations_reader import RegistrationsReader
 from pytcnz.gender import Gender
 from pytcnz.util import get_timestamp
 import pytcnz.meta as META
@@ -25,6 +26,13 @@ parser.epilog = META.epilog
 
 inputg = parser.add_argument_group(title="Input")
 insheets = inputg.add_mutually_exclusive_group(required=True)
+insheets.add_argument(
+    "--registrations",
+    metavar="REGISTRATIONS",
+    type=str,
+    dest="registrations",
+    help="iSquash registrations file to read",
+)
 insheets.add_argument(
     "--tcexport",
     metavar="TC-EXPORT",
@@ -119,6 +127,14 @@ filterg.add_argument(
     help="Invert the filter criteria",
 )
 parser.add_argument(
+    "--tournament_name",
+    metavar="TOURNAMENT_NAME",
+    type=str,
+    help=(
+        "Tournament name to override data from source"
+    ),
+)
+parser.add_argument(
     "--separator",
     "-S",
     metavar="SEPARATOR",
@@ -169,7 +185,26 @@ elif args.drawmaker:
         data.read_draws()
     colmap = dict(squash_code="code")
 
-data.read_tournament_name()
+elif args.registrations:
+    if args.waitlist or args.all:
+        print(
+            "--all and --waitlist make no sense with --tcexport",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    if not args.tournament_name:
+        print(
+            "--registrations requires --tournament_name",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    data = RegistrationsReader(args.registrations)
+    colmap = dict(squash_code="code")
+
+if args.tournament_name:
+    data.set_tournament_name(args.tournament_name)
+else:
+    data.read_tournament_name()
 data.read_players(colmap=colmap, strict=False)
 
 if args.points:
