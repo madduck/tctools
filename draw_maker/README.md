@@ -65,6 +65,10 @@ Here is the gist:
 
 ![image](https://user-images.githubusercontent.com/195073/145316546-f6d3913e-8494-4771-b791-0a664d8d3a3b.png)
 
+### Keeping track of player restrictions
+
+![image](https://user-images.githubusercontent.com/195073/145316681-bf492759-9c56-42d8-b29a-66d69987afbe.png)
+
 ### Planning schedule slots
 
 ![image](https://user-images.githubusercontent.com/195073/134892797-3bab0626-c0d0-4323-96b9-52f178e0f71d.png)
