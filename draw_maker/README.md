@@ -63,7 +63,7 @@ Here is the gist:
 
 ### Making draws
 
-![image](https://user-images.githubusercontent.com/195073/134892584-56a463b8-e21c-48ed-8ee3-5b3d580bb902.png)
+![image](https://user-images.githubusercontent.com/195073/145316546-f6d3913e-8494-4771-b791-0a664d8d3a3b.png)
 
 ### Planning schedule slots
 
