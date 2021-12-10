@@ -39,7 +39,7 @@ parser.add_argument(
 parser.add_argument(
     "--list",
     "-l",
-    metavar="SEPARATOR",
+    metavar="CATEGORY",
     type=str,
     choices=('districts', 'clubs', 'ages', 'grades'),
     help="List all known entities in the given category",
