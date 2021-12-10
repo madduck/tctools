@@ -32,8 +32,8 @@ fi
 {
   echo "Name	First name	Email	Tags"
   ${0%/*}/player_mmerge.py --drawmaker "$1" --all \
-    "{name}	{first_name}	{email}	$2{wl:d}" \
-    | sed -e 's,0$,,;s,1$,-wl,'
+    "{name}	{first_name}	{email}	{wl:d}{available:d}" \
+    | sed -e "s,.0$,,;s,01$,$2,;s,11$,${2}-wl,"
 } | xclip -i -selection clipboard
 
 xclip -o -selection clipboard | echo "$(($(wc -l) - 1)) records ready in the clipboard."
