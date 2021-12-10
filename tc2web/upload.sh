@@ -24,7 +24,9 @@ if [ -f .shasums ] && shasum -sc .shasums; then
   exit 0
 fi
 
-shasum $FILES > .shasums
+for f in $FILES; do
+  shasum "$f" || echo "0  $f"
+done > .shasums
 
 if [ -r ./upload.creds ]; then
   . ./upload.creds
