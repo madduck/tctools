@@ -161,7 +161,7 @@ class Game(BaseGame):
             return "Soon"
 
         else:
-            self.status = ""
+            return ""
 
     def get_status_class(self):
         return self.status.name
