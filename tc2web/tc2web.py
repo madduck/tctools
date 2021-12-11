@@ -108,6 +108,23 @@ class Game(BaseGame):
                 **kwargs,
             )
 
+        except Game.InconsistentResultError as e:
+            Warnings.add(e, context=f"Reading game {name}")
+            super().__init__(
+                name,
+                player1,
+                from1,
+                score1,
+                player2,
+                from2,
+                score2,
+                Game.Status.error,
+                autoflip_scores=autoflip_scores,
+                drawnamepat=drawnamepat,
+                error=e,
+                **kwargs,
+            )
+
     def get_player_class(self, which):
         if self.is_player_known(which):
             if self.get_winner() == self.players[which]:
