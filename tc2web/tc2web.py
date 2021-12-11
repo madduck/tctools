@@ -160,6 +160,9 @@ class Game(BaseGame):
         elif self.status == Game.Status.soon:
             return "Soon"
 
+        elif self.status == Game.Status.elsewhere:
+            return "Awaiting result"
+
         else:
             return ""
 
