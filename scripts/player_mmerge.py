@@ -55,6 +55,12 @@ inputg.add_argument(
     help="Read all players, not just those in draws",
 )
 
+inputg.add_argument(
+    "--include-unavailable",
+    action="store_true",
+    help="Include players marked unavailable",
+)
+
 outputg = parser.add_argument_group(title="Output")
 outdata = outputg.add_mutually_exclusive_group(required=False)
 outdata.add_argument(
@@ -169,9 +175,9 @@ elif not args.template:
 
 colmap = None
 if args.tcexport:
-    if args.waitlist or args.all:
+    if args.include_unavailable or args.waitlist or args.all:
         print(
-            "--all and --waitlist make no sense with --tcexport",
+            "--alli, --waitlist, and --include-unavailable make no sense with --tcexport",
             file=sys.stderr,
         )
         sys.exit(1)
@@ -186,9 +192,9 @@ elif args.drawmaker:
     colmap = dict(squash_code="code")
 
 elif args.registrations:
-    if args.waitlist or args.all:
+    if args.include_unavailable or args.waitlist or args.all:
         print(
-            "--all and --waitlist make no sense with --tcexport",
+            "--all, --waitlist, and --include-unavailable make no sense with --registrations",
             file=sys.stderr,
         )
         sys.exit(1)
@@ -226,6 +232,9 @@ for player in data.players.values():
     if gender is not Gender.N:
         if (gender == player.gender) == args.invert:
             continue
+
+    if not player.available and not args.include_unavailable:
+        continue
 
     if not args.invert:
         if args.code and not player.code.startswith(args.code):
