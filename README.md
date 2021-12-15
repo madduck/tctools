@@ -17,6 +17,7 @@ The tools include:
   * automated entering of game scores for tournaments into iSquash.
 * A set of [scripts and templates to publish up-to-date draw and schedule information](https://github.com/madduck/tctools/tree/main/tc2web) from TournamentControl to a web page;
 * A [template for draw posters](https://github.com/madduck/tctools/tree/main/poster_maker), automatically generated from TournamentControl data;
+* A [score sheet template](https://github.com/madduck/tctools/tree/main/scoresheet) which can be used to print individual sheets for all the games, populated with the specific game data, as exported by TournamentControl;
 
 There is a [series of videos to explain how to use
 these](https://vimeo.com/tctools).
