@@ -138,12 +138,15 @@ class Game(BaseGame):
 
         if self.status == Game.Status.notplayed:
             return "Not played"
-        elif self.status <= Game.Status.justfinished:
+        elif self.is_played():
             winner = self.get_winner()
             if not winner:
                 return "Awaiting result"
             else:
-                return f"Won by {winner} in {len(self.scores)}"
+                ret = f"Won by {winner}"
+                if self.scores:
+                    ret = f"{ret} in {len(self.scores)}"
+                return ret
 
         elif self.status == Game.Status.on:
             r = f"On {self.court}"
@@ -179,6 +182,8 @@ class Game(BaseGame):
                 return f"{s} ({self.comment})"
             else:
                 return s
+        elif self.get_winner():
+            return "Scores pending"
         else:
             return self.comment
 
