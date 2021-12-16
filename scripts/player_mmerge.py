@@ -233,7 +233,7 @@ for player in data.players.values():
         if (gender == player.gender) == args.invert:
             continue
 
-    if not player.available and not args.include_unavailable:
+    if not player.get('available', True) and not args.include_unavailable:
         continue
 
     if not args.invert:
