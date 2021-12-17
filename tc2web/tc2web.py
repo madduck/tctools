@@ -161,7 +161,10 @@ class Game(BaseGame):
             return ""
 
         elif self.status == Game.Status.soon:
-            return "Soon"
+            ret = "Soon"
+            if self.court:
+                ret = f"{ret} on {self.court}"
+            return ret
 
         elif self.status == Game.Status.elsewhere:
             return "Awaiting result"
