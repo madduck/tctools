@@ -155,7 +155,12 @@ class Game(BaseGame):
             return r
 
         elif self.status == Game.Status.next:
-            return f"Next on {self.court}"
+            if self.court:
+                return f"Next on {self.court}"
+            else:
+                # TC actually messes this up, "Soon" without a court is
+                # considered "next"
+                return "Soon"
 
         elif self.status == Game.Status.scheduled:
             return ""
@@ -173,7 +178,12 @@ class Game(BaseGame):
             return ""
 
     def get_status_class(self):
-        return self.status.name
+        if self.status == Game.Status.next and not self.court:
+            # TC actually messes this up, "Soon" without a court is
+            # listed as "next"
+            return Game.Status.soon.name
+        else:
+            return self.status.name
 
     def get_comment(self):
         if error := self.get("error"):
