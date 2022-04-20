@@ -10,6 +10,7 @@ import sys
 import os.path
 import datetime
 from pytcnz.tctools.drawmaker_reader import DrawsReader
+from pytcnz.tctools.player import Player
 from pytcnz.squashnz.isquash_controller import (
     iSquashController,
     DRAW_TYPES,
@@ -163,10 +164,19 @@ if not args.makedraws and (args.drawtypemap or args.drawdescmap):
 if not args.register and args.update:
     parser.error("--update only makes sense with --register")
 
+
+class Player(Player):
+    def __init__(self, *args, **kwargs):
+        kwargs["strict"] = False
+        super().__init__(*args, **kwargs)
+
+
 data = None
 if args.register or args.makedraws or args.populate:
     if args.drawmaker:
-        data = DrawsReader(args.drawmaker, add_players_to_draws=True)
+        data = DrawsReader(
+            args.drawmaker, Player_class=Player, add_players_to_draws=True
+        )
         # TODO drawdescmap should be taken into account here
         data.read_draws()
         data.read_players()
