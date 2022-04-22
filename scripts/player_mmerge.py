@@ -136,9 +136,7 @@ parser.add_argument(
     "--tournament_name",
     metavar="TOURNAMENT_NAME",
     type=str,
-    help=(
-        "Tournament name to override data from source"
-    ),
+    help=("Tournament name to override data from source"),
 )
 parser.add_argument(
     "--separator",
@@ -177,7 +175,7 @@ colmap = None
 if args.tcexport:
     if args.include_unavailable or args.waitlist or args.all:
         print(
-            "--alli, --waitlist, and --include-unavailable make no sense with --tcexport",
+            "--all, --waitlist, and --include-unavailable make no sense with --tcexport",
             file=sys.stderr,
         )
         sys.exit(1)
@@ -211,7 +209,22 @@ if args.tournament_name:
     data.set_tournament_name(args.tournament_name)
 else:
     data.read_tournament_name()
-data.read_players(colmap=colmap, strict=False)
+
+
+def resolve_duplicate_cb(existing, new):
+    # If a player is in the draw maker multiple times because e.g. on waitlist
+    # and regularly registered, then make sure that we don't let a waitlist or
+    # unavailable entry overwrite an existing one, and replace an existing one
+    # if the new one is better
+    if not new.wl and new.available:
+        return new
+    else:
+        return existing
+
+
+data.read_players(
+    colmap=colmap, strict=False, resolve_duplicate_cb=resolve_duplicate_cb
+)
 
 if args.points:
     p = args.points.split("-")
@@ -233,7 +246,7 @@ for player in data.players.values():
         if (gender == player.gender) == args.invert:
             continue
 
-    if not player.get('available', True) and not args.include_unavailable:
+    if not player.get("available", True) and not args.include_unavailable:
         continue
 
     if not args.invert:
