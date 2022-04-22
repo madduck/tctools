@@ -7,6 +7,7 @@
 
 import argparse
 import configparser
+import os
 import sys
 from pytcnz.dtkapiti.tcexport_reader import TCExportReader
 from pytcnz.squashnz.isquash_controller import (
@@ -76,7 +77,15 @@ data = TCExportReader(
     autoflip_scores=True,
     drawnamepat=draw_name_pattern,
 )
-data.read_all()
+try:
+    data.read_all()
+except KeyError as e:
+    if re.match(draw_name_pattern, str(e).strip("'")):
+        print(f"Could not find draw {e}, maybe you need to set "
+              f"'draw_name_pattern' in {config_filename} …?")
+        sys.exit(os.EX_CONFIG)
+    else:
+        raise
 
 with iSquashController(headless=args.headless) as c:
     print(c, file=sys.stderr)
