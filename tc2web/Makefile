@@ -8,7 +8,7 @@ view: live.html
 clean:
 	rm -f live.html .shasums
 
-upload: $(wildcard *.html *.css)
+upload: $(wildcard *.html *.css) live.html
 	./upload.sh
 
 ../tc-export-fixed.xls: ../tc-export.xls
