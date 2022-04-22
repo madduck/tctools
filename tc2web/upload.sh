@@ -10,7 +10,7 @@
 #   FTPHOST=ftp.example.org
 #   TARGETDIR=/tc/
 #
-# Copyright © 2021 martin f. krafft <m@rtin.kiwi>
+# Copyright © 2021–2022 martin f. krafft <m@rtin.kiwi>
 # Released under the terms of the MIT Licence.
 #
 set -eu

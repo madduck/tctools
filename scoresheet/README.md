@@ -28,4 +28,4 @@ licence in whatever you do.
 Of course, if you have any improvements, it would be nice if you fed them back
 to us.
 
-Copyright © 2021 martin f. krafft <<tctools@pobox.madduck.net>>
+Copyright © 2021–2022 martin f. krafft <<tctools@pobox.madduck.net>>

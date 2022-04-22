@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 #
-# Copyright © 2021 martin f. krafft <tctools@pobox.madduck.net>
+# Copyright © 2021–2022 martin f. krafft <tctools@pobox.madduck.net>
 # Released under the MIT Licence
 #
 

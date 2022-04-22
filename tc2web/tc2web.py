@@ -8,7 +8,7 @@
 # refers to the player named first, and the second to the
 # player named second.
 #
-# Copyright © 2021 martin f. krafft <m@rtin.kiwi>
+# Copyright © 2021–2022 martin f. krafft <m@rtin.kiwi>
 # Released under the MIT Licence
 #
 

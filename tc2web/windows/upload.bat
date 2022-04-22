@@ -1,6 +1,6 @@
 :: bgupdater.bat — screenshot the display, and upload changes
 ::
-:: Copyright © 2021 martin f. krafft <tctools@pobox.madduck.net>
+:: Copyright © 2021–2022 martin f. krafft <tctools@pobox.madduck.net>
 :: Released under the terms of the MIT Licence
 ::
 :: This expects a file upload.creds in the local directory with the credentials

@@ -5,7 +5,7 @@
 # Usage:
 #   ./snapshot_registrations.sh 80 regs.ods
 #
-# Copyright © 2021 martin f. krafft <tctools@pobox.madduck.net>
+# Copyright © 2021–2022 martin f. krafft <tctools@pobox.madduck.net>
 # Released under the MIT Licence
 #
 set -eu

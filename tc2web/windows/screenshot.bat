@@ -2,7 +2,7 @@
 ::
 :: TODO: Figure out how to crop the border of the screenshot
 ::
-:: Copyright © 2021 martin f. krafft <tctools@pobox.madduck.net>
+:: Copyright © 2021–2022 martin f. krafft <tctools@pobox.madduck.net>
 :: Released under the terms of the MIT Licence
 ::
 @echo off
