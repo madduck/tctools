@@ -13,6 +13,7 @@
 #
 
 import argparse
+import configparser
 import datetime
 import pytz
 import os
@@ -22,6 +23,7 @@ from pytcnz.dtkapiti.tcexport_reader import TCExportReader
 from pytcnz.dtkapiti.game import Game as BaseGame
 from pytcnz.warnings import Warnings
 from pytcnz.scores import Scores
+from pytcnz.util import get_config_filename
 import pytcnz.meta as META
 
 parser = argparse.ArgumentParser(
@@ -201,6 +203,12 @@ class Game(BaseGame):
             return self.comment
 
 
+config = configparser.ConfigParser()
+config.read(get_config_filename())
+draw_name_pattern = config.get(
+    "dtkapiti", "draw_name_pattern", fallback=r"\w\d{1}"
+)
+
 data = TCExportReader(
     args.spreadsheet,
     Game_class=Game,
@@ -208,6 +216,7 @@ data = TCExportReader(
     add_games_to_draws=True,
     add_players_to_draws=True,
     add_players_to_games=True,
+    drawnamepat=draw_name_pattern,
 )
 data.read_all()
 

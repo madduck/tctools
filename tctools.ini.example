@@ -5,3 +5,13 @@
 username = [replace with iSquash username]
 password = [replace with iSquash password]
 tournament = [replace with tournament code]
+
+[dtkapiti]
+# The TournamentControl software uses a combination of draw code and player or
+# game number, such as M013 or W1201. Unfortunately, this can be ambiguous: Is
+# player M013 #13 in div M0, or #3 in div M00? By default, it's assumed that
+# only the first digit is part of the draw, but when running a really big
+# tournament with 10+ draws per gender, uncomment the following instead:
+#draw_name_pattern = \w\d{2}
+# Or, if you have 10+ men's draws, but 9 or less women's draws:
+#draw_name_pattern = M\d\d|W\d

@@ -5,13 +5,14 @@
 #
 
 import argparse
+import configparser
 import sys
 import os
 from pytcnz.dtkapiti.tcexport_reader import TCExportReader
 from pytcnz.tctools.drawmaker_reader import DrawMakerReader, DrawsReader
 from pytcnz.squashnz.registrations_reader import RegistrationsReader
 from pytcnz.gender import Gender
-from pytcnz.util import get_timestamp
+from pytcnz.util import get_timestamp, get_config_filename
 import pytcnz.meta as META
 
 try:
@@ -179,7 +180,14 @@ if args.tcexport:
             file=sys.stderr,
         )
         sys.exit(1)
-    data = TCExportReader(args.tcexport)
+
+    config = configparser.ConfigParser()
+    config.read(get_config_filename())
+    draw_name_pattern = config.get(
+        "dtkapiti", "draw_name_pattern", fallback=r"\w\d{1}"
+    )
+
+    data = TCExportReader(args.tcexport, drawnamepat=draw_name_pattern)
 
 elif args.drawmaker:
     if args.all:

@@ -6,6 +6,7 @@
 #
 
 import argparse
+import configparser
 import sys
 from pytcnz.dtkapiti.tcexport_reader import TCExportReader
 from pytcnz.squashnz.isquash_controller import (
@@ -15,7 +16,8 @@ from pytcnz.squashnz.isquash_controller import (
 from pytcnz.util import get_config_filename
 from pytcnz.meta import epilog
 
-is_argparser = make_is_argument_parser(configfile=get_config_filename())
+config_filename = get_config_filename()
+is_argparser = make_is_argument_parser(configfile=config_filename)
 
 parser = argparse.ArgumentParser(
     description="Automatically enter tournament results into iSquash",
@@ -61,11 +63,18 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
+config = configparser.ConfigParser()
+config.read(config_filename)
+draw_name_pattern = config.get(
+    "dtkapiti", "draw_name_pattern", fallback=r"\w\d{1}"
+)
+
 data = TCExportReader(
     args.spreadsheet,
     add_games_to_draws=True,
     add_players_to_games=True,
     autoflip_scores=True,
+    drawnamepat=draw_name_pattern,
 )
 data.read_all()
 

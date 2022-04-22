@@ -99,6 +99,10 @@ There is a script
 [fix-tc-export.sh](https://github.com/madduck/tctools/blob/main/fix-tc-export.sh)
 that does this.
 
+## Configuration
+
+Many of the scripts read configurable settings from the file `tctools.ini` in the `tctools` top directory. In this file, you may provide iSquash login details (so you don't always have to pass them on the command line), and other important settings. Please have a look at the [`tctools.ini.example`](https://github.com/madduck/tctools/blob/main/tctools.ini.example) file.
+
 ## Thanks & credits
 
 Kelsey Mackay from KP sent me the draw templates she was using, which gave me
