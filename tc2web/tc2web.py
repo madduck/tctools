@@ -133,6 +133,8 @@ class Game(BaseGame):
         if self.is_player_known(which):
             if self.get_winner() == self.players[which]:
                 return "winner"
+            else:
+                return ""
         else:
             return "unknown"
 
