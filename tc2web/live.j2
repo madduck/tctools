@@ -61,7 +61,7 @@ Last updated: {{timestamp}}
 <p>
 Made with <a
 href="{{meta.url}}">tctools</a>.
-Copyright &copy; {{meta.years}} by
+Copyright &copy; {{meta.years|replace("–", "&ndash;")|safe}} by
 <a href="mailto:{{meta.email}}">{{meta.author}}</a>
 </p>
 </div>
