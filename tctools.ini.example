@@ -22,3 +22,15 @@ tournament = [replace with tournament code]
 # "\d{2}" is the same as "\d\d". The pipe symbol "|" is used to express OR, so
 # "M\d\d|W\d" means "either M followed by two digits, or W followed by one.
 # See: https://docs.python.org/3/library/re.html#regular-expression-syntax
+
+[split_off_waitinglist]
+# Use settings in this stanza to influence the way split_off_waitinglist
+# processes registration snapshots:
+#
+# Give preferential treatment to players and always include them, no matter
+# when they signed up:
+#include = WNTHMK WNTHHDT
+#
+# If a player signed up as WNIBMK, and then got a new grading code WNTHMK, use
+# this to keep their position in the line:
+#codemap = WNIBMK=WNTHMK
