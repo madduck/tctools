@@ -13,5 +13,12 @@ tournament = [replace with tournament code]
 # only the first digit is part of the draw, but when running a really big
 # tournament with 10+ draws per gender, uncomment the following instead:
 #draw_name_pattern = \w\d{2}
+#
 # Or, if you have 10+ men's draws, but 9 or less women's draws:
 #draw_name_pattern = M\d\d|W\d
+#
+# These are "regular expressions" used to express patterns in strings. \w is a
+# "word character", and \d a digit. {2} means two of the previous token, so
+# "\d{2}" is the same as "\d\d". The pipe symbol "|" is used to express OR, so
+# "M\d\d|W\d" means "either M followed by two digits, or W followed by one.
+# See: https://docs.python.org/3/library/re.html#regular-expression-syntax
