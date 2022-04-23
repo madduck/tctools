@@ -60,11 +60,13 @@ in combination with TournamentControl, as detailed in the next section:
 
 ### Python and `pytcnz`
 
-If you want to use the [scripts](https://github.com/madduck/tctools/tree/main/scripts) or [tc2web](https://github.com/madduck/tctools/tree/main/tc2web) — and trust me, you do, unless you want to make and seed draws manually, or enter results by hand – you will need to install [Python](https://python.org), as [detailed here](https://www.python.org/downloads/).
+If you want to use the [scripts](https://github.com/madduck/tctools/tree/main/scripts) or [tc2web](https://github.com/madduck/tctools/tree/main/tc2web) — and trust me, you do, unless you want to make and seed draws manually, or enter results by hand – you will need to install [Python](https://python.org), as [detailed here](https://www.python.org/downloads/). Please select "Manual Mode", and when asked about "Optional Features" during the install, make sure that only "pip" is selected:
 
-Once installed, you need to obtain the [`pytcnz`](https://github.com/madduck/pytcnz) library, which used to be part of `tctools`, but has been split off into a separate library.
+![Python installer optional features](https://user-images.githubusercontent.com/195073/164948749-b9241105-7e1d-4fe3-9641-c8e1f70563f0.png)
 
-Once Python is installed, the `pytcnz` library, as well as all dependencies can be installed with a single command (you might need to install `pip` first, if the following gives an error).
+And on the next screen, select to add "Python to the environment variables".
+
+Once installed, you need to obtain the [`pytcnz`](https://github.com/madduck/pytcnz) library, which used to be part of `tctools`, but has been split off into a separate library. This can be done with a single command:
 
 ```
 pip install git+https://github.com/madduck/pytcnz@main
