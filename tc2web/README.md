@@ -17,6 +17,7 @@ For this to work, you need to install:
 
 * Python 3.9 or later, as well as `pytcnz`. Please refer to [the section in tctools' README file](https://github.com/madduck/tctools#python-and-pytcnz) on how to install those;
 * The `python-jinja2` templating library, which you can install from the Windows PowerShell like so: `pip install Jinja2`;
+* The `python-pytz` library for displaying timezones correctly: `pip install pytz`;
 * [NcFTP](https://www.ncftp.com/download/) to handle the FTP upload.
 
 ## Uploading
