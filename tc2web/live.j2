@@ -191,6 +191,7 @@ Last updated: {{timestamp}}
 <td>#</td>
 <td>Name</td>
 <td>Points</td>
+<td>Grade</td>
 <td>Code</td>
 <td>Club</td>
 </tr>
@@ -201,6 +202,7 @@ Last updated: {{timestamp}}
     <td>{{loop.index}}</td>
     <td>{{player.name}}</td>
     <td>{{'{0:,d}'.format(player.points|int)}}</td>
+    <td>{{player.grade}}</td>
     <td>{{player.grading_code}}</td>
     <td>{{player.club}}</td>
   </tr>
