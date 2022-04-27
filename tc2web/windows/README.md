@@ -27,9 +27,9 @@ Then at the bottom of the settings, you will find the auto-export function:
 
 ![Screenshot](https://user-images.githubusercontent.com/195073/135780204-afbf46f2-c8de-47ee-9889-2dd108abfc09.png)
 
-For file location, please make sure that you have selected the top directory of the   `tctools`, and chosen `tc-export.xls` as the filename.
+For file location, please make sure that you have selected the top directory of the `tctools` (or the the current tournament directory, if you made a new clone of the software for the current tournament), and chosen `tc-export.xls` as the filename.
 
-It is also advisable to configure auto-save in the settings, so that the file is      exported if the machine is left idle, otherwise changes are only propagated if you hit "save" explicitly.
+It is also advisable to configure auto-save in the settings, so that the file is exported if the machine is left idle, otherwise changes are only propagated if you hit "save" explicitly.
 
 ![Screenshot](https://user-images.githubusercontent.com/195073/135780292-fd8a2b8f-1e8e-4071-9fda-b5edd88df970.png)
 
@@ -40,13 +40,15 @@ The main script `bgupdater.bat` is designed to run in the background and will lo
 1. Create a shortcut to the `bgupdater.bat` (using the right-click context menu in the Explorer);
 2. Modify its properties (also right-click), and change "Run: Normal Window" to "Run: Minimized".
 3. Select it, and hit `Ctrl-c`;
-2. Hit `Windows-R` and type `shell:startup` into the dialog;
-3. Hit `Ctrl-v` and the file should appear in the new destination. Overwrite or remove any previous shortcuts;
-4. Reboot and verify that there now a minimised command line window in the task bar:
+4. Hit `Windows-R` and type `shell:startup` into the dialog;
+5. Hit `Ctrl-v` and the file should appear in the new destination. Overwrite or remove any previous shortcuts;
+6. Double-click that shortcut file now, or reboot the machine, and you should see a little icon down in the taskbar.
 
-![image](https://user-images.githubusercontent.com/195073/135781870-2bab72e3-1709-44d4-9b6d-1e42da2208c5.png)
+![Screenshot](https://user-images.githubusercontent.com/195073/135781870-2bab72e3-1709-44d4-9b6d-1e42da2208c5.png)
 
-Now you are ready to roll!
+Now you are ready to roll! If you click on the icon, a window opens with lots of text, and which does something every 30 seconds. You don't really need to pay much attention to it, so you might just want to keep it minimised, but here's how it looks:
+
+![Screenshot](https://user-images.githubusercontent.com/195073/165473347-378f1ec1-c560-474f-b009-b0f498f5eace.png)
 
 ## Licence
 
