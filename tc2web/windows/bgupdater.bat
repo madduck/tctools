@@ -28,9 +28,8 @@ if not exist "upload" (
 if exist "..\..\tc-export.xls" (
 
   call fix-tc-export.bat
-  del ..\..\tc-export.xls
 
-  call rebuild.bat
+  call rebuild.bat && del ..\..\tc-export.xls
 )
 
 call screenshot.bat %~dp0\display.png
